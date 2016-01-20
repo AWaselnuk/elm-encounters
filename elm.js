@@ -10348,6 +10348,297 @@ Elm.Html.make = function (_elm) {
                              ,menuitem: menuitem
                              ,menu: menu};
 };
+Elm.Html = Elm.Html || {};
+Elm.Html.Attributes = Elm.Html.Attributes || {};
+Elm.Html.Attributes.make = function (_elm) {
+   "use strict";
+   _elm.Html = _elm.Html || {};
+   _elm.Html.Attributes = _elm.Html.Attributes || {};
+   if (_elm.Html.Attributes.values) return _elm.Html.Attributes.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Json$Encode = Elm.Json.Encode.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $String = Elm.String.make(_elm),
+   $VirtualDom = Elm.VirtualDom.make(_elm);
+   var _op = {};
+   var attribute = $VirtualDom.attribute;
+   var contextmenu = function (value) {    return A2(attribute,"contextmenu",value);};
+   var property = $VirtualDom.property;
+   var stringProperty = F2(function (name,string) {    return A2(property,name,$Json$Encode.string(string));});
+   var $class = function (name) {    return A2(stringProperty,"className",name);};
+   var id = function (name) {    return A2(stringProperty,"id",name);};
+   var title = function (name) {    return A2(stringProperty,"title",name);};
+   var accesskey = function ($char) {    return A2(stringProperty,"accessKey",$String.fromChar($char));};
+   var dir = function (value) {    return A2(stringProperty,"dir",value);};
+   var draggable = function (value) {    return A2(stringProperty,"draggable",value);};
+   var dropzone = function (value) {    return A2(stringProperty,"dropzone",value);};
+   var itemprop = function (value) {    return A2(stringProperty,"itemprop",value);};
+   var lang = function (value) {    return A2(stringProperty,"lang",value);};
+   var tabindex = function (n) {    return A2(stringProperty,"tabIndex",$Basics.toString(n));};
+   var charset = function (value) {    return A2(stringProperty,"charset",value);};
+   var content = function (value) {    return A2(stringProperty,"content",value);};
+   var httpEquiv = function (value) {    return A2(stringProperty,"httpEquiv",value);};
+   var language = function (value) {    return A2(stringProperty,"language",value);};
+   var src = function (value) {    return A2(stringProperty,"src",value);};
+   var height = function (value) {    return A2(stringProperty,"height",$Basics.toString(value));};
+   var width = function (value) {    return A2(stringProperty,"width",$Basics.toString(value));};
+   var alt = function (value) {    return A2(stringProperty,"alt",value);};
+   var preload = function (value) {    return A2(stringProperty,"preload",value);};
+   var poster = function (value) {    return A2(stringProperty,"poster",value);};
+   var kind = function (value) {    return A2(stringProperty,"kind",value);};
+   var srclang = function (value) {    return A2(stringProperty,"srclang",value);};
+   var sandbox = function (value) {    return A2(stringProperty,"sandbox",value);};
+   var srcdoc = function (value) {    return A2(stringProperty,"srcdoc",value);};
+   var type$ = function (value) {    return A2(stringProperty,"type",value);};
+   var value = function (value) {    return A2(stringProperty,"value",value);};
+   var placeholder = function (value) {    return A2(stringProperty,"placeholder",value);};
+   var accept = function (value) {    return A2(stringProperty,"accept",value);};
+   var acceptCharset = function (value) {    return A2(stringProperty,"acceptCharset",value);};
+   var action = function (value) {    return A2(stringProperty,"action",value);};
+   var autocomplete = function (bool) {    return A2(stringProperty,"autocomplete",bool ? "on" : "off");};
+   var autosave = function (value) {    return A2(stringProperty,"autosave",value);};
+   var enctype = function (value) {    return A2(stringProperty,"enctype",value);};
+   var formaction = function (value) {    return A2(stringProperty,"formAction",value);};
+   var list = function (value) {    return A2(stringProperty,"list",value);};
+   var minlength = function (n) {    return A2(stringProperty,"minLength",$Basics.toString(n));};
+   var maxlength = function (n) {    return A2(stringProperty,"maxLength",$Basics.toString(n));};
+   var method = function (value) {    return A2(stringProperty,"method",value);};
+   var name = function (value) {    return A2(stringProperty,"name",value);};
+   var pattern = function (value) {    return A2(stringProperty,"pattern",value);};
+   var size = function (n) {    return A2(stringProperty,"size",$Basics.toString(n));};
+   var $for = function (value) {    return A2(stringProperty,"htmlFor",value);};
+   var form = function (value) {    return A2(stringProperty,"form",value);};
+   var max = function (value) {    return A2(stringProperty,"max",value);};
+   var min = function (value) {    return A2(stringProperty,"min",value);};
+   var step = function (n) {    return A2(stringProperty,"step",n);};
+   var cols = function (n) {    return A2(stringProperty,"cols",$Basics.toString(n));};
+   var rows = function (n) {    return A2(stringProperty,"rows",$Basics.toString(n));};
+   var wrap = function (value) {    return A2(stringProperty,"wrap",value);};
+   var usemap = function (value) {    return A2(stringProperty,"useMap",value);};
+   var shape = function (value) {    return A2(stringProperty,"shape",value);};
+   var coords = function (value) {    return A2(stringProperty,"coords",value);};
+   var challenge = function (value) {    return A2(stringProperty,"challenge",value);};
+   var keytype = function (value) {    return A2(stringProperty,"keytype",value);};
+   var align = function (value) {    return A2(stringProperty,"align",value);};
+   var cite = function (value) {    return A2(stringProperty,"cite",value);};
+   var href = function (value) {    return A2(stringProperty,"href",value);};
+   var target = function (value) {    return A2(stringProperty,"target",value);};
+   var downloadAs = function (value) {    return A2(stringProperty,"download",value);};
+   var hreflang = function (value) {    return A2(stringProperty,"hreflang",value);};
+   var media = function (value) {    return A2(stringProperty,"media",value);};
+   var ping = function (value) {    return A2(stringProperty,"ping",value);};
+   var rel = function (value) {    return A2(stringProperty,"rel",value);};
+   var datetime = function (value) {    return A2(stringProperty,"datetime",value);};
+   var pubdate = function (value) {    return A2(stringProperty,"pubdate",value);};
+   var start = function (n) {    return A2(stringProperty,"start",$Basics.toString(n));};
+   var colspan = function (n) {    return A2(stringProperty,"colSpan",$Basics.toString(n));};
+   var headers = function (value) {    return A2(stringProperty,"headers",value);};
+   var rowspan = function (n) {    return A2(stringProperty,"rowSpan",$Basics.toString(n));};
+   var scope = function (value) {    return A2(stringProperty,"scope",value);};
+   var manifest = function (value) {    return A2(stringProperty,"manifest",value);};
+   var boolProperty = F2(function (name,bool) {    return A2(property,name,$Json$Encode.bool(bool));});
+   var hidden = function (bool) {    return A2(boolProperty,"hidden",bool);};
+   var contenteditable = function (bool) {    return A2(boolProperty,"contentEditable",bool);};
+   var spellcheck = function (bool) {    return A2(boolProperty,"spellcheck",bool);};
+   var async = function (bool) {    return A2(boolProperty,"async",bool);};
+   var defer = function (bool) {    return A2(boolProperty,"defer",bool);};
+   var scoped = function (bool) {    return A2(boolProperty,"scoped",bool);};
+   var autoplay = function (bool) {    return A2(boolProperty,"autoplay",bool);};
+   var controls = function (bool) {    return A2(boolProperty,"controls",bool);};
+   var loop = function (bool) {    return A2(boolProperty,"loop",bool);};
+   var $default = function (bool) {    return A2(boolProperty,"default",bool);};
+   var seamless = function (bool) {    return A2(boolProperty,"seamless",bool);};
+   var checked = function (bool) {    return A2(boolProperty,"checked",bool);};
+   var selected = function (bool) {    return A2(boolProperty,"selected",bool);};
+   var autofocus = function (bool) {    return A2(boolProperty,"autofocus",bool);};
+   var disabled = function (bool) {    return A2(boolProperty,"disabled",bool);};
+   var multiple = function (bool) {    return A2(boolProperty,"multiple",bool);};
+   var novalidate = function (bool) {    return A2(boolProperty,"noValidate",bool);};
+   var readonly = function (bool) {    return A2(boolProperty,"readOnly",bool);};
+   var required = function (bool) {    return A2(boolProperty,"required",bool);};
+   var ismap = function (value) {    return A2(boolProperty,"isMap",value);};
+   var download = function (bool) {    return A2(boolProperty,"download",bool);};
+   var reversed = function (bool) {    return A2(boolProperty,"reversed",bool);};
+   var classList = function (list) {    return $class(A2($String.join," ",A2($List.map,$Basics.fst,A2($List.filter,$Basics.snd,list))));};
+   var style = function (props) {
+      return A2(property,
+      "style",
+      $Json$Encode.object(A2($List.map,function (_p0) {    var _p1 = _p0;return {ctor: "_Tuple2",_0: _p1._0,_1: $Json$Encode.string(_p1._1)};},props)));
+   };
+   var key = function (k) {    return A2(stringProperty,"key",k);};
+   return _elm.Html.Attributes.values = {_op: _op
+                                        ,key: key
+                                        ,style: style
+                                        ,$class: $class
+                                        ,classList: classList
+                                        ,id: id
+                                        ,title: title
+                                        ,hidden: hidden
+                                        ,type$: type$
+                                        ,value: value
+                                        ,checked: checked
+                                        ,placeholder: placeholder
+                                        ,selected: selected
+                                        ,accept: accept
+                                        ,acceptCharset: acceptCharset
+                                        ,action: action
+                                        ,autocomplete: autocomplete
+                                        ,autofocus: autofocus
+                                        ,autosave: autosave
+                                        ,disabled: disabled
+                                        ,enctype: enctype
+                                        ,formaction: formaction
+                                        ,list: list
+                                        ,maxlength: maxlength
+                                        ,minlength: minlength
+                                        ,method: method
+                                        ,multiple: multiple
+                                        ,name: name
+                                        ,novalidate: novalidate
+                                        ,pattern: pattern
+                                        ,readonly: readonly
+                                        ,required: required
+                                        ,size: size
+                                        ,$for: $for
+                                        ,form: form
+                                        ,max: max
+                                        ,min: min
+                                        ,step: step
+                                        ,cols: cols
+                                        ,rows: rows
+                                        ,wrap: wrap
+                                        ,href: href
+                                        ,target: target
+                                        ,download: download
+                                        ,downloadAs: downloadAs
+                                        ,hreflang: hreflang
+                                        ,media: media
+                                        ,ping: ping
+                                        ,rel: rel
+                                        ,ismap: ismap
+                                        ,usemap: usemap
+                                        ,shape: shape
+                                        ,coords: coords
+                                        ,src: src
+                                        ,height: height
+                                        ,width: width
+                                        ,alt: alt
+                                        ,autoplay: autoplay
+                                        ,controls: controls
+                                        ,loop: loop
+                                        ,preload: preload
+                                        ,poster: poster
+                                        ,$default: $default
+                                        ,kind: kind
+                                        ,srclang: srclang
+                                        ,sandbox: sandbox
+                                        ,seamless: seamless
+                                        ,srcdoc: srcdoc
+                                        ,reversed: reversed
+                                        ,start: start
+                                        ,align: align
+                                        ,colspan: colspan
+                                        ,rowspan: rowspan
+                                        ,headers: headers
+                                        ,scope: scope
+                                        ,async: async
+                                        ,charset: charset
+                                        ,content: content
+                                        ,defer: defer
+                                        ,httpEquiv: httpEquiv
+                                        ,language: language
+                                        ,scoped: scoped
+                                        ,accesskey: accesskey
+                                        ,contenteditable: contenteditable
+                                        ,contextmenu: contextmenu
+                                        ,dir: dir
+                                        ,draggable: draggable
+                                        ,dropzone: dropzone
+                                        ,itemprop: itemprop
+                                        ,lang: lang
+                                        ,spellcheck: spellcheck
+                                        ,tabindex: tabindex
+                                        ,challenge: challenge
+                                        ,keytype: keytype
+                                        ,cite: cite
+                                        ,datetime: datetime
+                                        ,pubdate: pubdate
+                                        ,manifest: manifest
+                                        ,property: property
+                                        ,attribute: attribute};
+};
+Elm.Html = Elm.Html || {};
+Elm.Html.Events = Elm.Html.Events || {};
+Elm.Html.Events.make = function (_elm) {
+   "use strict";
+   _elm.Html = _elm.Html || {};
+   _elm.Html.Events = _elm.Html.Events || {};
+   if (_elm.Html.Events.values) return _elm.Html.Events.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Json$Decode = Elm.Json.Decode.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $VirtualDom = Elm.VirtualDom.make(_elm);
+   var _op = {};
+   var keyCode = A2($Json$Decode._op[":="],"keyCode",$Json$Decode.$int);
+   var targetChecked = A2($Json$Decode.at,_U.list(["target","checked"]),$Json$Decode.bool);
+   var targetValue = A2($Json$Decode.at,_U.list(["target","value"]),$Json$Decode.string);
+   var defaultOptions = $VirtualDom.defaultOptions;
+   var Options = F2(function (a,b) {    return {stopPropagation: a,preventDefault: b};});
+   var onWithOptions = $VirtualDom.onWithOptions;
+   var on = $VirtualDom.on;
+   var messageOn = F3(function (name,addr,msg) {    return A3(on,name,$Json$Decode.value,function (_p0) {    return A2($Signal.message,addr,msg);});});
+   var onClick = messageOn("click");
+   var onDoubleClick = messageOn("dblclick");
+   var onMouseMove = messageOn("mousemove");
+   var onMouseDown = messageOn("mousedown");
+   var onMouseUp = messageOn("mouseup");
+   var onMouseEnter = messageOn("mouseenter");
+   var onMouseLeave = messageOn("mouseleave");
+   var onMouseOver = messageOn("mouseover");
+   var onMouseOut = messageOn("mouseout");
+   var onBlur = messageOn("blur");
+   var onFocus = messageOn("focus");
+   var onSubmit = messageOn("submit");
+   var onKey = F3(function (name,addr,handler) {    return A3(on,name,keyCode,function (code) {    return A2($Signal.message,addr,handler(code));});});
+   var onKeyUp = onKey("keyup");
+   var onKeyDown = onKey("keydown");
+   var onKeyPress = onKey("keypress");
+   return _elm.Html.Events.values = {_op: _op
+                                    ,onBlur: onBlur
+                                    ,onFocus: onFocus
+                                    ,onSubmit: onSubmit
+                                    ,onKeyUp: onKeyUp
+                                    ,onKeyDown: onKeyDown
+                                    ,onKeyPress: onKeyPress
+                                    ,onClick: onClick
+                                    ,onDoubleClick: onDoubleClick
+                                    ,onMouseMove: onMouseMove
+                                    ,onMouseDown: onMouseDown
+                                    ,onMouseUp: onMouseUp
+                                    ,onMouseEnter: onMouseEnter
+                                    ,onMouseLeave: onMouseLeave
+                                    ,onMouseOver: onMouseOver
+                                    ,onMouseOut: onMouseOut
+                                    ,on: on
+                                    ,onWithOptions: onWithOptions
+                                    ,defaultOptions: defaultOptions
+                                    ,targetValue: targetValue
+                                    ,targetChecked: targetChecked
+                                    ,keyCode: keyCode
+                                    ,Options: Options};
+};
 Elm.StartApp = Elm.StartApp || {};
 Elm.StartApp.make = function (_elm) {
    "use strict";
@@ -10395,20 +10686,136 @@ Elm.Encounter.make = function (_elm) {
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
    $Debug = Elm.Debug.make(_elm),
+   $Dict = Elm.Dict.make(_elm),
    $Effects = Elm.Effects.make(_elm),
    $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
    _op["=>"] = F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};});
-   var view = F2(function (address,model) {    return A2($Html.div,_U.list([]),_U.list([$Html.text("Hello, world!")]));});
+   var deadlyThresholds = $Dict.fromList(_U.list([{ctor: "_Tuple2",_0: 1,_1: 25}
+                                                 ,{ctor: "_Tuple2",_0: 2,_1: 50}
+                                                 ,{ctor: "_Tuple2",_0: 3,_1: 75}
+                                                 ,{ctor: "_Tuple2",_0: 4,_1: 125}
+                                                 ,{ctor: "_Tuple2",_0: 5,_1: 250}
+                                                 ,{ctor: "_Tuple2",_0: 6,_1: 300}
+                                                 ,{ctor: "_Tuple2",_0: 7,_1: 350}
+                                                 ,{ctor: "_Tuple2",_0: 8,_1: 450}
+                                                 ,{ctor: "_Tuple2",_0: 9,_1: 550}
+                                                 ,{ctor: "_Tuple2",_0: 10,_1: 600}
+                                                 ,{ctor: "_Tuple2",_0: 11,_1: 800}
+                                                 ,{ctor: "_Tuple2",_0: 12,_1: 1000}
+                                                 ,{ctor: "_Tuple2",_0: 13,_1: 1100}
+                                                 ,{ctor: "_Tuple2",_0: 14,_1: 1250}
+                                                 ,{ctor: "_Tuple2",_0: 15,_1: 1400}
+                                                 ,{ctor: "_Tuple2",_0: 16,_1: 1600}
+                                                 ,{ctor: "_Tuple2",_0: 17,_1: 2000}
+                                                 ,{ctor: "_Tuple2",_0: 18,_1: 2100}
+                                                 ,{ctor: "_Tuple2",_0: 19,_1: 2400}
+                                                 ,{ctor: "_Tuple2",_0: 20,_1: 2800}]));
+   var hardThresholds = $Dict.fromList(_U.list([{ctor: "_Tuple2",_0: 1,_1: 25}
+                                               ,{ctor: "_Tuple2",_0: 2,_1: 50}
+                                               ,{ctor: "_Tuple2",_0: 3,_1: 75}
+                                               ,{ctor: "_Tuple2",_0: 4,_1: 125}
+                                               ,{ctor: "_Tuple2",_0: 5,_1: 250}
+                                               ,{ctor: "_Tuple2",_0: 6,_1: 300}
+                                               ,{ctor: "_Tuple2",_0: 7,_1: 350}
+                                               ,{ctor: "_Tuple2",_0: 8,_1: 450}
+                                               ,{ctor: "_Tuple2",_0: 9,_1: 550}
+                                               ,{ctor: "_Tuple2",_0: 10,_1: 600}
+                                               ,{ctor: "_Tuple2",_0: 11,_1: 800}
+                                               ,{ctor: "_Tuple2",_0: 12,_1: 1000}
+                                               ,{ctor: "_Tuple2",_0: 13,_1: 1100}
+                                               ,{ctor: "_Tuple2",_0: 14,_1: 1250}
+                                               ,{ctor: "_Tuple2",_0: 15,_1: 1400}
+                                               ,{ctor: "_Tuple2",_0: 16,_1: 1600}
+                                               ,{ctor: "_Tuple2",_0: 17,_1: 2000}
+                                               ,{ctor: "_Tuple2",_0: 18,_1: 2100}
+                                               ,{ctor: "_Tuple2",_0: 19,_1: 2400}
+                                               ,{ctor: "_Tuple2",_0: 20,_1: 2800}]));
+   var mediumThresholds = $Dict.fromList(_U.list([{ctor: "_Tuple2",_0: 1,_1: 25}
+                                                 ,{ctor: "_Tuple2",_0: 2,_1: 50}
+                                                 ,{ctor: "_Tuple2",_0: 3,_1: 75}
+                                                 ,{ctor: "_Tuple2",_0: 4,_1: 125}
+                                                 ,{ctor: "_Tuple2",_0: 5,_1: 250}
+                                                 ,{ctor: "_Tuple2",_0: 6,_1: 300}
+                                                 ,{ctor: "_Tuple2",_0: 7,_1: 350}
+                                                 ,{ctor: "_Tuple2",_0: 8,_1: 450}
+                                                 ,{ctor: "_Tuple2",_0: 9,_1: 550}
+                                                 ,{ctor: "_Tuple2",_0: 10,_1: 600}
+                                                 ,{ctor: "_Tuple2",_0: 11,_1: 800}
+                                                 ,{ctor: "_Tuple2",_0: 12,_1: 1000}
+                                                 ,{ctor: "_Tuple2",_0: 13,_1: 1100}
+                                                 ,{ctor: "_Tuple2",_0: 14,_1: 1250}
+                                                 ,{ctor: "_Tuple2",_0: 15,_1: 1400}
+                                                 ,{ctor: "_Tuple2",_0: 16,_1: 1600}
+                                                 ,{ctor: "_Tuple2",_0: 17,_1: 2000}
+                                                 ,{ctor: "_Tuple2",_0: 18,_1: 2100}
+                                                 ,{ctor: "_Tuple2",_0: 19,_1: 2400}
+                                                 ,{ctor: "_Tuple2",_0: 20,_1: 2800}]));
+   var easyThresholds = $Dict.fromList(_U.list([{ctor: "_Tuple2",_0: 1,_1: 25}
+                                               ,{ctor: "_Tuple2",_0: 2,_1: 50}
+                                               ,{ctor: "_Tuple2",_0: 3,_1: 75}
+                                               ,{ctor: "_Tuple2",_0: 4,_1: 125}
+                                               ,{ctor: "_Tuple2",_0: 5,_1: 250}
+                                               ,{ctor: "_Tuple2",_0: 6,_1: 300}
+                                               ,{ctor: "_Tuple2",_0: 7,_1: 350}
+                                               ,{ctor: "_Tuple2",_0: 8,_1: 450}
+                                               ,{ctor: "_Tuple2",_0: 9,_1: 550}
+                                               ,{ctor: "_Tuple2",_0: 10,_1: 600}
+                                               ,{ctor: "_Tuple2",_0: 11,_1: 800}
+                                               ,{ctor: "_Tuple2",_0: 12,_1: 1000}
+                                               ,{ctor: "_Tuple2",_0: 13,_1: 1100}
+                                               ,{ctor: "_Tuple2",_0: 14,_1: 1250}
+                                               ,{ctor: "_Tuple2",_0: 15,_1: 1400}
+                                               ,{ctor: "_Tuple2",_0: 16,_1: 1600}
+                                               ,{ctor: "_Tuple2",_0: 17,_1: 2000}
+                                               ,{ctor: "_Tuple2",_0: 18,_1: 2100}
+                                               ,{ctor: "_Tuple2",_0: 19,_1: 2400}
+                                               ,{ctor: "_Tuple2",_0: 20,_1: 2800}]));
+   var randomName = "Random Name";
+   var characterView = F2(function (address,character) {
+      return A2($Html.div,
+      _U.list([$Html$Attributes.$class("character")]),
+      _U.list([A2($Html.input,
+              _U.list([$Html$Attributes.$class("character-level"),$Html$Attributes.type$("number"),$Html$Attributes.value($Basics.toString(character.level))]),
+              _U.list([]))
+              ,A2($Html.input,
+              _U.list([$Html$Attributes.$class("character-name")
+                      ,$Html$Attributes.type$("input")
+                      ,$Html$Attributes.value(A2($Maybe.withDefault,randomName,character.name))]),
+              _U.list([]))
+              ,A2($Html.p,_U.list([]),_U.list([$Html.text($Basics.toString(A2($Dict.get,character.level,easyThresholds)))]))
+              ,A2($Html.p,_U.list([]),_U.list([$Html.text($Basics.toString(A2($Dict.get,character.level,mediumThresholds)))]))
+              ,A2($Html.p,_U.list([]),_U.list([$Html.text($Basics.toString(A2($Dict.get,character.level,hardThresholds)))]))
+              ,A2($Html.p,_U.list([]),_U.list([$Html.text($Basics.toString(A2($Dict.get,character.level,deadlyThresholds)))]))]));
+   });
+   var view = F2(function (address,model) {    return A2($Html.div,_U.list([]),A2($List.map,characterView(address),model.party));});
    var update = F2(function (action,model) {    var _p0 = action;return {ctor: "_Tuple2",_0: model,_1: $Effects.none};});
    var NoOp = {ctor: "NoOp"};
-   var init = {ctor: "_Tuple2",_0: {},_1: $Effects.none};
-   var Model = {};
-   return _elm.Encounter.values = {_op: _op,Model: Model,init: init,NoOp: NoOp,update: update,view: view};
+   var initCharacter = {level: 1,name: $Maybe.Nothing,easyThreshold: 1,mediumThreshold: 2,hardThreshold: 3,deadlyThreshold: 4};
+   var initCharacters = A2($List.repeat,5,initCharacter);
+   var init = {ctor: "_Tuple2",_0: {party: initCharacters},_1: $Effects.none};
+   var Model = function (a) {    return {party: a};};
+   var Character = F6(function (a,b,c,d,e,f) {    return {level: a,name: b,easyThreshold: c,mediumThreshold: d,hardThreshold: e,deadlyThreshold: f};});
+   return _elm.Encounter.values = {_op: _op
+                                  ,Character: Character
+                                  ,Model: Model
+                                  ,initCharacter: initCharacter
+                                  ,initCharacters: initCharacters
+                                  ,init: init
+                                  ,NoOp: NoOp
+                                  ,update: update
+                                  ,view: view
+                                  ,characterView: characterView
+                                  ,randomName: randomName
+                                  ,easyThresholds: easyThresholds
+                                  ,mediumThresholds: mediumThresholds
+                                  ,hardThresholds: hardThresholds
+                                  ,deadlyThresholds: deadlyThresholds};
 };
 Elm.Main = Elm.Main || {};
 Elm.Main.make = function (_elm) {

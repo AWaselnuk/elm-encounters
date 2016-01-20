@@ -2,6 +2,9 @@ module Encounter where
 
 import Effects exposing (Effects)
 import Html exposing (..)
+import Html.Attributes exposing (..)
+import Html.Events exposing (..)
+import Dict exposing (..)
 
 -- FEATURES
 
@@ -74,10 +77,144 @@ update action model =
 
 view : Signal.Address Action -> Model -> Html
 view address model =
+  div 
+    []
+    (List.map (characterView address) model.party)
+
+characterView : Signal.Address Action -> Character -> Html
+characterView address character = 
   div
-  []
-  [ text "Hello, world!"
-  ]
+    [ class "character" ]
+    [
+      input 
+      [
+        class "character-level"
+      , type' "number"
+      , value (toString character.level)
+      ] []
+    , input
+      [
+        class "character-name"
+      , type' "input"
+      , value (Maybe.withDefault randomName character.name)
+      ] []
+    , p []
+      [ text (toString (get character.level easyThresholds)) ]
+    , p []
+      [ text (toString (get character.level mediumThresholds)) ]
+    , p []
+      [ text (toString (get character.level hardThresholds)) ]
+    , p []
+      [ text (toString (get character.level deadlyThresholds)) ]
+    ]
+  
+randomName : String
+randomName =
+  "Random Name"
+
+easyThresholds : Dict Int Int
+easyThresholds =
+  Dict.fromList 
+    [
+      (1, 25)
+    , (2, 50)
+    , (3, 75)
+    , (4, 125)
+    , (5, 250)
+    , (6, 300)
+    , (7, 350)
+    , (8, 450)
+    , (9, 550)
+    , (10, 600)
+    , (11, 800)
+    , (12, 1000)
+    , (13, 1100)
+    , (14, 1250)
+    , (15, 1400)
+    , (16, 1600)
+    , (17, 2000)
+    , (18, 2100)
+    , (19, 2400)
+    , (20, 2800)
+    ]
+
+mediumThresholds : Dict Int Int
+mediumThresholds =
+  Dict.fromList 
+    [
+      (1, 25)
+    , (2, 50)
+    , (3, 75)
+    , (4, 125)
+    , (5, 250)
+    , (6, 300)
+    , (7, 350)
+    , (8, 450)
+    , (9, 550)
+    , (10, 600)
+    , (11, 800)
+    , (12, 1000)
+    , (13, 1100)
+    , (14, 1250)
+    , (15, 1400)
+    , (16, 1600)
+    , (17, 2000)
+    , (18, 2100)
+    , (19, 2400)
+    , (20, 2800)
+    ]
+
+hardThresholds : Dict Int Int
+hardThresholds =
+  Dict.fromList 
+    [
+      (1, 25)
+    , (2, 50)
+    , (3, 75)
+    , (4, 125)
+    , (5, 250)
+    , (6, 300)
+    , (7, 350)
+    , (8, 450)
+    , (9, 550)
+    , (10, 600)
+    , (11, 800)
+    , (12, 1000)
+    , (13, 1100)
+    , (14, 1250)
+    , (15, 1400)
+    , (16, 1600)
+    , (17, 2000)
+    , (18, 2100)
+    , (19, 2400)
+    , (20, 2800)
+    ]
+
+deadlyThresholds : Dict Int Int
+deadlyThresholds =
+  Dict.fromList 
+    [
+      (1, 25)
+    , (2, 50)
+    , (3, 75)
+    , (4, 125)
+    , (5, 250)
+    , (6, 300)
+    , (7, 350)
+    , (8, 450)
+    , (9, 550)
+    , (10, 600)
+    , (11, 800)
+    , (12, 1000)
+    , (13, 1100)
+    , (14, 1250)
+    , (15, 1400)
+    , (16, 1600)
+    , (17, 2000)
+    , (18, 2100)
+    , (19, 2400)
+    , (20, 2800)
+    ]
 
 (=>) : a -> b -> (a, b)
 (=>) = (,)
