@@ -34,10 +34,6 @@ import Dict exposing (..)
 type alias Character =
   { level : Int
   , name : Maybe String
-  , easyThreshold : Int
-  , mediumThreshold : Int
-  , hardThreshold : Int
-  , deadlyThreshold : Int
   }
 
 type alias Model =
@@ -47,10 +43,6 @@ initCharacter : Character
 initCharacter =
   { level = 1
   , name = Nothing
-  , easyThreshold = 1
-  , mediumThreshold = 2
-  , hardThreshold = 3
-  , deadlyThreshold = 4
   }
 
 initCharacters : List Character
