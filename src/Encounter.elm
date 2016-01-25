@@ -65,11 +65,23 @@ init =
 
 type Action
   = NoOp
+  | AddCharacter
+  | RemoveCharacter
+  | IncreaseLevel Character
+  | DecreaseLevel Character
 
 update : Action -> Model -> (Model, Effects Action)
 update action model =
   case action of
     NoOp ->
+      (model, Effects.none)
+    AddCharacter ->
+      ({ model | party = initCharacter :: model.party }, Effects.none)
+    RemoveCharacter ->
+      ({ model | party = Maybe.withDefault [initCharacter] <| List.tail model.party }, Effects.none)
+    IncreaseLevel character ->
+      (model, Effects.none)
+    DecreaseLevel character ->
       (model, Effects.none)
 
 -- VIEW
@@ -82,6 +94,12 @@ view address model =
       p
         []
         [ text (toString (partyThresholds model.party)) ]
+    , button
+        [ onClick address AddCharacter ]
+        [ text "Add Character" ]
+    , button
+        [ onClick address RemoveCharacter ]
+        [ text "Remove Character" ]
     , div 
         []
         (List.map (characterView address) model.party)
