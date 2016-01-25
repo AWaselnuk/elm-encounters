@@ -36,6 +36,13 @@ type alias Character =
   , name : Maybe String
   }
 
+type alias PartyThresholds =
+  { easy : Int
+  , medium : Int
+  , hard : Int
+  , deadly : Int
+  }
+
 type alias Model =
   { party : List Character }
 
@@ -73,11 +80,11 @@ view address model =
     []
     [
       p
-      []
-      [ text (toString (partyThresholds model.party)) ]
+        []
+        [ text (toString (partyThresholds model.party)) ]
     , div 
-      []
-      (List.map (characterView address) model.party)
+        []
+        (List.map (characterView address) model.party)
     ]
 
 characterView : Signal.Address Action -> Character -> Html
@@ -86,27 +93,45 @@ characterView address character =
     [ class "character" ]
     [
       input 
-      [
-        class "character-level"
-      , type' "number"
-      , value (toString character.level)
-      ] []
+        [
+          class "character-level"
+        , type' "number"
+        , value (toString character.level)
+        ] []
     , input
-      [
-        class "character-name"
-      , type' "input"
-      , value (Maybe.withDefault randomName character.name)
-      ] []
+        [
+          class "character-name"
+        , type' "input"
+        , value (Maybe.withDefault randomName character.name)
+        ] []
     ]
   
 randomName : String
 randomName =
   "Random Name"
 
+getThreshold : Dict Int Int -> Character -> Int
+getThreshold thresholds character =
+  Maybe.withDefault 0 <| get character.level thresholds
+  
 -- TODO: Implement this
-partyThresholds : List Character -> (Int, Int, Int, Int)
+partyThresholds : List Character -> PartyThresholds
 partyThresholds party =
-  (1, 2, 3, 4)
+  let
+    easyPartyThresholds =
+      List.map (getThreshold easyThresholds) party
+    mediumPartyThresholds =
+      List.map (getThreshold mediumThresholds) party
+    hardPartyThresholds =
+      List.map (getThreshold hardThresholds) party
+    deadlyPartyThresholds =
+      List.map (getThreshold deadlyThresholds) party
+  in
+    { easy = List.sum easyPartyThresholds
+    , medium = List.sum mediumPartyThresholds
+    , hard = List.sum hardPartyThresholds
+    , deadly = List.sum deadlyPartyThresholds
+    }
 
 easyThresholds : Dict Int Int
 easyThresholds =

@@ -10696,66 +10696,66 @@ Elm.Encounter.make = function (_elm) {
    $Signal = Elm.Signal.make(_elm);
    var _op = {};
    _op["=>"] = F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};});
-   var deadlyThresholds = $Dict.fromList(_U.list([{ctor: "_Tuple2",_0: 1,_1: 25}
-                                                 ,{ctor: "_Tuple2",_0: 2,_1: 50}
-                                                 ,{ctor: "_Tuple2",_0: 3,_1: 75}
-                                                 ,{ctor: "_Tuple2",_0: 4,_1: 125}
-                                                 ,{ctor: "_Tuple2",_0: 5,_1: 250}
-                                                 ,{ctor: "_Tuple2",_0: 6,_1: 300}
-                                                 ,{ctor: "_Tuple2",_0: 7,_1: 350}
-                                                 ,{ctor: "_Tuple2",_0: 8,_1: 450}
-                                                 ,{ctor: "_Tuple2",_0: 9,_1: 550}
-                                                 ,{ctor: "_Tuple2",_0: 10,_1: 600}
-                                                 ,{ctor: "_Tuple2",_0: 11,_1: 800}
-                                                 ,{ctor: "_Tuple2",_0: 12,_1: 1000}
-                                                 ,{ctor: "_Tuple2",_0: 13,_1: 1100}
-                                                 ,{ctor: "_Tuple2",_0: 14,_1: 1250}
-                                                 ,{ctor: "_Tuple2",_0: 15,_1: 1400}
-                                                 ,{ctor: "_Tuple2",_0: 16,_1: 1600}
-                                                 ,{ctor: "_Tuple2",_0: 17,_1: 2000}
-                                                 ,{ctor: "_Tuple2",_0: 18,_1: 2100}
-                                                 ,{ctor: "_Tuple2",_0: 19,_1: 2400}
-                                                 ,{ctor: "_Tuple2",_0: 20,_1: 2800}]));
-   var hardThresholds = $Dict.fromList(_U.list([{ctor: "_Tuple2",_0: 1,_1: 25}
-                                               ,{ctor: "_Tuple2",_0: 2,_1: 50}
-                                               ,{ctor: "_Tuple2",_0: 3,_1: 75}
-                                               ,{ctor: "_Tuple2",_0: 4,_1: 125}
-                                               ,{ctor: "_Tuple2",_0: 5,_1: 250}
-                                               ,{ctor: "_Tuple2",_0: 6,_1: 300}
-                                               ,{ctor: "_Tuple2",_0: 7,_1: 350}
-                                               ,{ctor: "_Tuple2",_0: 8,_1: 450}
-                                               ,{ctor: "_Tuple2",_0: 9,_1: 550}
-                                               ,{ctor: "_Tuple2",_0: 10,_1: 600}
-                                               ,{ctor: "_Tuple2",_0: 11,_1: 800}
-                                               ,{ctor: "_Tuple2",_0: 12,_1: 1000}
-                                               ,{ctor: "_Tuple2",_0: 13,_1: 1100}
-                                               ,{ctor: "_Tuple2",_0: 14,_1: 1250}
-                                               ,{ctor: "_Tuple2",_0: 15,_1: 1400}
-                                               ,{ctor: "_Tuple2",_0: 16,_1: 1600}
-                                               ,{ctor: "_Tuple2",_0: 17,_1: 2000}
-                                               ,{ctor: "_Tuple2",_0: 18,_1: 2100}
-                                               ,{ctor: "_Tuple2",_0: 19,_1: 2400}
-                                               ,{ctor: "_Tuple2",_0: 20,_1: 2800}]));
-   var mediumThresholds = $Dict.fromList(_U.list([{ctor: "_Tuple2",_0: 1,_1: 25}
-                                                 ,{ctor: "_Tuple2",_0: 2,_1: 50}
-                                                 ,{ctor: "_Tuple2",_0: 3,_1: 75}
-                                                 ,{ctor: "_Tuple2",_0: 4,_1: 125}
-                                                 ,{ctor: "_Tuple2",_0: 5,_1: 250}
-                                                 ,{ctor: "_Tuple2",_0: 6,_1: 300}
-                                                 ,{ctor: "_Tuple2",_0: 7,_1: 350}
-                                                 ,{ctor: "_Tuple2",_0: 8,_1: 450}
-                                                 ,{ctor: "_Tuple2",_0: 9,_1: 550}
-                                                 ,{ctor: "_Tuple2",_0: 10,_1: 600}
-                                                 ,{ctor: "_Tuple2",_0: 11,_1: 800}
-                                                 ,{ctor: "_Tuple2",_0: 12,_1: 1000}
-                                                 ,{ctor: "_Tuple2",_0: 13,_1: 1100}
-                                                 ,{ctor: "_Tuple2",_0: 14,_1: 1250}
-                                                 ,{ctor: "_Tuple2",_0: 15,_1: 1400}
-                                                 ,{ctor: "_Tuple2",_0: 16,_1: 1600}
-                                                 ,{ctor: "_Tuple2",_0: 17,_1: 2000}
-                                                 ,{ctor: "_Tuple2",_0: 18,_1: 2100}
-                                                 ,{ctor: "_Tuple2",_0: 19,_1: 2400}
-                                                 ,{ctor: "_Tuple2",_0: 20,_1: 2800}]));
+   var deadlyThresholds = $Dict.fromList(_U.list([{ctor: "_Tuple2",_0: 1,_1: 100}
+                                                 ,{ctor: "_Tuple2",_0: 2,_1: 200}
+                                                 ,{ctor: "_Tuple2",_0: 3,_1: 400}
+                                                 ,{ctor: "_Tuple2",_0: 4,_1: 500}
+                                                 ,{ctor: "_Tuple2",_0: 5,_1: 1100}
+                                                 ,{ctor: "_Tuple2",_0: 6,_1: 1400}
+                                                 ,{ctor: "_Tuple2",_0: 7,_1: 1700}
+                                                 ,{ctor: "_Tuple2",_0: 8,_1: 2100}
+                                                 ,{ctor: "_Tuple2",_0: 9,_1: 2400}
+                                                 ,{ctor: "_Tuple2",_0: 10,_1: 2800}
+                                                 ,{ctor: "_Tuple2",_0: 11,_1: 3600}
+                                                 ,{ctor: "_Tuple2",_0: 12,_1: 4500}
+                                                 ,{ctor: "_Tuple2",_0: 13,_1: 5100}
+                                                 ,{ctor: "_Tuple2",_0: 14,_1: 5700}
+                                                 ,{ctor: "_Tuple2",_0: 15,_1: 6400}
+                                                 ,{ctor: "_Tuple2",_0: 16,_1: 7200}
+                                                 ,{ctor: "_Tuple2",_0: 17,_1: 8800}
+                                                 ,{ctor: "_Tuple2",_0: 18,_1: 9500}
+                                                 ,{ctor: "_Tuple2",_0: 19,_1: 10900}
+                                                 ,{ctor: "_Tuple2",_0: 20,_1: 12700}]));
+   var hardThresholds = $Dict.fromList(_U.list([{ctor: "_Tuple2",_0: 1,_1: 75}
+                                               ,{ctor: "_Tuple2",_0: 2,_1: 150}
+                                               ,{ctor: "_Tuple2",_0: 3,_1: 225}
+                                               ,{ctor: "_Tuple2",_0: 4,_1: 375}
+                                               ,{ctor: "_Tuple2",_0: 5,_1: 750}
+                                               ,{ctor: "_Tuple2",_0: 6,_1: 900}
+                                               ,{ctor: "_Tuple2",_0: 7,_1: 1100}
+                                               ,{ctor: "_Tuple2",_0: 8,_1: 1400}
+                                               ,{ctor: "_Tuple2",_0: 9,_1: 1600}
+                                               ,{ctor: "_Tuple2",_0: 10,_1: 1900}
+                                               ,{ctor: "_Tuple2",_0: 11,_1: 2400}
+                                               ,{ctor: "_Tuple2",_0: 12,_1: 3000}
+                                               ,{ctor: "_Tuple2",_0: 13,_1: 3400}
+                                               ,{ctor: "_Tuple2",_0: 14,_1: 3800}
+                                               ,{ctor: "_Tuple2",_0: 15,_1: 4300}
+                                               ,{ctor: "_Tuple2",_0: 16,_1: 4800}
+                                               ,{ctor: "_Tuple2",_0: 17,_1: 5900}
+                                               ,{ctor: "_Tuple2",_0: 18,_1: 6300}
+                                               ,{ctor: "_Tuple2",_0: 19,_1: 7300}
+                                               ,{ctor: "_Tuple2",_0: 20,_1: 8500}]));
+   var mediumThresholds = $Dict.fromList(_U.list([{ctor: "_Tuple2",_0: 1,_1: 50}
+                                                 ,{ctor: "_Tuple2",_0: 2,_1: 100}
+                                                 ,{ctor: "_Tuple2",_0: 3,_1: 150}
+                                                 ,{ctor: "_Tuple2",_0: 4,_1: 250}
+                                                 ,{ctor: "_Tuple2",_0: 5,_1: 500}
+                                                 ,{ctor: "_Tuple2",_0: 6,_1: 600}
+                                                 ,{ctor: "_Tuple2",_0: 7,_1: 750}
+                                                 ,{ctor: "_Tuple2",_0: 8,_1: 900}
+                                                 ,{ctor: "_Tuple2",_0: 9,_1: 1100}
+                                                 ,{ctor: "_Tuple2",_0: 10,_1: 1200}
+                                                 ,{ctor: "_Tuple2",_0: 11,_1: 1600}
+                                                 ,{ctor: "_Tuple2",_0: 12,_1: 2000}
+                                                 ,{ctor: "_Tuple2",_0: 13,_1: 2200}
+                                                 ,{ctor: "_Tuple2",_0: 14,_1: 2500}
+                                                 ,{ctor: "_Tuple2",_0: 15,_1: 2800}
+                                                 ,{ctor: "_Tuple2",_0: 16,_1: 3200}
+                                                 ,{ctor: "_Tuple2",_0: 17,_1: 3900}
+                                                 ,{ctor: "_Tuple2",_0: 18,_1: 4200}
+                                                 ,{ctor: "_Tuple2",_0: 19,_1: 4900}
+                                                 ,{ctor: "_Tuple2",_0: 20,_1: 5700}]));
    var easyThresholds = $Dict.fromList(_U.list([{ctor: "_Tuple2",_0: 1,_1: 25}
                                                ,{ctor: "_Tuple2",_0: 2,_1: 50}
                                                ,{ctor: "_Tuple2",_0: 3,_1: 75}
@@ -10776,6 +10776,17 @@ Elm.Encounter.make = function (_elm) {
                                                ,{ctor: "_Tuple2",_0: 18,_1: 2100}
                                                ,{ctor: "_Tuple2",_0: 19,_1: 2400}
                                                ,{ctor: "_Tuple2",_0: 20,_1: 2800}]));
+   var getThreshold = F2(function (thresholds,character) {    return A2($Maybe.withDefault,0,A2($Dict.get,character.level,thresholds));});
+   var partyThresholds = function (party) {
+      var deadlyPartyThresholds = A2($List.map,getThreshold(deadlyThresholds),party);
+      var hardPartyThresholds = A2($List.map,getThreshold(hardThresholds),party);
+      var mediumPartyThresholds = A2($List.map,getThreshold(mediumThresholds),party);
+      var easyPartyThresholds = A2($List.map,getThreshold(easyThresholds),party);
+      return {easy: $List.sum(easyPartyThresholds)
+             ,medium: $List.sum(mediumPartyThresholds)
+             ,hard: $List.sum(hardPartyThresholds)
+             ,deadly: $List.sum(deadlyPartyThresholds)};
+   };
    var randomName = "Random Name";
    var characterView = F2(function (address,character) {
       return A2($Html.div,
@@ -10787,22 +10798,25 @@ Elm.Encounter.make = function (_elm) {
               _U.list([$Html$Attributes.$class("character-name")
                       ,$Html$Attributes.type$("input")
                       ,$Html$Attributes.value(A2($Maybe.withDefault,randomName,character.name))]),
-              _U.list([]))
-              ,A2($Html.p,_U.list([]),_U.list([$Html.text($Basics.toString(A2($Dict.get,character.level,easyThresholds)))]))
-              ,A2($Html.p,_U.list([]),_U.list([$Html.text($Basics.toString(A2($Dict.get,character.level,mediumThresholds)))]))
-              ,A2($Html.p,_U.list([]),_U.list([$Html.text($Basics.toString(A2($Dict.get,character.level,hardThresholds)))]))
-              ,A2($Html.p,_U.list([]),_U.list([$Html.text($Basics.toString(A2($Dict.get,character.level,deadlyThresholds)))]))]));
+              _U.list([]))]));
    });
-   var view = F2(function (address,model) {    return A2($Html.div,_U.list([]),A2($List.map,characterView(address),model.party));});
+   var view = F2(function (address,model) {
+      return A2($Html.div,
+      _U.list([]),
+      _U.list([A2($Html.p,_U.list([]),_U.list([$Html.text($Basics.toString(partyThresholds(model.party)))]))
+              ,A2($Html.div,_U.list([]),A2($List.map,characterView(address),model.party))]));
+   });
    var update = F2(function (action,model) {    var _p0 = action;return {ctor: "_Tuple2",_0: model,_1: $Effects.none};});
    var NoOp = {ctor: "NoOp"};
-   var initCharacter = {level: 1,name: $Maybe.Nothing,easyThreshold: 1,mediumThreshold: 2,hardThreshold: 3,deadlyThreshold: 4};
+   var initCharacter = {level: 1,name: $Maybe.Nothing};
    var initCharacters = A2($List.repeat,5,initCharacter);
    var init = {ctor: "_Tuple2",_0: {party: initCharacters},_1: $Effects.none};
    var Model = function (a) {    return {party: a};};
-   var Character = F6(function (a,b,c,d,e,f) {    return {level: a,name: b,easyThreshold: c,mediumThreshold: d,hardThreshold: e,deadlyThreshold: f};});
+   var PartyThresholds = F4(function (a,b,c,d) {    return {easy: a,medium: b,hard: c,deadly: d};});
+   var Character = F2(function (a,b) {    return {level: a,name: b};});
    return _elm.Encounter.values = {_op: _op
                                   ,Character: Character
+                                  ,PartyThresholds: PartyThresholds
                                   ,Model: Model
                                   ,initCharacter: initCharacter
                                   ,initCharacters: initCharacters
@@ -10812,6 +10826,8 @@ Elm.Encounter.make = function (_elm) {
                                   ,view: view
                                   ,characterView: characterView
                                   ,randomName: randomName
+                                  ,getThreshold: getThreshold
+                                  ,partyThresholds: partyThresholds
                                   ,easyThresholds: easyThresholds
                                   ,mediumThresholds: mediumThresholds
                                   ,hardThresholds: hardThresholds
