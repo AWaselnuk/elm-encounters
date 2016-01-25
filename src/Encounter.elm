@@ -78,7 +78,10 @@ update action model =
     AddCharacter ->
       ({ model | party = initCharacter :: model.party }, Effects.none)
     RemoveCharacter ->
-      ({ model | party = Maybe.withDefault [initCharacter] <| List.tail model.party }, Effects.none)
+      if List.length model.party > 1 then
+        ({ model | party = Maybe.withDefault [initCharacter] <| List.tail model.party }, Effects.none)
+      else
+        (model, Effects.none)
     IncreaseLevel character ->
       (model, Effects.none)
     DecreaseLevel character ->
