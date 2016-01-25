@@ -10690,6 +10690,7 @@ Elm.Encounter.make = function (_elm) {
    $Effects = Elm.Effects.make(_elm),
    $Html = Elm.Html.make(_elm),
    $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
@@ -10800,18 +10801,37 @@ Elm.Encounter.make = function (_elm) {
                       ,$Html$Attributes.value(A2($Maybe.withDefault,randomName,character.name))]),
               _U.list([]))]));
    });
+   var DecreaseLevel = function (a) {    return {ctor: "DecreaseLevel",_0: a};};
+   var IncreaseLevel = function (a) {    return {ctor: "IncreaseLevel",_0: a};};
+   var RemoveCharacter = {ctor: "RemoveCharacter"};
+   var AddCharacter = {ctor: "AddCharacter"};
    var view = F2(function (address,model) {
       return A2($Html.div,
       _U.list([]),
-      _U.list([A2($Html.p,_U.list([]),_U.list([$Html.text($Basics.toString(partyThresholds(model.party)))]))
+      _U.list([A2($Html.p,_U.list([]),_U.list([$Html.text($Basics.toString(model.partyThresholds))]))
+              ,A2($Html.button,_U.list([A2($Html$Events.onClick,address,AddCharacter)]),_U.list([$Html.text("Add Character")]))
+              ,A2($Html.button,_U.list([A2($Html$Events.onClick,address,RemoveCharacter)]),_U.list([$Html.text("Remove Character")]))
               ,A2($Html.div,_U.list([]),A2($List.map,characterView(address),model.party))]));
    });
-   var update = F2(function (action,model) {    var _p0 = action;return {ctor: "_Tuple2",_0: model,_1: $Effects.none};});
    var NoOp = {ctor: "NoOp"};
    var initCharacter = {level: 1,name: $Maybe.Nothing};
-   var initCharacters = A2($List.repeat,5,initCharacter);
-   var init = {ctor: "_Tuple2",_0: {party: initCharacters},_1: $Effects.none};
-   var Model = function (a) {    return {party: a};};
+   var initParty = A2($List.repeat,5,initCharacter);
+   var initPartyThresholds = partyThresholds(initParty);
+   var init = {ctor: "_Tuple2",_0: {party: initParty,partyThresholds: initPartyThresholds},_1: $Effects.none};
+   var update = F2(function (action,model) {
+      var _p0 = action;
+      switch (_p0.ctor)
+      {case "NoOp": return {ctor: "_Tuple2",_0: model,_1: $Effects.none};
+         case "AddCharacter": var newParty = A2($List._op["::"],initCharacter,model.party);
+           return {ctor: "_Tuple2",_0: _U.update(model,{party: newParty,partyThresholds: partyThresholds(newParty)}),_1: $Effects.none};
+         case "RemoveCharacter": var newParty = _U.cmp($List.length(model.party),1) > 0 ? A2($Maybe.withDefault,
+           _U.list([initCharacter]),
+           $List.tail(model.party)) : model.party;
+           return {ctor: "_Tuple2",_0: _U.update(model,{party: newParty,partyThresholds: partyThresholds(newParty)}),_1: $Effects.none};
+         case "IncreaseLevel": return {ctor: "_Tuple2",_0: model,_1: $Effects.none};
+         default: return {ctor: "_Tuple2",_0: model,_1: $Effects.none};}
+   });
+   var Model = F2(function (a,b) {    return {party: a,partyThresholds: b};});
    var PartyThresholds = F4(function (a,b,c,d) {    return {easy: a,medium: b,hard: c,deadly: d};});
    var Character = F2(function (a,b) {    return {level: a,name: b};});
    return _elm.Encounter.values = {_op: _op
@@ -10819,9 +10839,14 @@ Elm.Encounter.make = function (_elm) {
                                   ,PartyThresholds: PartyThresholds
                                   ,Model: Model
                                   ,initCharacter: initCharacter
-                                  ,initCharacters: initCharacters
+                                  ,initParty: initParty
+                                  ,initPartyThresholds: initPartyThresholds
                                   ,init: init
                                   ,NoOp: NoOp
+                                  ,AddCharacter: AddCharacter
+                                  ,RemoveCharacter: RemoveCharacter
+                                  ,IncreaseLevel: IncreaseLevel
+                                  ,DecreaseLevel: DecreaseLevel
                                   ,update: update
                                   ,view: view
                                   ,characterView: characterView
