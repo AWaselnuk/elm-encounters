@@ -44,7 +44,9 @@ type alias PartyThresholds =
   }
 
 type alias Model =
-  { party : List Character }
+  { party : List Character
+  , partyThresholds : PartyThresholds
+  }
 
 initCharacter : Character
 initCharacter =
@@ -52,13 +54,18 @@ initCharacter =
   , name = Nothing
   }
 
-initCharacters : List Character
-initCharacters =
+initParty : List Character
+initParty =
   List.repeat 5 initCharacter
+
+initPartyThresholds : PartyThresholds
+initPartyThresholds =
+  partyThresholds initParty
 
 init : (Model, Effects Action)
 init =
-  ( { party = initCharacters }
+  ( { party = initParty 
+    , partyThresholds = initPartyThresholds }
   , Effects.none)
 
 -- UPDATE
@@ -76,12 +83,15 @@ update action model =
     NoOp ->
       (model, Effects.none)
     AddCharacter ->
-      ({ model | party = initCharacter :: model.party }, Effects.none)
+      let
+        newParty = initCharacter :: model.party
+      in
+        ({ model | party = newParty, partyThresholds = partyThresholds newParty }, Effects.none)
     RemoveCharacter ->
-      if List.length model.party > 1 then
-        ({ model | party = Maybe.withDefault [initCharacter] <| List.tail model.party }, Effects.none)
-      else
-        (model, Effects.none)
+      let
+        newParty = if List.length model.party > 1 then Maybe.withDefault [initCharacter] <| List.tail model.party else model.party
+      in
+        ({ model | party = newParty, partyThresholds = partyThresholds newParty }, Effects.none)
     IncreaseLevel character ->
       (model, Effects.none)
     DecreaseLevel character ->
@@ -96,7 +106,7 @@ view address model =
     [
       p
         []
-        [ text (toString (partyThresholds model.party)) ]
+        [ text (toString (model.partyThresholds)) ]
     , button
         [ onClick address AddCharacter ]
         [ text "Add Character" ]
@@ -135,7 +145,6 @@ getThreshold : Dict Int Int -> Character -> Int
 getThreshold thresholds character =
   Maybe.withDefault 0 <| get character.level thresholds
   
--- TODO: Implement this
 partyThresholds : List Character -> PartyThresholds
 partyThresholds party =
   let
