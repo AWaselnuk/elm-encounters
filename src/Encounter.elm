@@ -167,7 +167,7 @@ newCharacter level name =
 
 randomName : String
 randomName =
-  "Random Name"
+  "PC Name"
 
 safeStrToLevelInt : String -> Int
 safeStrToLevelInt =
