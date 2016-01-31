@@ -10789,6 +10789,7 @@ Elm.Encounter.make = function (_elm) {
              ,hard: $List.sum(hardPartyThresholds)
              ,deadly: $List.sum(deadlyPartyThresholds)};
    };
+   var restrictLevel = function (level) {    return _U.cmp(level,1) < 0 ? 1 : _U.cmp(level,20) > 0 ? 20 : level;};
    var safeStrToLevelInt = function (_p0) {    return A2($Maybe.withDefault,1,$Result.toMaybe($String.toInt(_p0)));};
    var randomName = "Random Name";
    var newCharacter = F2(function (level,name) {    return {level: level,name: _U.eq($String.length(name),0) ? randomName : name};});
@@ -10808,7 +10809,7 @@ Elm.Encounter.make = function (_elm) {
       {case "NoOp": return {ctor: "_Tuple2",_0: model,_1: $Effects.none};
          case "AddCharacter": var newParty = A2($List._op["::"],_p1._0,model.party);
            return {ctor: "_Tuple2",_0: _U.update(model,{party: newParty,partyThresholds: partyThresholds(newParty)}),_1: $Effects.none};
-         case "SetNewCharacterLevel": return {ctor: "_Tuple2",_0: _U.update(model,{newCharacterLevel: _p1._0}),_1: $Effects.none};
+         case "SetNewCharacterLevel": return {ctor: "_Tuple2",_0: _U.update(model,{newCharacterLevel: restrictLevel(_p1._0)}),_1: $Effects.none};
          case "SetNewCharacterName": return {ctor: "_Tuple2",_0: _U.update(model,{newCharacterName: _p1._0}),_1: $Effects.none};
          case "IncreaseLevel": return {ctor: "_Tuple2",_0: model,_1: $Effects.none};
          default: return {ctor: "_Tuple2",_0: model,_1: $Effects.none};}
@@ -10877,6 +10878,7 @@ Elm.Encounter.make = function (_elm) {
                                   ,newCharacter: newCharacter
                                   ,randomName: randomName
                                   ,safeStrToLevelInt: safeStrToLevelInt
+                                  ,restrictLevel: restrictLevel
                                   ,getThreshold: getThreshold
                                   ,partyThresholds: partyThresholds
                                   ,easyThresholds: easyThresholds

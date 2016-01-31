@@ -93,7 +93,7 @@ update action model =
       in
         ({ model | party = newParty, partyThresholds = partyThresholds newParty }, Effects.none)
     SetNewCharacterLevel level ->
-      ({ model | newCharacterLevel = level }, Effects.none)
+      ({ model | newCharacterLevel = restrictLevel level }, Effects.none)
     SetNewCharacterName name ->
       ({ model | newCharacterName = name }, Effects.none)
     IncreaseLevel character ->
@@ -172,6 +172,15 @@ randomName =
 safeStrToLevelInt : String -> Int
 safeStrToLevelInt =
   String.toInt >> Result.toMaybe >> Maybe.withDefault 1
+
+restrictLevel : Int -> Int
+restrictLevel level =
+  if level < 1 then
+    1 
+  else if level > 20 then
+    20
+  else
+    level
 
 getThreshold : Dict Int Int -> Character -> Int
 getThreshold thresholds character =
