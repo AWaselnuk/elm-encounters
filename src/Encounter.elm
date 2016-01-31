@@ -5,6 +5,7 @@ import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Dict exposing (..)
+import String
 
 -- FEATURES
 
@@ -33,7 +34,7 @@ import Dict exposing (..)
 
 type alias Character =
   { level : Int
-  , name : Maybe String
+  , name : String 
   }
 
 type alias PartyThresholds =
@@ -44,19 +45,16 @@ type alias PartyThresholds =
   }
 
 type alias Model =
-  { party : List Character
+  { uid : Int
+  , party : List Character
   , partyThresholds : PartyThresholds
-  }
-
-initCharacter : Character
-initCharacter =
-  { level = 1
-  , name = Nothing
+  , newCharacterLevel : Int
+  , newCharacterName : String
   }
 
 initParty : List Character
 initParty =
-  List.repeat 5 initCharacter
+  List.repeat 5 (newCharacter 1 randomName)
 
 initPartyThresholds : PartyThresholds
 initPartyThresholds =
@@ -64,16 +62,23 @@ initPartyThresholds =
 
 init : (Model, Effects Action)
 init =
-  ( { party = initParty 
-    , partyThresholds = initPartyThresholds }
+  ( { uid = 0
+    , party = initParty
+    , partyThresholds = initPartyThresholds
+    , newCharacterLevel = 1
+    , newCharacterName = "" }
   , Effects.none)
 
 -- UPDATE
 
+type alias Level = Int
+type alias Name = String
+
 type Action
   = NoOp
-  | AddCharacter
-  | RemoveCharacter
+  | AddCharacter Character
+  | SetNewCharacterLevel Level
+  | SetNewCharacterName Name
   | IncreaseLevel Character
   | DecreaseLevel Character
 
@@ -82,16 +87,15 @@ update action model =
   case action of
     NoOp ->
       (model, Effects.none)
-    AddCharacter ->
+    AddCharacter character ->
       let
-        newParty = initCharacter :: model.party
+        newParty = character :: model.party
       in
         ({ model | party = newParty, partyThresholds = partyThresholds newParty }, Effects.none)
-    RemoveCharacter ->
-      let
-        newParty = if List.length model.party > 1 then Maybe.withDefault [initCharacter] <| List.tail model.party else model.party
-      in
-        ({ model | party = newParty, partyThresholds = partyThresholds newParty }, Effects.none)
+    SetNewCharacterLevel level ->
+      ({ model | newCharacterLevel = level }, Effects.none)
+    SetNewCharacterName name ->
+      ({ model | newCharacterName = name }, Effects.none)
     IncreaseLevel character ->
       (model, Effects.none)
     DecreaseLevel character ->
@@ -107,23 +111,41 @@ view address model =
       p
         []
         [ text (toString (model.partyThresholds)) ]
-    , button
-        [ onClick address AddCharacter ]
-        [ text "Add Character" ]
-    , button
-        [ onClick address RemoveCharacter ]
-        [ text "Remove Character" ]
     , div 
+        []
+        [ label
+            [ for "level" ]
+            [ text "Level" ]
+        , input
+            [ type' "number" 
+            , value (toString model.newCharacterLevel) 
+            , on "input" targetValue (\level -> Signal.message address (SetNewCharacterLevel (safeStrToLevelInt level)))
+            ]
+            []
+        , label 
+            [ for "name" ]
+            [ text "Name" ]
+        , input
+            [ type' "text"
+            , value model.newCharacterName
+            , on "input" targetValue (\name -> Signal.message address (SetNewCharacterName name))
+            ]
+            []
+        , button
+            [ onClick address (AddCharacter (newCharacter model.newCharacterLevel model.newCharacterName)) ]
+            [ text "Add Character"]
+        ] 
+    , div
         []
         (List.map (characterView address) model.party)
     ]
 
 characterView : Signal.Address Action -> Character -> Html
-characterView address character = 
+characterView address character =
   div
     [ class "character" ]
     [
-      input 
+      input
         [
           class "character-level"
         , type' "number"
@@ -133,18 +155,28 @@ characterView address character =
         [
           class "character-name"
         , type' "input"
-        , value (Maybe.withDefault randomName character.name)
+        , value (character.name)
         ] []
     ]
-  
+
+newCharacter : Int -> String -> Character
+newCharacter level name =
+  { level = level
+  , name = if String.length name == 0 then randomName else name 
+  }
+
 randomName : String
 randomName =
   "Random Name"
 
+safeStrToLevelInt : String -> Int
+safeStrToLevelInt =
+  String.toInt >> Result.toMaybe >> Maybe.withDefault 1
+
 getThreshold : Dict Int Int -> Character -> Int
 getThreshold thresholds character =
   Maybe.withDefault 0 <| get character.level thresholds
-  
+
 partyThresholds : List Character -> PartyThresholds
 partyThresholds party =
   let
@@ -165,7 +197,7 @@ partyThresholds party =
 
 easyThresholds : Dict Int Int
 easyThresholds =
-  Dict.fromList 
+  Dict.fromList
     [
       (1, 25)
     , (2, 50)
@@ -191,7 +223,7 @@ easyThresholds =
 
 mediumThresholds : Dict Int Int
 mediumThresholds =
-  Dict.fromList 
+  Dict.fromList
     [
       (1, 50)
     , (2, 100)
@@ -217,7 +249,7 @@ mediumThresholds =
 
 hardThresholds : Dict Int Int
 hardThresholds =
-  Dict.fromList 
+  Dict.fromList
     [
       (1, 75)
     , (2, 150)
@@ -243,7 +275,7 @@ hardThresholds =
 
 deadlyThresholds : Dict Int Int
 deadlyThresholds =
-  Dict.fromList 
+  Dict.fromList
     [
       (1, 100)
     , (2, 200)
