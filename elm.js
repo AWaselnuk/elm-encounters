@@ -10678,6 +10678,87 @@ Elm.StartApp.make = function (_elm) {
    var Config = F4(function (a,b,c,d) {    return {init: a,update: b,view: c,inputs: d};});
    return _elm.StartApp.values = {_op: _op,start: start,Config: Config,App: App};
 };
+Elm.Utilities = Elm.Utilities || {};
+Elm.Utilities.make = function (_elm) {
+   "use strict";
+   _elm.Utilities = _elm.Utilities || {};
+   if (_elm.Utilities.values) return _elm.Utilities.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $String = Elm.String.make(_elm);
+   var _op = {};
+   var restrictLevel = function (level) {    return _U.cmp(level,1) < 0 ? 1 : _U.cmp(level,20) > 0 ? 20 : level;};
+   var safeStrToLevel = function (_p0) {    return A2($Maybe.withDefault,1,$Result.toMaybe($String.toInt(_p0)));};
+   return _elm.Utilities.values = {_op: _op,restrictLevel: restrictLevel,safeStrToLevel: safeStrToLevel};
+};
+Elm.Character = Elm.Character || {};
+Elm.Character.make = function (_elm) {
+   "use strict";
+   _elm.Character = _elm.Character || {};
+   if (_elm.Character.values) return _elm.Character.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Effects = Elm.Effects.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $String = Elm.String.make(_elm),
+   $Utilities = Elm.Utilities.make(_elm);
+   var _op = {};
+   var randomName = "PC Name";
+   var $new = F2(function (level,name) {    return {level: level,name: _U.eq($String.length(name),0) ? randomName : name};});
+   var init = A2($new,1,randomName);
+   var Context = F2(function (a,b) {    return {actions: a,remove: b};});
+   var update = F2(function (action,model) {
+      var _p0 = action;
+      if (_p0.ctor === "ModifyLevel") {
+            return {ctor: "_Tuple2",_0: _U.update(model,{level: $Utilities.restrictLevel(_p0._0)}),_1: $Effects.none};
+         } else {
+            return {ctor: "_Tuple2",_0: _U.update(model,{name: _p0._0}),_1: $Effects.none};
+         }
+   });
+   var ModifyName = function (a) {    return {ctor: "ModifyName",_0: a};};
+   var ModifyLevel = function (a) {    return {ctor: "ModifyLevel",_0: a};};
+   var view = F2(function (context,character) {
+      return A2($Html.div,
+      _U.list([$Html$Attributes.$class("character")]),
+      _U.list([A2($Html.input,
+              _U.list([$Html$Attributes.$class("character-level")
+                      ,$Html$Attributes.type$("number")
+                      ,$Html$Attributes.value($Basics.toString(character.level))
+                      ,A3($Html$Events.on,
+                      "input",
+                      $Html$Events.targetValue,
+                      function (level) {
+                         return A2($Signal.message,context.actions,ModifyLevel($Utilities.safeStrToLevel(level)));
+                      })]),
+              _U.list([]))
+              ,A2($Html.input,
+              _U.list([$Html$Attributes.$class("character-name")
+                      ,$Html$Attributes.type$("input")
+                      ,$Html$Attributes.value(character.name)
+                      ,A3($Html$Events.on,
+                      "input",
+                      $Html$Events.targetValue,
+                      function (name) {
+                         return A2($Signal.message,context.actions,ModifyName(name));
+                      })]),
+              _U.list([]))
+              ,A2($Html.button,_U.list([A2($Html$Events.onClick,context.remove,{ctor: "_Tuple0"})]),_U.list([$Html.text("Remove")]))]));
+   });
+   var Model = F2(function (a,b) {    return {level: a,name: b};});
+   return _elm.Character.values = {_op: _op,init: init,$new: $new,update: update,view: view,Model: Model,Context: Context};
+};
 Elm.Encounter = Elm.Encounter || {};
 Elm.Encounter.make = function (_elm) {
    "use strict";
@@ -10685,6 +10766,7 @@ Elm.Encounter.make = function (_elm) {
    if (_elm.Encounter.values) return _elm.Encounter.values;
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
+   $Character = Elm.Character.make(_elm),
    $Debug = Elm.Debug.make(_elm),
    $Dict = Elm.Dict.make(_elm),
    $Effects = Elm.Effects.make(_elm),
@@ -10695,9 +10777,8 @@ Elm.Encounter.make = function (_elm) {
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm),
-   $String = Elm.String.make(_elm);
+   $Utilities = Elm.Utilities.make(_elm);
    var _op = {};
-   _op["=>"] = F2(function (v0,v1) {    return {ctor: "_Tuple2",_0: v0,_1: v1};});
    var deadlyThresholds = $Dict.fromList(_U.list([{ctor: "_Tuple2",_0: 1,_1: 100}
                                                  ,{ctor: "_Tuple2",_0: 2,_1: 200}
                                                  ,{ctor: "_Tuple2",_0: 3,_1: 400}
@@ -10778,46 +10859,29 @@ Elm.Encounter.make = function (_elm) {
                                                ,{ctor: "_Tuple2",_0: 18,_1: 2100}
                                                ,{ctor: "_Tuple2",_0: 19,_1: 2400}
                                                ,{ctor: "_Tuple2",_0: 20,_1: 2800}]));
-   var getThreshold = F2(function (thresholds,character) {    return A2($Maybe.withDefault,0,A2($Dict.get,character.level,thresholds));});
-   var partyThresholds = function (party) {
-      var deadlyPartyThresholds = A2($List.map,getThreshold(deadlyThresholds),party);
-      var hardPartyThresholds = A2($List.map,getThreshold(hardThresholds),party);
-      var mediumPartyThresholds = A2($List.map,getThreshold(mediumThresholds),party);
-      var easyPartyThresholds = A2($List.map,getThreshold(easyThresholds),party);
+   var getThreshold = F2(function (thresholds,level) {    return A2($Maybe.withDefault,0,A2($Dict.get,level,thresholds));});
+   var partyThresholds = function (levels) {
+      var deadlyPartyThresholds = A2($List.map,getThreshold(deadlyThresholds),levels);
+      var hardPartyThresholds = A2($List.map,getThreshold(hardThresholds),levels);
+      var mediumPartyThresholds = A2($List.map,getThreshold(mediumThresholds),levels);
+      var easyPartyThresholds = A2($List.map,getThreshold(easyThresholds),levels);
       return {easy: $List.sum(easyPartyThresholds)
              ,medium: $List.sum(mediumPartyThresholds)
              ,hard: $List.sum(hardPartyThresholds)
              ,deadly: $List.sum(deadlyPartyThresholds)};
    };
-   var restrictLevel = function (level) {    return _U.cmp(level,1) < 0 ? 1 : _U.cmp(level,20) > 0 ? 20 : level;};
-   var safeStrToLevelInt = function (_p0) {    return A2($Maybe.withDefault,1,$Result.toMaybe($String.toInt(_p0)));};
-   var randomName = "Random Name";
-   var newCharacter = F2(function (level,name) {    return {level: level,name: _U.eq($String.length(name),0) ? randomName : name};});
-   var characterView = F2(function (address,character) {
-      return A2($Html.div,
-      _U.list([$Html$Attributes.$class("character")]),
-      _U.list([A2($Html.input,
-              _U.list([$Html$Attributes.$class("character-level"),$Html$Attributes.type$("number"),$Html$Attributes.value($Basics.toString(character.level))]),
-              _U.list([]))
-              ,A2($Html.input,
-              _U.list([$Html$Attributes.$class("character-name"),$Html$Attributes.type$("input"),$Html$Attributes.value(character.name)]),
-              _U.list([]))]));
-   });
-   var update = F2(function (action,model) {
-      var _p1 = action;
-      switch (_p1.ctor)
-      {case "NoOp": return {ctor: "_Tuple2",_0: model,_1: $Effects.none};
-         case "AddCharacter": var newParty = A2($List._op["::"],_p1._0,model.party);
-           return {ctor: "_Tuple2",_0: _U.update(model,{party: newParty,partyThresholds: partyThresholds(newParty)}),_1: $Effects.none};
-         case "SetNewCharacterLevel": return {ctor: "_Tuple2",_0: _U.update(model,{newCharacterLevel: restrictLevel(_p1._0)}),_1: $Effects.none};
-         case "SetNewCharacterName": return {ctor: "_Tuple2",_0: _U.update(model,{newCharacterName: _p1._0}),_1: $Effects.none};
-         case "IncreaseLevel": return {ctor: "_Tuple2",_0: model,_1: $Effects.none};
-         default: return {ctor: "_Tuple2",_0: model,_1: $Effects.none};}
-   });
-   var DecreaseLevel = function (a) {    return {ctor: "DecreaseLevel",_0: a};};
-   var IncreaseLevel = function (a) {    return {ctor: "IncreaseLevel",_0: a};};
    var SetNewCharacterName = function (a) {    return {ctor: "SetNewCharacterName",_0: a};};
    var SetNewCharacterLevel = function (a) {    return {ctor: "SetNewCharacterLevel",_0: a};};
+   var ModifyCharacter = F2(function (a,b) {    return {ctor: "ModifyCharacter",_0: a,_1: b};});
+   var RemoveCharacter = function (a) {    return {ctor: "RemoveCharacter",_0: a};};
+   var viewCharacter = F2(function (address,_p0) {
+      var _p1 = _p0;
+      var _p2 = _p1._0;
+      var context = A2($Character.Context,
+      A2($Signal.forwardTo,address,ModifyCharacter(_p2)),
+      A2($Signal.forwardTo,address,$Basics.always(RemoveCharacter(_p2))));
+      return A2($Character.view,context,_p1._1);
+   });
    var AddCharacter = function (a) {    return {ctor: "AddCharacter",_0: a};};
    var view = F2(function (address,model) {
       return A2($Html.div,
@@ -10833,7 +10897,7 @@ Elm.Encounter.make = function (_elm) {
                               "input",
                               $Html$Events.targetValue,
                               function (level) {
-                                 return A2($Signal.message,address,SetNewCharacterLevel(safeStrToLevelInt(level)));
+                                 return A2($Signal.message,address,SetNewCharacterLevel($Utilities.safeStrToLevel(level)));
                               })]),
                       _U.list([]))
                       ,A2($Html.label,_U.list([$Html$Attributes.$for("name")]),_U.list([$Html.text("Name")]))
@@ -10848,37 +10912,59 @@ Elm.Encounter.make = function (_elm) {
                               })]),
                       _U.list([]))
                       ,A2($Html.button,
-                      _U.list([A2($Html$Events.onClick,address,AddCharacter(A2(newCharacter,model.newCharacterLevel,model.newCharacterName)))]),
+                      _U.list([A2($Html$Events.onClick,address,AddCharacter(A2($Character.$new,model.newCharacterLevel,model.newCharacterName)))]),
                       _U.list([$Html.text("Add Character")]))]))
-              ,A2($Html.div,_U.list([]),A2($List.map,characterView(address),model.party))]));
+              ,A2($Html.div,_U.list([]),A2($List.map,viewCharacter(address),model.party))]));
    });
    var NoOp = {ctor: "NoOp"};
-   var initParty = A2($List.repeat,5,A2(newCharacter,1,randomName));
-   var initPartyThresholds = partyThresholds(initParty);
-   var init = {ctor: "_Tuple2",_0: {uid: 0,party: initParty,partyThresholds: initPartyThresholds,newCharacterLevel: 1,newCharacterName: ""},_1: $Effects.none};
+   var levelsFromParty = function (party) {    return A2($List.map,function (_p3) {    return function (_) {    return _.level;}($Basics.snd(_p3));},party);};
+   var update = F2(function (action,model) {
+      var _p4 = action;
+      switch (_p4.ctor)
+      {case "NoOp": return {ctor: "_Tuple2",_0: model,_1: $Effects.none};
+         case "AddCharacter": var newParty = A2($List._op["::"],{ctor: "_Tuple2",_0: model.uid,_1: _p4._0},model.party);
+           return {ctor: "_Tuple2"
+                  ,_0: _U.update(model,{party: newParty,partyThresholds: partyThresholds(levelsFromParty(newParty)),uid: model.uid + 1})
+                  ,_1: $Effects.none};
+         case "RemoveCharacter": return {ctor: "_Tuple2"
+                                        ,_0: _U.update(model,
+                                        {party: A2($List.filter,function (_p5) {    var _p6 = _p5;return !_U.eq(_p6._0,_p4._0);},model.party)})
+                                        ,_1: $Effects.none};
+         case "ModifyCharacter": var updateCharacter = function (_p7) {
+              var _p8 = _p7;
+              var _p10 = _p8._1;
+              var _p9 = _p8._0;
+              return _U.eq(_p4._0,_p9) ? {ctor: "_Tuple2",_0: _p9,_1: $Basics.fst(A2($Character.update,_p4._1,_p10))} : {ctor: "_Tuple2",_0: _p9,_1: _p10};
+           };
+           return {ctor: "_Tuple2",_0: _U.update(model,{party: A2($List.map,updateCharacter,model.party)}),_1: $Effects.none};
+         case "SetNewCharacterLevel": return {ctor: "_Tuple2",_0: _U.update(model,{newCharacterLevel: $Utilities.restrictLevel(_p4._0)}),_1: $Effects.none};
+         default: return {ctor: "_Tuple2",_0: _U.update(model,{newCharacterName: _p4._0}),_1: $Effects.none};}
+   });
+   var initParty = _U.list([{ctor: "_Tuple2",_0: 1,_1: $Character.init}
+                           ,{ctor: "_Tuple2",_0: 2,_1: $Character.init}
+                           ,{ctor: "_Tuple2",_0: 3,_1: $Character.init}
+                           ,{ctor: "_Tuple2",_0: 4,_1: $Character.init}
+                           ,{ctor: "_Tuple2",_0: 5,_1: $Character.init}]);
+   var initPartyThresholds = partyThresholds(levelsFromParty(initParty));
+   var init = {ctor: "_Tuple2",_0: {uid: 6,party: initParty,partyThresholds: initPartyThresholds,newCharacterLevel: 1,newCharacterName: ""},_1: $Effects.none};
    var Model = F5(function (a,b,c,d,e) {    return {uid: a,party: b,partyThresholds: c,newCharacterLevel: d,newCharacterName: e};});
    var PartyThresholds = F4(function (a,b,c,d) {    return {easy: a,medium: b,hard: c,deadly: d};});
-   var Character = F2(function (a,b) {    return {level: a,name: b};});
    return _elm.Encounter.values = {_op: _op
-                                  ,Character: Character
                                   ,PartyThresholds: PartyThresholds
                                   ,Model: Model
                                   ,initParty: initParty
+                                  ,levelsFromParty: levelsFromParty
                                   ,initPartyThresholds: initPartyThresholds
                                   ,init: init
                                   ,NoOp: NoOp
                                   ,AddCharacter: AddCharacter
+                                  ,RemoveCharacter: RemoveCharacter
+                                  ,ModifyCharacter: ModifyCharacter
                                   ,SetNewCharacterLevel: SetNewCharacterLevel
                                   ,SetNewCharacterName: SetNewCharacterName
-                                  ,IncreaseLevel: IncreaseLevel
-                                  ,DecreaseLevel: DecreaseLevel
                                   ,update: update
                                   ,view: view
-                                  ,characterView: characterView
-                                  ,newCharacter: newCharacter
-                                  ,randomName: randomName
-                                  ,safeStrToLevelInt: safeStrToLevelInt
-                                  ,restrictLevel: restrictLevel
+                                  ,viewCharacter: viewCharacter
                                   ,getThreshold: getThreshold
                                   ,partyThresholds: partyThresholds
                                   ,easyThresholds: easyThresholds
