@@ -66,7 +66,7 @@ levelsFromParty party =
 
 initPartyThresholds : PartyThresholds
 initPartyThresholds =
-  partyThresholds <| levelsFromParty initParty
+  calculatePartyThresholds <| levelsFromParty initParty
 
 init : (Model, Effects Action)
 init =
@@ -98,13 +98,17 @@ update action model =
       in
         ({ model |
              party = newParty,
-             partyThresholds = partyThresholds <| levelsFromParty newParty,
+             partyThresholds = calculatePartyThresholds <| levelsFromParty newParty,
              uid = model.uid + 1 }
         , Effects.none)
     RemoveCharacter id ->
-      ({ model |
-          party = List.filter (\(characterID, _) -> characterID /= id) model.party }
-      , Effects.none)
+      let
+        newParty = List.filter (\(characterID, _) -> characterID /= id) model.party 
+      in
+        ({ model |
+             party = newParty,
+             partyThresholds = calculatePartyThresholds <| levelsFromParty newParty }
+        , Effects.none)
     ModifyCharacter id characterAction ->
       let
         updateCharacter (characterID, characterModel) =
@@ -112,9 +116,11 @@ update action model =
             (characterID, fst <| Character.update characterAction characterModel)
           else
             (characterID, characterModel)
+        newParty = List.map updateCharacter model.party 
       in
         ({ model |
-            party = List.map updateCharacter model.party }
+             party = newParty,
+             partyThresholds = calculatePartyThresholds <| levelsFromParty newParty }
         , Effects.none)
     SetNewCharacterLevel level ->
       ({ model | newCharacterLevel = restrictLevel level }, Effects.none)
@@ -174,8 +180,8 @@ getThreshold : Dict Int Int -> Int -> Int
 getThreshold thresholds level =
   Maybe.withDefault 0 <| get level thresholds
 
-partyThresholds : List Int -> PartyThresholds
-partyThresholds levels =
+calculatePartyThresholds : List Int -> PartyThresholds
+calculatePartyThresholds levels =
   let
     easyPartyThresholds =
       List.map (getThreshold easyThresholds) levels

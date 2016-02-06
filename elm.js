@@ -10860,7 +10860,7 @@ Elm.Encounter.make = function (_elm) {
                                                ,{ctor: "_Tuple2",_0: 19,_1: 2400}
                                                ,{ctor: "_Tuple2",_0: 20,_1: 2800}]));
    var getThreshold = F2(function (thresholds,level) {    return A2($Maybe.withDefault,0,A2($Dict.get,level,thresholds));});
-   var partyThresholds = function (levels) {
+   var calculatePartyThresholds = function (levels) {
       var deadlyPartyThresholds = A2($List.map,getThreshold(deadlyThresholds),levels);
       var hardPartyThresholds = A2($List.map,getThreshold(hardThresholds),levels);
       var mediumPartyThresholds = A2($List.map,getThreshold(mediumThresholds),levels);
@@ -10924,19 +10924,22 @@ Elm.Encounter.make = function (_elm) {
       {case "NoOp": return {ctor: "_Tuple2",_0: model,_1: $Effects.none};
          case "AddCharacter": var newParty = A2($List._op["::"],{ctor: "_Tuple2",_0: model.uid,_1: _p4._0},model.party);
            return {ctor: "_Tuple2"
-                  ,_0: _U.update(model,{party: newParty,partyThresholds: partyThresholds(levelsFromParty(newParty)),uid: model.uid + 1})
+                  ,_0: _U.update(model,{party: newParty,partyThresholds: calculatePartyThresholds(levelsFromParty(newParty)),uid: model.uid + 1})
                   ,_1: $Effects.none};
-         case "RemoveCharacter": return {ctor: "_Tuple2"
-                                        ,_0: _U.update(model,
-                                        {party: A2($List.filter,function (_p5) {    var _p6 = _p5;return !_U.eq(_p6._0,_p4._0);},model.party)})
-                                        ,_1: $Effects.none};
+         case "RemoveCharacter": var newParty = A2($List.filter,function (_p5) {    var _p6 = _p5;return !_U.eq(_p6._0,_p4._0);},model.party);
+           return {ctor: "_Tuple2"
+                  ,_0: _U.update(model,{party: newParty,partyThresholds: calculatePartyThresholds(levelsFromParty(newParty))})
+                  ,_1: $Effects.none};
          case "ModifyCharacter": var updateCharacter = function (_p7) {
               var _p8 = _p7;
               var _p10 = _p8._1;
               var _p9 = _p8._0;
               return _U.eq(_p4._0,_p9) ? {ctor: "_Tuple2",_0: _p9,_1: $Basics.fst(A2($Character.update,_p4._1,_p10))} : {ctor: "_Tuple2",_0: _p9,_1: _p10};
            };
-           return {ctor: "_Tuple2",_0: _U.update(model,{party: A2($List.map,updateCharacter,model.party)}),_1: $Effects.none};
+           var newParty = A2($List.map,updateCharacter,model.party);
+           return {ctor: "_Tuple2"
+                  ,_0: _U.update(model,{party: newParty,partyThresholds: calculatePartyThresholds(levelsFromParty(newParty))})
+                  ,_1: $Effects.none};
          case "SetNewCharacterLevel": return {ctor: "_Tuple2",_0: _U.update(model,{newCharacterLevel: $Utilities.restrictLevel(_p4._0)}),_1: $Effects.none};
          default: return {ctor: "_Tuple2",_0: _U.update(model,{newCharacterName: _p4._0}),_1: $Effects.none};}
    });
@@ -10945,7 +10948,7 @@ Elm.Encounter.make = function (_elm) {
                            ,{ctor: "_Tuple2",_0: 3,_1: $Character.init}
                            ,{ctor: "_Tuple2",_0: 4,_1: $Character.init}
                            ,{ctor: "_Tuple2",_0: 5,_1: $Character.init}]);
-   var initPartyThresholds = partyThresholds(levelsFromParty(initParty));
+   var initPartyThresholds = calculatePartyThresholds(levelsFromParty(initParty));
    var init = {ctor: "_Tuple2",_0: {uid: 6,party: initParty,partyThresholds: initPartyThresholds,newCharacterLevel: 1,newCharacterName: ""},_1: $Effects.none};
    var Model = F5(function (a,b,c,d,e) {    return {uid: a,party: b,partyThresholds: c,newCharacterLevel: d,newCharacterName: e};});
    var PartyThresholds = F4(function (a,b,c,d) {    return {easy: a,medium: b,hard: c,deadly: d};});
@@ -10966,7 +10969,7 @@ Elm.Encounter.make = function (_elm) {
                                   ,view: view
                                   ,viewCharacter: viewCharacter
                                   ,getThreshold: getThreshold
-                                  ,partyThresholds: partyThresholds
+                                  ,calculatePartyThresholds: calculatePartyThresholds
                                   ,easyThresholds: easyThresholds
                                   ,mediumThresholds: mediumThresholds
                                   ,hardThresholds: hardThresholds
