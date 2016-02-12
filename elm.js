@@ -10686,15 +10686,62 @@ Elm.Utilities.make = function (_elm) {
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
    $Debug = Elm.Debug.make(_elm),
+   $Dict = Elm.Dict.make(_elm),
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
    $Signal = Elm.Signal.make(_elm),
    $String = Elm.String.make(_elm);
    var _op = {};
-   var restrictLevel = function (level) {    return _U.cmp(level,1) < 0 ? 1 : _U.cmp(level,20) > 0 ? 20 : level;};
-   var safeStrToLevel = function (_p0) {    return A2($Maybe.withDefault,1,$Result.toMaybe($String.toInt(_p0)));};
-   return _elm.Utilities.values = {_op: _op,restrictLevel: restrictLevel,safeStrToLevel: safeStrToLevel};
+   var ratingXpList = _U.list([{ctor: "_Tuple2",_0: 0,_1: 10}
+                              ,{ctor: "_Tuple2",_0: 0.125,_1: 25}
+                              ,{ctor: "_Tuple2",_0: 0.25,_1: 50}
+                              ,{ctor: "_Tuple2",_0: 0.5,_1: 100}
+                              ,{ctor: "_Tuple2",_0: 1,_1: 200}
+                              ,{ctor: "_Tuple2",_0: 2,_1: 450}
+                              ,{ctor: "_Tuple2",_0: 3,_1: 700}
+                              ,{ctor: "_Tuple2",_0: 4,_1: 1100}
+                              ,{ctor: "_Tuple2",_0: 5,_1: 1800}
+                              ,{ctor: "_Tuple2",_0: 6,_1: 2300}
+                              ,{ctor: "_Tuple2",_0: 7,_1: 2900}
+                              ,{ctor: "_Tuple2",_0: 8,_1: 3900}
+                              ,{ctor: "_Tuple2",_0: 9,_1: 5000}
+                              ,{ctor: "_Tuple2",_0: 10,_1: 5900}
+                              ,{ctor: "_Tuple2",_0: 11,_1: 7200}
+                              ,{ctor: "_Tuple2",_0: 12,_1: 8400}
+                              ,{ctor: "_Tuple2",_0: 13,_1: 10000}
+                              ,{ctor: "_Tuple2",_0: 14,_1: 11500}
+                              ,{ctor: "_Tuple2",_0: 15,_1: 13000}
+                              ,{ctor: "_Tuple2",_0: 16,_1: 15000}
+                              ,{ctor: "_Tuple2",_0: 17,_1: 18000}
+                              ,{ctor: "_Tuple2",_0: 18,_1: 20000}
+                              ,{ctor: "_Tuple2",_0: 19,_1: 22000}
+                              ,{ctor: "_Tuple2",_0: 20,_1: 25000}
+                              ,{ctor: "_Tuple2",_0: 21,_1: 33000}
+                              ,{ctor: "_Tuple2",_0: 22,_1: 41000}
+                              ,{ctor: "_Tuple2",_0: 23,_1: 50000}
+                              ,{ctor: "_Tuple2",_0: 24,_1: 62000}
+                              ,{ctor: "_Tuple2",_0: 25,_1: 75000}
+                              ,{ctor: "_Tuple2",_0: 26,_1: 90000}
+                              ,{ctor: "_Tuple2",_0: 27,_1: 105000}
+                              ,{ctor: "_Tuple2",_0: 28,_1: 120000}
+                              ,{ctor: "_Tuple2",_0: 29,_1: 135000}
+                              ,{ctor: "_Tuple2",_0: 30,_1: 155000}]);
+   var xpList = A2($List.map,$Basics.snd,ratingXpList);
+   var ratingList = A2($List.map,$Basics.fst,ratingXpList);
+   var ratingXPTable = $Dict.fromList(ratingXpList);
+   var highestXP = A2($Maybe.withDefault,0,$List.maximum(xpList));
+   var safeRatingToXP = function (rating) {    return A2($Maybe.withDefault,0,A2($Dict.get,rating,ratingXPTable));};
+   var restrictRating = function (rating) {    return rating;};
+   var restrictXP = function (xp) {    return A3($Basics.clamp,0,highestXP,xp);};
+   var restrictLevel = function (level) {    return A3($Basics.clamp,1,20,level);};
+   var safeStrToLevel = function (_p0) {    return A2($Maybe.withDefault,0,$Result.toMaybe($String.toInt(_p0)));};
+   return _elm.Utilities.values = {_op: _op
+                                  ,restrictLevel: restrictLevel
+                                  ,restrictRating: restrictRating
+                                  ,restrictXP: restrictXP
+                                  ,safeStrToLevel: safeStrToLevel
+                                  ,safeRatingToXP: safeRatingToXP};
 };
 Elm.Character = Elm.Character || {};
 Elm.Character.make = function (_elm) {
@@ -10745,7 +10792,7 @@ Elm.Character.make = function (_elm) {
               _U.list([]))
               ,A2($Html.input,
               _U.list([$Html$Attributes.$class("character-name")
-                      ,$Html$Attributes.type$("input")
+                      ,$Html$Attributes.type$("text")
                       ,$Html$Attributes.value(character.name)
                       ,A3($Html$Events.on,
                       "input",
@@ -10758,6 +10805,71 @@ Elm.Character.make = function (_elm) {
    });
    var Model = F2(function (a,b) {    return {level: a,name: b};});
    return _elm.Character.values = {_op: _op,init: init,$new: $new,update: update,view: view,Model: Model,Context: Context};
+};
+Elm.Monster = Elm.Monster || {};
+Elm.Monster.make = function (_elm) {
+   "use strict";
+   _elm.Monster = _elm.Monster || {};
+   if (_elm.Monster.values) return _elm.Monster.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Effects = Elm.Effects.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $String = Elm.String.make(_elm),
+   $Utilities = Elm.Utilities.make(_elm);
+   var _op = {};
+   var randomName = "Monster Name";
+   var $new = F2(function (rating,name) {
+      return {xp: $Utilities.safeRatingToXP(rating),name: _U.eq($String.length(name),0) ? randomName : name,rating: rating};
+   });
+   var init = A2($new,1,randomName);
+   var Context = F2(function (a,b) {    return {actions: a,remove: b};});
+   var update = F2(function (action,model) {
+      var _p0 = action;
+      switch (_p0.ctor)
+      {case "ModifyXP": return {ctor: "_Tuple2",_0: _U.update(model,{xp: $Utilities.restrictXP(_p0._0)}),_1: $Effects.none};
+         case "ModifyRating": return {ctor: "_Tuple2",_0: _U.update(model,{rating: $Utilities.restrictRating(_p0._0)}),_1: $Effects.none};
+         default: return {ctor: "_Tuple2",_0: _U.update(model,{name: _p0._0}),_1: $Effects.none};}
+   });
+   var ModifyName = function (a) {    return {ctor: "ModifyName",_0: a};};
+   var ModifyRating = function (a) {    return {ctor: "ModifyRating",_0: a};};
+   var ModifyXP = function (a) {    return {ctor: "ModifyXP",_0: a};};
+   var view = F2(function (context,monster) {
+      return A2($Html.div,
+      _U.list([$Html$Attributes.$class("monster")]),
+      _U.list([A2($Html.input,
+              _U.list([$Html$Attributes.$class("monster-xp")
+                      ,$Html$Attributes.type$("number")
+                      ,$Html$Attributes.value($Basics.toString(monster.xp))
+                      ,A3($Html$Events.on,
+                      "input",
+                      $Html$Events.targetValue,
+                      function (xp) {
+                         return A2($Signal.message,context.actions,ModifyXP($Utilities.safeStrToLevel(xp)));
+                      })]),
+              _U.list([]))
+              ,A2($Html.input,
+              _U.list([$Html$Attributes.$class("monster-name")
+                      ,$Html$Attributes.type$("text")
+                      ,$Html$Attributes.value(monster.name)
+                      ,A3($Html$Events.on,
+                      "input",
+                      $Html$Events.targetValue,
+                      function (name) {
+                         return A2($Signal.message,context.actions,ModifyName(name));
+                      })]),
+              _U.list([]))
+              ,A2($Html.button,_U.list([A2($Html$Events.onClick,context.remove,{ctor: "_Tuple0"})]),_U.list([$Html.text("Remove")]))]));
+   });
+   var Model = F3(function (a,b,c) {    return {xp: a,rating: b,name: c};});
+   return _elm.Monster.values = {_op: _op,init: init,$new: $new,update: update,view: view,Model: Model,Context: Context};
 };
 Elm.Encounter = Elm.Encounter || {};
 Elm.Encounter.make = function (_elm) {

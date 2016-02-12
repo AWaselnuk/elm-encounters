@@ -1,6 +1,6 @@
-module Character (Model, init, new, Action, update, view, Context) where
+module Monster (Model, init, new, Action, update, view, Context) where
 
-import Utilities exposing (restrictLevel, safeStrToLevel)
+import Utilities exposing (safeRatingToXP, safeStrToLevel, restrictXP, restrictRating)
 import Effects exposing (Effects)
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -10,23 +10,25 @@ import String
 -- MODEL
 
 type alias Model =
-  { level : Int
+  { xp : Int
+  , rating : Float 
   , name : String 
   }
 
 -- UPDATE
 
-type alias ID = Int
-
 type Action
-  = ModifyLevel Int
+  = ModifyXP Int
+  | ModifyRating Float
   | ModifyName String
 
 update : Action -> Model -> (Model, Effects Action)
 update action model =
   case action of
-    ModifyLevel level ->
-      ({ model | level = restrictLevel level }, Effects.none)
+    ModifyXP xp ->
+      ({ model | xp = restrictXP xp }, Effects.none)
+    ModifyRating rating ->
+      ({ model | rating = restrictRating rating }, Effects.none)
     ModifyName name ->
       ({ model | name = name }, Effects.none)
 
@@ -38,22 +40,22 @@ type alias Context =
   }
 
 view : Context -> Model -> Html
-view context character =
+view context monster =
   div
-    [ class "character" ]
+    [ class "monster" ]
     [
       input
         [
-          class "character-level"
+          class "monster-xp"
         , type' "number"
-        , value (toString character.level)
-        , on "input" targetValue (\level -> Signal.message context.actions (ModifyLevel (safeStrToLevel level)))
+        , value (toString monster.xp)
+        , on "input" targetValue (\xp -> Signal.message context.actions (ModifyXP (safeStrToLevel xp)))
         ] []
     , input
         [
-          class "character-name"
+          class "monster-name"
         , type' "text"
-        , value (character.name)
+        , value (monster.name)
         , on "input" targetValue (\name -> Signal.message context.actions (ModifyName name))
         ] []
     , button
@@ -65,12 +67,13 @@ init : Model
 init =
   new 1 randomName
 
-new : Int -> String -> Model
-new level name =
-  { level = level 
+new : Float -> String -> Model
+new rating name =
+  { xp = safeRatingToXP rating 
   , name = if String.length name == 0 then randomName else name 
+  , rating = rating 
   }
 
 randomName : String
 randomName =
-  "PC Name"
+  "Monster Name"

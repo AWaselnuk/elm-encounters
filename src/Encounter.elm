@@ -2,6 +2,7 @@ module Encounter where
 
 import Utilities exposing (restrictLevel, safeStrToLevel)
 import Character
+import Monster
 import Effects exposing (Effects)
 import Html exposing (..)
 import Html.Attributes exposing (..)
