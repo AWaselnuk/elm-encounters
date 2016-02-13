@@ -135,40 +135,48 @@ view address model =
   div
     []
     [
-      p
-        []
-        [ text (toString (model.partyThresholds)) ]
-    , div 
-        []
-        [ label
-            [ for "level" ]
-            [ text "Level" ]
-        , input
-            [ type' "number" 
-            , value (toString model.newCharacterLevel) 
-            , on "input" targetValue (\level -> Signal.message address (SetNewCharacterLevel (safeStrToLevel level)))
-            ]
-            []
-        , label 
-            [ for "name" ]
-            [ text "Name" ]
-        , input
-            [ type' "text"
-            , value model.newCharacterName
-            , on "input" targetValue (\name -> Signal.message address (SetNewCharacterName name))
-            ]
-            []
-        , button
-            [ onClick address (AddCharacter (Character.new model.newCharacterLevel model.newCharacterName)) ]
-            [ text "Add Character"]
-        ] 
+      partyThresholdsView model.partyThresholds
+    , addCharacterView address model
     , div
         []
-        (List.map (viewCharacter address) model.party)
+        (List.map (characterView address) model.party)
     ]
 
-viewCharacter : Signal.Address Action -> (ID, Character.Model) -> Html
-viewCharacter address (id, model) =
+partyThresholdsView : PartyThresholds -> Html
+partyThresholdsView partyThresholds =
+  p
+    []
+    [ text (partyThresholds |> toString) ]
+
+addCharacterView : Signal.Address Action -> Model -> Html
+addCharacterView address model =
+  div 
+    []
+    [ label
+        [ for "level" ]
+        [ text "Level" ]
+    , input
+        [ type' "number" 
+        , value (toString model.newCharacterLevel) 
+        , on "input" targetValue (\level -> Signal.message address (SetNewCharacterLevel (safeStrToLevel level)))
+        ]
+        []
+    , label 
+        [ for "name" ]
+        [ text "Name" ]
+    , input
+        [ type' "text"
+        , value model.newCharacterName
+        , on "input" targetValue (\name -> Signal.message address (SetNewCharacterName name))
+        ]
+        []
+    , button
+        [ onClick address (AddCharacter (Character.new model.newCharacterLevel model.newCharacterName)) ]
+        [ text "Add Character"]
+    ] 
+
+characterView : Signal.Address Action -> (ID, Character.Model) -> Html
+characterView address (id, model) =
   let
     context = 
       Character.Context

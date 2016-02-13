@@ -10982,11 +10982,12 @@ Elm.Encounter.make = function (_elm) {
              ,hard: $List.sum(hardPartyThresholds)
              ,deadly: $List.sum(deadlyPartyThresholds)};
    };
+   var partyThresholdsView = function (partyThresholds) {    return A2($Html.p,_U.list([]),_U.list([$Html.text($Basics.toString(partyThresholds))]));};
    var SetNewCharacterName = function (a) {    return {ctor: "SetNewCharacterName",_0: a};};
    var SetNewCharacterLevel = function (a) {    return {ctor: "SetNewCharacterLevel",_0: a};};
    var ModifyCharacter = F2(function (a,b) {    return {ctor: "ModifyCharacter",_0: a,_1: b};});
    var RemoveCharacter = function (a) {    return {ctor: "RemoveCharacter",_0: a};};
-   var viewCharacter = F2(function (address,_p0) {
+   var characterView = F2(function (address,_p0) {
       var _p1 = _p0;
       var _p2 = _p1._0;
       var context = A2($Character.Context,
@@ -10995,38 +10996,41 @@ Elm.Encounter.make = function (_elm) {
       return A2($Character.view,context,_p1._1);
    });
    var AddCharacter = function (a) {    return {ctor: "AddCharacter",_0: a};};
+   var addCharacterView = F2(function (address,model) {
+      return A2($Html.div,
+      _U.list([]),
+      _U.list([A2($Html.label,_U.list([$Html$Attributes.$for("level")]),_U.list([$Html.text("Level")]))
+              ,A2($Html.input,
+              _U.list([$Html$Attributes.type$("number")
+                      ,$Html$Attributes.value($Basics.toString(model.newCharacterLevel))
+                      ,A3($Html$Events.on,
+                      "input",
+                      $Html$Events.targetValue,
+                      function (level) {
+                         return A2($Signal.message,address,SetNewCharacterLevel($Utilities.safeStrToLevel(level)));
+                      })]),
+              _U.list([]))
+              ,A2($Html.label,_U.list([$Html$Attributes.$for("name")]),_U.list([$Html.text("Name")]))
+              ,A2($Html.input,
+              _U.list([$Html$Attributes.type$("text")
+                      ,$Html$Attributes.value(model.newCharacterName)
+                      ,A3($Html$Events.on,
+                      "input",
+                      $Html$Events.targetValue,
+                      function (name) {
+                         return A2($Signal.message,address,SetNewCharacterName(name));
+                      })]),
+              _U.list([]))
+              ,A2($Html.button,
+              _U.list([A2($Html$Events.onClick,address,AddCharacter(A2($Character.$new,model.newCharacterLevel,model.newCharacterName)))]),
+              _U.list([$Html.text("Add Character")]))]));
+   });
    var view = F2(function (address,model) {
       return A2($Html.div,
       _U.list([]),
-      _U.list([A2($Html.p,_U.list([]),_U.list([$Html.text($Basics.toString(model.partyThresholds))]))
-              ,A2($Html.div,
-              _U.list([]),
-              _U.list([A2($Html.label,_U.list([$Html$Attributes.$for("level")]),_U.list([$Html.text("Level")]))
-                      ,A2($Html.input,
-                      _U.list([$Html$Attributes.type$("number")
-                              ,$Html$Attributes.value($Basics.toString(model.newCharacterLevel))
-                              ,A3($Html$Events.on,
-                              "input",
-                              $Html$Events.targetValue,
-                              function (level) {
-                                 return A2($Signal.message,address,SetNewCharacterLevel($Utilities.safeStrToLevel(level)));
-                              })]),
-                      _U.list([]))
-                      ,A2($Html.label,_U.list([$Html$Attributes.$for("name")]),_U.list([$Html.text("Name")]))
-                      ,A2($Html.input,
-                      _U.list([$Html$Attributes.type$("text")
-                              ,$Html$Attributes.value(model.newCharacterName)
-                              ,A3($Html$Events.on,
-                              "input",
-                              $Html$Events.targetValue,
-                              function (name) {
-                                 return A2($Signal.message,address,SetNewCharacterName(name));
-                              })]),
-                      _U.list([]))
-                      ,A2($Html.button,
-                      _U.list([A2($Html$Events.onClick,address,AddCharacter(A2($Character.$new,model.newCharacterLevel,model.newCharacterName)))]),
-                      _U.list([$Html.text("Add Character")]))]))
-              ,A2($Html.div,_U.list([]),A2($List.map,viewCharacter(address),model.party))]));
+      _U.list([partyThresholdsView(model.partyThresholds)
+              ,A2(addCharacterView,address,model)
+              ,A2($Html.div,_U.list([]),A2($List.map,characterView(address),model.party))]));
    });
    var NoOp = {ctor: "NoOp"};
    var levelsFromParty = function (party) {    return A2($List.map,function (_p3) {    return function (_) {    return _.level;}($Basics.snd(_p3));},party);};
@@ -11079,7 +11083,9 @@ Elm.Encounter.make = function (_elm) {
                                   ,SetNewCharacterName: SetNewCharacterName
                                   ,update: update
                                   ,view: view
-                                  ,viewCharacter: viewCharacter
+                                  ,partyThresholdsView: partyThresholdsView
+                                  ,addCharacterView: addCharacterView
+                                  ,characterView: characterView
                                   ,getThreshold: getThreshold
                                   ,calculatePartyThresholds: calculatePartyThresholds
                                   ,easyThresholds: easyThresholds
