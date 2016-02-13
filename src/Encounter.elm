@@ -1,13 +1,13 @@
 module Encounter where
 
-import Utilities exposing (restrictLevel, safeStrToLevel)
+import Utilities exposing (..)
 import Character
 import Monster
 import Effects exposing (Effects)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
-import Dict exposing (..)
+import Dict exposing (Dict)
 import String
 
 -- FEATURES
@@ -50,6 +50,9 @@ type alias Model =
   , partyThresholds : PartyThresholds
   , newCharacterLevel : Int
   , newCharacterName : String
+  , monsters : List (ID, Monster.Model)
+  , newMonsterName : String
+  , newMonsterRating : Float
   }
 
 initParty : List (ID, Character.Model)
@@ -75,7 +78,10 @@ init =
     , party = initParty
     , partyThresholds = initPartyThresholds
     , newCharacterLevel = 1
-    , newCharacterName = "" }
+    , newCharacterName = "" 
+    , monsters = []
+    , newMonsterName = "" 
+    , newMonsterRating = initRating }
   , Effects.none)
 
 -- UPDATE
@@ -87,6 +93,8 @@ type Action
   | ModifyCharacter ID Character.Action
   | SetNewCharacterLevel Int
   | SetNewCharacterName String
+  | AddMonster Monster.Model
+  | SetNewMonsterName String
 
 update : Action -> Model -> (Model, Effects Action)
 update action model =
@@ -127,6 +135,16 @@ update action model =
       ({ model | newCharacterLevel = restrictLevel level }, Effects.none)
     SetNewCharacterName name ->
       ({ model | newCharacterName = name }, Effects.none)
+    AddMonster monster ->
+      let
+        newMonsters = (model.uid, monster) :: model.monsters
+      in
+        ({ model |
+             monsters = newMonsters,
+             uid = model.uid + 1 }
+        , Effects.none)
+    SetNewMonsterName name ->
+      ({ model | newMonsterName = name }, Effects.none)
 
 -- VIEW
 
@@ -140,7 +158,62 @@ view address model =
     , div
         []
         (List.map (characterView address) model.party)
+    , addMonsterView address model
     ]
+
+addMonsterView : Signal.Address Action -> Model -> Html
+addMonsterView address model =
+  div
+    []
+    [ label
+        [ for "monster-rating" ]
+        [ text "Challenge Rating" ]
+    , monsterRatingOptionsView
+    , label
+        [ for "monster-xp" ]
+        [ text "Experience Points" ]
+    , monsterXpOptionsView
+    , label
+        [ for "monster-name" ]
+        [ text "Name" ]
+    , input
+        [ type' "text" 
+        , value model.newMonsterName
+        , on "input" targetValue (\name -> Signal.message address (SetNewMonsterName name))
+        ]
+        []
+    , button
+        [ onClick address (AddMonster (Monster.new model.newMonsterRating model.newMonsterName)) ]
+        [ text "Add Monster"]
+    ]
+
+monsterRatingOptionsView : Html
+monsterRatingOptionsView =
+  let 
+    monsterRatingOption rating =
+      option
+        [ value rating ]
+        [ text rating ]
+    monsterRatingOptions =
+      List.map (\rating -> monsterRatingOption <| toString <| rating) ratingList
+  in
+    select 
+      [ name "monster-rating" ]
+      monsterRatingOptions
+
+monsterXpOptionsView : Html
+monsterXpOptionsView =
+  let 
+    monsterXpOption xp =
+      option
+        [ value xp ]
+        [ text xp ]
+    monsterXpOptions =
+      List.map (\xp -> monsterXpOption <| toString <| xp) xpList
+  in
+    select 
+      [ name "monster-xp" ]
+      monsterXpOptions
 
 partyThresholdsView : PartyThresholds -> Html
 partyThresholdsView partyThresholds =
@@ -187,7 +260,7 @@ characterView address (id, model) =
 
 getThreshold : Dict Int Int -> Int -> Int
 getThreshold thresholds level =
-  Maybe.withDefault 0 <| get level thresholds
+  Maybe.withDefault 0 <| Dict.get level thresholds
 
 calculatePartyThresholds : List Int -> PartyThresholds
 calculatePartyThresholds levels =

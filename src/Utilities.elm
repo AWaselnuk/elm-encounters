@@ -1,4 +1,4 @@
-module Utilities (restrictLevel, restrictRating, restrictXP, safeStrToLevel, safeRatingToXP) where
+module Utilities (restrictLevel, restrictRating, restrictXP, safeStrToLevel, safeRatingToXP, ratingList, xpList, ratingXPTable, initRating) where
 
 import String
 import Dict
@@ -31,6 +31,10 @@ highestXP =
 ratingXPTable : Dict.Dict Float Int
 ratingXPTable =
   Dict.fromList ratingXpList
+
+initRating : Float
+initRating =
+  List.head ratingList |> Maybe.withDefault 0
 
 ratingList : List Float
 ratingList = 
