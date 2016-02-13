@@ -1,4 +1,4 @@
-module Utilities (restrictLevel, restrictRating, restrictXP, safeStrToLevel, safeRatingToXP, ratingList, xpList, ratingXPTable, initRating) where
+module Utilities (restrictLevel, restrictRating, restrictXP, safeStrToLevel, safeStrToRating, safeRatingToXP, safeXPToRating, ratingList, xpList, ratingXPTable, initRating) where
 
 import String
 import Dict
@@ -6,6 +6,10 @@ import Dict
 safeStrToLevel : String -> Int
 safeStrToLevel =
   String.toInt >> Result.toMaybe >> Maybe.withDefault 0
+
+safeStrToRating : String -> Float
+safeStrToRating =
+  String.toFloat >> Result.toMaybe >> Maybe.withDefault 0
 
 restrictLevel : Int -> Int
 restrictLevel level =
@@ -20,6 +24,10 @@ restrictRating : Float -> Float
 restrictRating rating =
   rating
 
+safeXPToRating : Int -> Float
+safeXPToRating xp =
+  Dict.get xp xpRatingTable |> Maybe.withDefault 0
+
 safeRatingToXP : Float -> Int
 safeRatingToXP rating =
   Dict.get rating ratingXPTable |> Maybe.withDefault 0
@@ -28,6 +36,10 @@ highestXP : Int
 highestXP =
   List.maximum xpList |> Maybe.withDefault 0
 
+xpRatingTable : Dict.Dict Int Float
+xpRatingTable =
+  Dict.fromList <| List.map (\row -> (snd row, fst row)) ratingXpList
+  
 ratingXPTable : Dict.Dict Float Int
 ratingXPTable =
   Dict.fromList ratingXpList

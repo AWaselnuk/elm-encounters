@@ -10731,18 +10731,23 @@ Elm.Utilities.make = function (_elm) {
    var ratingList = A2($List.map,$Basics.fst,ratingXpList);
    var initRating = A2($Maybe.withDefault,0,$List.head(ratingList));
    var ratingXPTable = $Dict.fromList(ratingXpList);
+   var xpRatingTable = $Dict.fromList(A2($List.map,function (row) {    return {ctor: "_Tuple2",_0: $Basics.snd(row),_1: $Basics.fst(row)};},ratingXpList));
    var highestXP = A2($Maybe.withDefault,0,$List.maximum(xpList));
    var safeRatingToXP = function (rating) {    return A2($Maybe.withDefault,0,A2($Dict.get,rating,ratingXPTable));};
+   var safeXPToRating = function (xp) {    return A2($Maybe.withDefault,0,A2($Dict.get,xp,xpRatingTable));};
    var restrictRating = function (rating) {    return rating;};
    var restrictXP = function (xp) {    return A3($Basics.clamp,0,highestXP,xp);};
    var restrictLevel = function (level) {    return A3($Basics.clamp,1,20,level);};
-   var safeStrToLevel = function (_p0) {    return A2($Maybe.withDefault,0,$Result.toMaybe($String.toInt(_p0)));};
+   var safeStrToRating = function (_p0) {    return A2($Maybe.withDefault,0,$Result.toMaybe($String.toFloat(_p0)));};
+   var safeStrToLevel = function (_p1) {    return A2($Maybe.withDefault,0,$Result.toMaybe($String.toInt(_p1)));};
    return _elm.Utilities.values = {_op: _op
                                   ,restrictLevel: restrictLevel
                                   ,restrictRating: restrictRating
                                   ,restrictXP: restrictXP
                                   ,safeStrToLevel: safeStrToLevel
+                                  ,safeStrToRating: safeStrToRating
                                   ,safeRatingToXP: safeRatingToXP
+                                  ,safeXPToRating: safeXPToRating
                                   ,ratingList: ratingList
                                   ,xpList: xpList
                                   ,ratingXPTable: ratingXPTable
@@ -10989,25 +10994,52 @@ Elm.Encounter.make = function (_elm) {
              ,deadly: $List.sum(deadlyPartyThresholds)};
    };
    var partyThresholdsView = function (partyThresholds) {    return A2($Html.p,_U.list([]),_U.list([$Html.text($Basics.toString(partyThresholds))]));};
-   var monsterXpOptionsView = function () {
-      var monsterXpOption = function (xp) {    return A2($Html.option,_U.list([$Html$Attributes.value(xp)]),_U.list([$Html.text(xp)]));};
-      var monsterXpOptions = A2($List.map,function (xp) {    return monsterXpOption($Basics.toString(xp));},$Utilities.xpList);
-      return A2($Html.select,_U.list([$Html$Attributes.name("monster-xp")]),monsterXpOptions);
-   }();
-   var monsterRatingOptionsView = function () {
-      var monsterRatingOption = function (rating) {    return A2($Html.option,_U.list([$Html$Attributes.value(rating)]),_U.list([$Html.text(rating)]));};
-      var monsterRatingOptions = A2($List.map,function (rating) {    return monsterRatingOption($Basics.toString(rating));},$Utilities.ratingList);
-      return A2($Html.select,_U.list([$Html$Attributes.name("monster-rating")]),monsterRatingOptions);
-   }();
+   var debugView = function (model) {    return A2($Html.p,_U.list([]),_U.list([$Html.text($Basics.toString(model))]));};
+   var SetNewMonsterRating = function (a) {    return {ctor: "SetNewMonsterRating",_0: a};};
+   var monsterRatingOptionsView = F2(function (address,model) {
+      var monsterRatingOption = F2(function (rating,isSelected) {
+         return A2($Html.option,_U.list([$Html$Attributes.value(rating),$Html$Attributes.selected(isSelected)]),_U.list([$Html.text(rating)]));
+      });
+      var monsterRatingOptions = A2($List.map,
+      function (rating) {
+         return A2(monsterRatingOption,$Basics.toString(rating),_U.eq(rating,model.newMonsterRating));
+      },
+      $Utilities.ratingList);
+      return A2($Html.select,
+      _U.list([$Html$Attributes.name("monster-rating")
+              ,A3($Html$Events.on,
+              "change",
+              $Html$Events.targetValue,
+              function (rating) {
+                 return A2($Signal.message,address,SetNewMonsterRating($Utilities.safeStrToRating(rating)));
+              })]),
+      monsterRatingOptions);
+   });
+   var SetNewMonsterXP = function (a) {    return {ctor: "SetNewMonsterXP",_0: a};};
+   var monsterXpOptionsView = F2(function (address,model) {
+      var monsterXpOption = F2(function (xp,isSelected) {
+         return A2($Html.option,_U.list([$Html$Attributes.value(xp),$Html$Attributes.selected(isSelected)]),_U.list([$Html.text(xp)]));
+      });
+      var monsterXpOptions = A2($List.map,function (xp) {    return A2(monsterXpOption,$Basics.toString(xp),_U.eq(xp,model.newMonsterXP));},$Utilities.xpList);
+      return A2($Html.select,
+      _U.list([$Html$Attributes.name("monster-xp")
+              ,A3($Html$Events.on,
+              "change",
+              $Html$Events.targetValue,
+              function (xp) {
+                 return A2($Signal.message,address,SetNewMonsterXP($Utilities.safeStrToLevel(xp)));
+              })]),
+      monsterXpOptions);
+   });
    var SetNewMonsterName = function (a) {    return {ctor: "SetNewMonsterName",_0: a};};
    var AddMonster = function (a) {    return {ctor: "AddMonster",_0: a};};
    var addMonsterView = F2(function (address,model) {
       return A2($Html.div,
       _U.list([]),
       _U.list([A2($Html.label,_U.list([$Html$Attributes.$for("monster-rating")]),_U.list([$Html.text("Challenge Rating")]))
-              ,monsterRatingOptionsView
+              ,A2(monsterRatingOptionsView,address,model)
               ,A2($Html.label,_U.list([$Html$Attributes.$for("monster-xp")]),_U.list([$Html.text("Experience Points")]))
-              ,monsterXpOptionsView
+              ,A2(monsterXpOptionsView,address,model)
               ,A2($Html.label,_U.list([$Html$Attributes.$for("monster-name")]),_U.list([$Html.text("Name")]))
               ,A2($Html.input,
               _U.list([$Html$Attributes.type$("text")
@@ -11063,7 +11095,8 @@ Elm.Encounter.make = function (_elm) {
    var view = F2(function (address,model) {
       return A2($Html.div,
       _U.list([]),
-      _U.list([partyThresholdsView(model.partyThresholds)
+      _U.list([debugView(model)
+              ,partyThresholdsView(model.partyThresholds)
               ,A2(addCharacterView,address,model)
               ,A2($Html.div,_U.list([]),A2($List.map,characterView(address),model.party))
               ,A2(addMonsterView,address,model)]));
@@ -11096,7 +11129,13 @@ Elm.Encounter.make = function (_elm) {
          case "SetNewCharacterName": return {ctor: "_Tuple2",_0: _U.update(model,{newCharacterName: _p4._0}),_1: $Effects.none};
          case "AddMonster": var newMonsters = A2($List._op["::"],{ctor: "_Tuple2",_0: model.uid,_1: _p4._0},model.monsters);
            return {ctor: "_Tuple2",_0: _U.update(model,{monsters: newMonsters,uid: model.uid + 1}),_1: $Effects.none};
-         default: return {ctor: "_Tuple2",_0: _U.update(model,{newMonsterName: _p4._0}),_1: $Effects.none};}
+         case "SetNewMonsterName": return {ctor: "_Tuple2",_0: _U.update(model,{newMonsterName: _p4._0}),_1: $Effects.none};
+         case "SetNewMonsterRating": var _p11 = _p4._0;
+           return {ctor: "_Tuple2"
+                  ,_0: _U.update(model,{newMonsterRating: A2($Debug.log,$Basics.toString(_p11),_p11),newMonsterXP: $Utilities.safeRatingToXP(_p11)})
+                  ,_1: $Effects.none};
+         default: var _p12 = _p4._0;
+           return {ctor: "_Tuple2",_0: _U.update(model,{newMonsterRating: $Utilities.safeXPToRating(_p12),newMonsterXP: _p12}),_1: $Effects.none};}
    });
    var initParty = _U.list([{ctor: "_Tuple2",_0: 1,_1: $Character.init}
                            ,{ctor: "_Tuple2",_0: 2,_1: $Character.init}
@@ -11105,17 +11144,18 @@ Elm.Encounter.make = function (_elm) {
                            ,{ctor: "_Tuple2",_0: 5,_1: $Character.init}]);
    var initPartyThresholds = calculatePartyThresholds(levelsFromParty(initParty));
    var init = {ctor: "_Tuple2"
-              ,_0: {uid: 6
+              ,_0: {uid: $List.length(initParty) + 1
                    ,party: initParty
                    ,partyThresholds: initPartyThresholds
                    ,newCharacterLevel: 1
                    ,newCharacterName: ""
                    ,monsters: _U.list([])
                    ,newMonsterName: ""
-                   ,newMonsterRating: $Utilities.initRating}
+                   ,newMonsterRating: $Utilities.initRating
+                   ,newMonsterXP: $Utilities.safeRatingToXP($Utilities.initRating)}
               ,_1: $Effects.none};
-   var Model = F8(function (a,b,c,d,e,f,g,h) {
-      return {uid: a,party: b,partyThresholds: c,newCharacterLevel: d,newCharacterName: e,monsters: f,newMonsterName: g,newMonsterRating: h};
+   var Model = F9(function (a,b,c,d,e,f,g,h,i) {
+      return {uid: a,party: b,partyThresholds: c,newCharacterLevel: d,newCharacterName: e,monsters: f,newMonsterName: g,newMonsterRating: h,newMonsterXP: i};
    });
    var PartyThresholds = F4(function (a,b,c,d) {    return {easy: a,medium: b,hard: c,deadly: d};});
    return _elm.Encounter.values = {_op: _op
@@ -11133,8 +11173,11 @@ Elm.Encounter.make = function (_elm) {
                                   ,SetNewCharacterName: SetNewCharacterName
                                   ,AddMonster: AddMonster
                                   ,SetNewMonsterName: SetNewMonsterName
+                                  ,SetNewMonsterXP: SetNewMonsterXP
+                                  ,SetNewMonsterRating: SetNewMonsterRating
                                   ,update: update
                                   ,view: view
+                                  ,debugView: debugView
                                   ,addMonsterView: addMonsterView
                                   ,monsterRatingOptionsView: monsterRatingOptionsView
                                   ,monsterXpOptionsView: monsterXpOptionsView

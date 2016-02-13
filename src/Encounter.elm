@@ -9,6 +9,7 @@ import Html.Attributes exposing (..)
 import Html.Events exposing (..)
 import Dict exposing (Dict)
 import String
+import Debug
 
 -- FEATURES
 
@@ -53,6 +54,7 @@ type alias Model =
   , monsters : List (ID, Monster.Model)
   , newMonsterName : String
   , newMonsterRating : Float
+  , newMonsterXP : Int
   }
 
 initParty : List (ID, Character.Model)
@@ -74,14 +76,15 @@ initPartyThresholds =
 
 init : (Model, Effects Action)
 init =
-  ( { uid = 6
+  ( { uid = List.length initParty + 1
     , party = initParty
     , partyThresholds = initPartyThresholds
     , newCharacterLevel = 1
     , newCharacterName = "" 
     , monsters = []
     , newMonsterName = "" 
-    , newMonsterRating = initRating }
+    , newMonsterRating = initRating 
+    , newMonsterXP = safeRatingToXP initRating }
   , Effects.none)
 
 -- UPDATE
@@ -95,6 +98,8 @@ type Action
   | SetNewCharacterName String
   | AddMonster Monster.Model
   | SetNewMonsterName String
+  | SetNewMonsterXP Int
+  | SetNewMonsterRating Float
 
 update : Action -> Model -> (Model, Effects Action)
 update action model =
@@ -145,6 +150,16 @@ update action model =
         , Effects.none)
     SetNewMonsterName name ->
       ({ model | newMonsterName = name }, Effects.none)
+    SetNewMonsterRating rating ->
+      ({ model |
+           newMonsterRating = Debug.log (toString rating) rating,
+           newMonsterXP = safeRatingToXP rating }
+       , Effects.none)
+    SetNewMonsterXP xp ->
+      ({ model |
+           newMonsterRating = safeXPToRating xp,
+           newMonsterXP = xp }
+       , Effects.none)
 
 -- VIEW
 
@@ -153,13 +168,17 @@ view address model =
   div
     []
     [
-      partyThresholdsView model.partyThresholds
+      debugView model
+    , partyThresholdsView model.partyThresholds
     , addCharacterView address model
     , div
         []
         (List.map (characterView address) model.party)
     , addMonsterView address model
     ]
+
+debugView model =
+  p [] [ text <| toString <| model ]
 
 addMonsterView : Signal.Address Action -> Model -> Html
 addMonsterView address model =
@@ -168,11 +187,11 @@ addMonsterView address model =
     [ label
         [ for "monster-rating" ]
         [ text "Challenge Rating" ]
-    , monsterRatingOptionsView
+    , monsterRatingOptionsView address model
     , label
         [ for "monster-xp" ]
         [ text "Experience Points" ]
-    , monsterXpOptionsView
+    , monsterXpOptionsView address model
     , label
         [ for "monster-name" ]
         [ text "Name" ]
@@ -187,32 +206,56 @@ addMonsterView address model =
         [ text "Add Monster"]
     ]
 
-monsterRatingOptionsView : Html
-monsterRatingOptionsView =
+{--
+monsterView : Signal.Address Action -> (ID, Monster.Model) -> Html
+monsterView address (id, model) =
+  let
+    context = 
+      Monster.Context
+        (Signal.forwardTo address (ModifyMonster id))
+        (Signal.forwardTo address (always (RemoveMonster id)))
+  in
+    Monster.view context model
+--}
+
+monsterRatingOptionsView : Signal.Address Action -> Model -> Html
+monsterRatingOptionsView address model =
   let 
-    monsterRatingOption rating =
+    monsterRatingOption rating isSelected =
       option
-        [ value rating ]
+        [ value rating 
+        , selected isSelected
+        ]
         [ text rating ]
     monsterRatingOptions =
-      List.map (\rating -> monsterRatingOption <| toString <| rating) ratingList
+      List.map
+        (\rating -> monsterRatingOption (toString rating) (rating == model.newMonsterRating))
+        ratingList
   in
     select 
-      [ name "monster-rating" ]
+      [ name "monster-rating"
+      , on "change" targetValue (\rating -> Signal.message address (SetNewMonsterRating (safeStrToRating rating))) 
+      ]
       monsterRatingOptions
 
-monsterXpOptionsView : Html
-monsterXpOptionsView =
+monsterXpOptionsView : Signal.Address Action -> Model -> Html
+monsterXpOptionsView address model =
   let 
-    monsterXpOption xp =
+    monsterXpOption xp isSelected =
       option
-        [ value xp ]
+        [ value xp 
+        , selected isSelected  
+        ]
         [ text xp ]
     monsterXpOptions =
-      List.map (\xp -> monsterXpOption <| toString <| xp) xpList
+      List.map
+        (\xp -> monsterXpOption (toString xp) (xp == model.newMonsterXP))
+        xpList
   in
     select 
-      [ name "monster-xp" ]
+      [ name "monster-xp"
+      , on "change" targetValue (\xp -> Signal.message address (SetNewMonsterXP (safeStrToLevel xp)))
+      ]
       monsterXpOptions
 
 partyThresholdsView : PartyThresholds -> Html
