@@ -1,4 +1,4 @@
-module Utilities (restrictLevel, restrictRating, restrictXP, safeStrToLevel, safeStrToRating, safeRatingToXP, safeXPToRating, ratingList, xpList, ratingXPTable, initRating) where
+module Utilities (safeStrToLevel, safeStrToRating, safeRatingToXP, safeXPToRating, ratingList, xpList, ratingXPTable, initRating) where
 
 import String
 import Dict
@@ -10,19 +10,6 @@ safeStrToLevel =
 safeStrToRating : String -> Float
 safeStrToRating =
   String.toFloat >> Result.toMaybe >> Maybe.withDefault 0
-
-restrictLevel : Int -> Int
-restrictLevel level =
-  clamp 1 20 level
-
-restrictXP : Int -> Int
-restrictXP xp =
-  clamp 0 highestXP xp
-
--- TODO: Implement this. Should i just use strings with a select box?
-restrictRating : Float -> Float
-restrictRating rating =
-  rating
 
 safeXPToRating : Int -> Float
 safeXPToRating xp =

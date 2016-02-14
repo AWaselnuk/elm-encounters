@@ -1,6 +1,6 @@
 module Character (Model, init, new, Action, update, view, Context) where
 
-import Utilities exposing (restrictLevel, safeStrToLevel)
+import Utilities exposing (..)
 import Effects exposing (Effects)
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -26,7 +26,7 @@ update : Action -> Model -> (Model, Effects Action)
 update action model =
   case action of
     ModifyLevel level ->
-      ({ model | level = restrictLevel level }, Effects.none)
+      ({ model | level = level }, Effects.none)
     ModifyName name ->
       ({ model | name = name }, Effects.none)
 

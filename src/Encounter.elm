@@ -139,7 +139,7 @@ update action model =
              partyThresholds = calculatePartyThresholds <| levelsFromParty newParty }
         , Effects.none)
     SetNewCharacterLevel level ->
-      ({ model | newCharacterLevel = restrictLevel level }, Effects.none)
+      ({ model | newCharacterLevel = level }, Effects.none)
     SetNewCharacterName name ->
       ({ model | newCharacterName = name }, Effects.none)
     AddMonster monster ->

@@ -10735,15 +10735,9 @@ Elm.Utilities.make = function (_elm) {
    var highestXP = A2($Maybe.withDefault,0,$List.maximum(xpList));
    var safeRatingToXP = function (rating) {    return A2($Maybe.withDefault,0,A2($Dict.get,rating,ratingXPTable));};
    var safeXPToRating = function (xp) {    return A2($Maybe.withDefault,0,A2($Dict.get,xp,xpRatingTable));};
-   var restrictRating = function (rating) {    return rating;};
-   var restrictXP = function (xp) {    return A3($Basics.clamp,0,highestXP,xp);};
-   var restrictLevel = function (level) {    return A3($Basics.clamp,1,20,level);};
    var safeStrToRating = function (_p0) {    return A2($Maybe.withDefault,0,$Result.toMaybe($String.toFloat(_p0)));};
    var safeStrToLevel = function (_p1) {    return A2($Maybe.withDefault,0,$Result.toMaybe($String.toInt(_p1)));};
    return _elm.Utilities.values = {_op: _op
-                                  ,restrictLevel: restrictLevel
-                                  ,restrictRating: restrictRating
-                                  ,restrictXP: restrictXP
                                   ,safeStrToLevel: safeStrToLevel
                                   ,safeStrToRating: safeStrToRating
                                   ,safeRatingToXP: safeRatingToXP
@@ -10779,7 +10773,7 @@ Elm.Character.make = function (_elm) {
    var update = F2(function (action,model) {
       var _p0 = action;
       if (_p0.ctor === "ModifyLevel") {
-            return {ctor: "_Tuple2",_0: _U.update(model,{level: $Utilities.restrictLevel(_p0._0)}),_1: $Effects.none};
+            return {ctor: "_Tuple2",_0: _U.update(model,{level: _p0._0}),_1: $Effects.none};
          } else {
             return {ctor: "_Tuple2",_0: _U.update(model,{name: _p0._0}),_1: $Effects.none};
          }
@@ -11164,7 +11158,7 @@ Elm.Encounter.make = function (_elm) {
            return {ctor: "_Tuple2"
                   ,_0: _U.update(model,{party: newParty,partyThresholds: calculatePartyThresholds(levelsFromParty(newParty))})
                   ,_1: $Effects.none};
-         case "SetNewCharacterLevel": return {ctor: "_Tuple2",_0: _U.update(model,{newCharacterLevel: $Utilities.restrictLevel(_p7._0)}),_1: $Effects.none};
+         case "SetNewCharacterLevel": return {ctor: "_Tuple2",_0: _U.update(model,{newCharacterLevel: _p7._0}),_1: $Effects.none};
          case "SetNewCharacterName": return {ctor: "_Tuple2",_0: _U.update(model,{newCharacterName: _p7._0}),_1: $Effects.none};
          case "AddMonster": var newMonsters = A2($List._op["::"],{ctor: "_Tuple2",_0: model.uid,_1: _p7._0},model.monsters);
            return {ctor: "_Tuple2",_0: _U.update(model,{monsters: newMonsters,uid: model.uid + 1}),_1: $Effects.none};
