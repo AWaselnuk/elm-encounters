@@ -10844,31 +10844,61 @@ Elm.Monster.make = function (_elm) {
    var update = F2(function (action,model) {
       var _p0 = action;
       switch (_p0.ctor)
-      {case "ModifyXP": return {ctor: "_Tuple2",_0: _U.update(model,{xp: $Utilities.restrictXP(_p0._0)}),_1: $Effects.none};
-         case "ModifyRating": return {ctor: "_Tuple2",_0: _U.update(model,{rating: $Utilities.restrictRating(_p0._0)}),_1: $Effects.none};
+      {case "ModifyRating": var _p1 = _p0._0;
+           return {ctor: "_Tuple2",_0: _U.update(model,{rating: _p1,xp: $Utilities.safeRatingToXP(_p1)}),_1: $Effects.none};
+         case "ModifyXP": var _p2 = _p0._0;
+           return {ctor: "_Tuple2",_0: _U.update(model,{rating: $Utilities.safeXPToRating(_p2),xp: _p2}),_1: $Effects.none};
          default: return {ctor: "_Tuple2",_0: _U.update(model,{name: _p0._0}),_1: $Effects.none};}
    });
    var ModifyName = function (a) {    return {ctor: "ModifyName",_0: a};};
    var ModifyRating = function (a) {    return {ctor: "ModifyRating",_0: a};};
+   var monsterRatingOptionsView = F2(function (address,model) {
+      var monsterRatingOption = F2(function (rating,isSelected) {
+         return A2($Html.option,_U.list([$Html$Attributes.value(rating),$Html$Attributes.selected(isSelected)]),_U.list([$Html.text(rating)]));
+      });
+      var monsterRatingOptions = A2($List.map,
+      function (rating) {
+         return A2(monsterRatingOption,$Basics.toString(rating),_U.eq(rating,model.rating));
+      },
+      $Utilities.ratingList);
+      return A2($Html.select,
+      _U.list([$Html$Attributes.name("monster-rating")
+              ,A3($Html$Events.on,
+              "change",
+              $Html$Events.targetValue,
+              function (rating) {
+                 return A2($Signal.message,address,ModifyRating($Utilities.safeStrToRating(rating)));
+              })]),
+      monsterRatingOptions);
+   });
    var ModifyXP = function (a) {    return {ctor: "ModifyXP",_0: a};};
-   var view = F2(function (context,monster) {
+   var monsterXpOptionsView = F2(function (address,model) {
+      var monsterXpOption = F2(function (xp,isSelected) {
+         return A2($Html.option,_U.list([$Html$Attributes.value(xp),$Html$Attributes.selected(isSelected)]),_U.list([$Html.text(xp)]));
+      });
+      var monsterXpOptions = A2($List.map,function (xp) {    return A2(monsterXpOption,$Basics.toString(xp),_U.eq(xp,model.xp));},$Utilities.xpList);
+      return A2($Html.select,
+      _U.list([$Html$Attributes.name("monster-xp")
+              ,A3($Html$Events.on,
+              "change",
+              $Html$Events.targetValue,
+              function (xp) {
+                 return A2($Signal.message,address,ModifyXP($Utilities.safeStrToLevel(xp)));
+              })]),
+      monsterXpOptions);
+   });
+   var view = F2(function (context,model) {
       return A2($Html.div,
       _U.list([$Html$Attributes.$class("monster")]),
-      _U.list([A2($Html.input,
-              _U.list([$Html$Attributes.$class("monster-xp")
-                      ,$Html$Attributes.type$("number")
-                      ,$Html$Attributes.value($Basics.toString(monster.xp))
-                      ,A3($Html$Events.on,
-                      "input",
-                      $Html$Events.targetValue,
-                      function (xp) {
-                         return A2($Signal.message,context.actions,ModifyXP($Utilities.safeStrToLevel(xp)));
-                      })]),
-              _U.list([]))
+      _U.list([A2($Html.label,_U.list([$Html$Attributes.$for("monster-rating")]),_U.list([$Html.text("Challenge Rating")]))
+              ,A2(monsterRatingOptionsView,context.actions,model)
+              ,A2($Html.label,_U.list([$Html$Attributes.$for("monster-xp")]),_U.list([$Html.text("Experience Points")]))
+              ,A2(monsterXpOptionsView,context.actions,model)
+              ,A2($Html.label,_U.list([$Html$Attributes.$for("monster-name")]),_U.list([$Html.text("Name")]))
               ,A2($Html.input,
               _U.list([$Html$Attributes.$class("monster-name")
                       ,$Html$Attributes.type$("text")
-                      ,$Html$Attributes.value(monster.name)
+                      ,$Html$Attributes.value(model.name)
                       ,A3($Html$Events.on,
                       "input",
                       $Html$Events.targetValue,

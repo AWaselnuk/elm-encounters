@@ -1,6 +1,6 @@
 module Monster (Model, init, new, Action, update, view, Context) where
 
-import Utilities exposing (safeRatingToXP, safeStrToLevel, restrictXP, restrictRating)
+import Utilities exposing (..)
 import Effects exposing (Effects)
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -25,10 +25,16 @@ type Action
 update : Action -> Model -> (Model, Effects Action)
 update action model =
   case action of
-    ModifyXP xp ->
-      ({ model | xp = restrictXP xp }, Effects.none)
     ModifyRating rating ->
-      ({ model | rating = restrictRating rating }, Effects.none)
+      ({ model |
+           rating = rating,
+           xp = safeRatingToXP rating }
+       , Effects.none)
+    ModifyXP xp ->
+      ({ model |
+           rating = safeXPToRating xp,
+           xp = xp }
+       , Effects.none)
     ModifyName name ->
       ({ model | name = name }, Effects.none)
 
@@ -40,28 +46,71 @@ type alias Context =
   }
 
 view : Context -> Model -> Html
-view context monster =
+view context model =
   div
     [ class "monster" ]
-    [
-      input
-        [
-          class "monster-xp"
-        , type' "number"
-        , value (toString monster.xp)
-        , on "input" targetValue (\xp -> Signal.message context.actions (ModifyXP (safeStrToLevel xp)))
-        ] []
+    [ label
+        [ for "monster-rating" ]
+        [ text "Challenge Rating" ]
+    , monsterRatingOptionsView context.actions model
+    , label
+        [ for "monster-xp" ]
+        [ text "Experience Points" ]
+    , monsterXpOptionsView context.actions model
+    , label
+        [ for "monster-name" ]
+        [ text "Name" ]
     , input
         [
           class "monster-name"
         , type' "text"
-        , value (monster.name)
+        , value (model.name)
         , on "input" targetValue (\name -> Signal.message context.actions (ModifyName name))
         ] []
     , button
         [ onClick context.remove () ]
         [ text "Remove" ]
     ]
+
+monsterRatingOptionsView : Signal.Address Action -> Model -> Html
+monsterRatingOptionsView address model =
+  let 
+    monsterRatingOption rating isSelected =
+      option
+        [ value rating 
+        , selected isSelected
+        ]
+        [ text rating ]
+    monsterRatingOptions =
+      List.map
+        (\rating -> monsterRatingOption (toString rating) (rating == model.rating))
+        ratingList
+  in
+    select 
+      [ name "monster-rating"
+      , on "change" targetValue (\rating -> Signal.message address (ModifyRating (safeStrToRating rating))) 
+      ]
+      monsterRatingOptions
+
+monsterXpOptionsView : Signal.Address Action -> Model -> Html
+monsterXpOptionsView address model =
+  let 
+    monsterXpOption xp isSelected =
+      option
+        [ value xp 
+        , selected isSelected  
+        ]
+        [ text xp ]
+    monsterXpOptions =
+      List.map
+        (\xp -> monsterXpOption (toString xp) (xp == model.xp))
+        xpList
+  in
+    select 
+      [ name "monster-xp"
+      , on "change" targetValue (\xp -> Signal.message address (ModifyXP (safeStrToLevel xp)))
+      ]
+      monsterXpOptions
 
 init : Model
 init =
