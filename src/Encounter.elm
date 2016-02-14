@@ -97,6 +97,8 @@ type Action
   | SetNewCharacterLevel Int
   | SetNewCharacterName String
   | AddMonster Monster.Model
+  | RemoveMonster ID
+  | ModifyMonster ID Monster.Action
   | SetNewMonsterName String
   | SetNewMonsterXP Int
   | SetNewMonsterRating Float
@@ -148,6 +150,25 @@ update action model =
              monsters = newMonsters,
              uid = model.uid + 1 }
         , Effects.none)
+    RemoveMonster id ->
+      let
+        newMonsters = List.filter (\(monsterID, _) -> monsterID /= id) model.monsters 
+      in
+        ({ model |
+             monsters = newMonsters }
+        , Effects.none)
+    ModifyMonster id monsterAction ->
+      let
+        updateMonster (monsterID, monsterModel) =
+          if id == monsterID then
+            (monsterID, fst <| Monster.update monsterAction monsterModel)
+          else
+            (monsterID, monsterModel)
+        newMonsters = List.map updateMonster model.monsters 
+      in
+        ({ model |
+             monsters = newMonsters }
+        , Effects.none)
     SetNewMonsterName name ->
       ({ model | newMonsterName = name }, Effects.none)
     SetNewMonsterRating rating ->
@@ -175,6 +196,9 @@ view address model =
         []
         (List.map (characterView address) model.party)
     , addMonsterView address model
+    , div
+        []
+        (List.map (monsterView address) model.monsters)
     ]
 
 debugView model =
@@ -206,7 +230,6 @@ addMonsterView address model =
         [ text "Add Monster"]
     ]
 
-{--
 monsterView : Signal.Address Action -> (ID, Monster.Model) -> Html
 monsterView address (id, model) =
   let
@@ -216,7 +239,6 @@ monsterView address (id, model) =
         (Signal.forwardTo address (always (RemoveMonster id)))
   in
     Monster.view context model
---}
 
 monsterRatingOptionsView : Signal.Address Action -> Model -> Html
 monsterRatingOptionsView address model =

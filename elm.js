@@ -11032,6 +11032,14 @@ Elm.Encounter.make = function (_elm) {
       monsterXpOptions);
    });
    var SetNewMonsterName = function (a) {    return {ctor: "SetNewMonsterName",_0: a};};
+   var ModifyMonster = F2(function (a,b) {    return {ctor: "ModifyMonster",_0: a,_1: b};});
+   var RemoveMonster = function (a) {    return {ctor: "RemoveMonster",_0: a};};
+   var monsterView = F2(function (address,_p0) {
+      var _p1 = _p0;
+      var _p2 = _p1._0;
+      var context = A2($Monster.Context,A2($Signal.forwardTo,address,ModifyMonster(_p2)),A2($Signal.forwardTo,address,$Basics.always(RemoveMonster(_p2))));
+      return A2($Monster.view,context,_p1._1);
+   });
    var AddMonster = function (a) {    return {ctor: "AddMonster",_0: a};};
    var addMonsterView = F2(function (address,model) {
       return A2($Html.div,
@@ -11054,13 +11062,13 @@ Elm.Encounter.make = function (_elm) {
    var SetNewCharacterLevel = function (a) {    return {ctor: "SetNewCharacterLevel",_0: a};};
    var ModifyCharacter = F2(function (a,b) {    return {ctor: "ModifyCharacter",_0: a,_1: b};});
    var RemoveCharacter = function (a) {    return {ctor: "RemoveCharacter",_0: a};};
-   var characterView = F2(function (address,_p0) {
-      var _p1 = _p0;
-      var _p2 = _p1._0;
+   var characterView = F2(function (address,_p3) {
+      var _p4 = _p3;
+      var _p5 = _p4._0;
       var context = A2($Character.Context,
-      A2($Signal.forwardTo,address,ModifyCharacter(_p2)),
-      A2($Signal.forwardTo,address,$Basics.always(RemoveCharacter(_p2))));
-      return A2($Character.view,context,_p1._1);
+      A2($Signal.forwardTo,address,ModifyCharacter(_p5)),
+      A2($Signal.forwardTo,address,$Basics.always(RemoveCharacter(_p5))));
+      return A2($Character.view,context,_p4._1);
    });
    var AddCharacter = function (a) {    return {ctor: "AddCharacter",_0: a};};
    var addCharacterView = F2(function (address,model) {
@@ -11099,43 +11107,54 @@ Elm.Encounter.make = function (_elm) {
               ,partyThresholdsView(model.partyThresholds)
               ,A2(addCharacterView,address,model)
               ,A2($Html.div,_U.list([]),A2($List.map,characterView(address),model.party))
-              ,A2(addMonsterView,address,model)]));
+              ,A2(addMonsterView,address,model)
+              ,A2($Html.div,_U.list([]),A2($List.map,monsterView(address),model.monsters))]));
    });
    var NoOp = {ctor: "NoOp"};
-   var levelsFromParty = function (party) {    return A2($List.map,function (_p3) {    return function (_) {    return _.level;}($Basics.snd(_p3));},party);};
+   var levelsFromParty = function (party) {    return A2($List.map,function (_p6) {    return function (_) {    return _.level;}($Basics.snd(_p6));},party);};
    var update = F2(function (action,model) {
-      var _p4 = action;
-      switch (_p4.ctor)
+      var _p7 = action;
+      switch (_p7.ctor)
       {case "NoOp": return {ctor: "_Tuple2",_0: model,_1: $Effects.none};
-         case "AddCharacter": var newParty = A2($List._op["::"],{ctor: "_Tuple2",_0: model.uid,_1: _p4._0},model.party);
+         case "AddCharacter": var newParty = A2($List._op["::"],{ctor: "_Tuple2",_0: model.uid,_1: _p7._0},model.party);
            return {ctor: "_Tuple2"
                   ,_0: _U.update(model,{party: newParty,partyThresholds: calculatePartyThresholds(levelsFromParty(newParty)),uid: model.uid + 1})
                   ,_1: $Effects.none};
-         case "RemoveCharacter": var newParty = A2($List.filter,function (_p5) {    var _p6 = _p5;return !_U.eq(_p6._0,_p4._0);},model.party);
+         case "RemoveCharacter": var newParty = A2($List.filter,function (_p8) {    var _p9 = _p8;return !_U.eq(_p9._0,_p7._0);},model.party);
            return {ctor: "_Tuple2"
                   ,_0: _U.update(model,{party: newParty,partyThresholds: calculatePartyThresholds(levelsFromParty(newParty))})
                   ,_1: $Effects.none};
-         case "ModifyCharacter": var updateCharacter = function (_p7) {
-              var _p8 = _p7;
-              var _p10 = _p8._1;
-              var _p9 = _p8._0;
-              return _U.eq(_p4._0,_p9) ? {ctor: "_Tuple2",_0: _p9,_1: $Basics.fst(A2($Character.update,_p4._1,_p10))} : {ctor: "_Tuple2",_0: _p9,_1: _p10};
+         case "ModifyCharacter": var updateCharacter = function (_p10) {
+              var _p11 = _p10;
+              var _p13 = _p11._1;
+              var _p12 = _p11._0;
+              return _U.eq(_p7._0,_p12) ? {ctor: "_Tuple2",_0: _p12,_1: $Basics.fst(A2($Character.update,_p7._1,_p13))} : {ctor: "_Tuple2",_0: _p12,_1: _p13};
            };
            var newParty = A2($List.map,updateCharacter,model.party);
            return {ctor: "_Tuple2"
                   ,_0: _U.update(model,{party: newParty,partyThresholds: calculatePartyThresholds(levelsFromParty(newParty))})
                   ,_1: $Effects.none};
-         case "SetNewCharacterLevel": return {ctor: "_Tuple2",_0: _U.update(model,{newCharacterLevel: $Utilities.restrictLevel(_p4._0)}),_1: $Effects.none};
-         case "SetNewCharacterName": return {ctor: "_Tuple2",_0: _U.update(model,{newCharacterName: _p4._0}),_1: $Effects.none};
-         case "AddMonster": var newMonsters = A2($List._op["::"],{ctor: "_Tuple2",_0: model.uid,_1: _p4._0},model.monsters);
+         case "SetNewCharacterLevel": return {ctor: "_Tuple2",_0: _U.update(model,{newCharacterLevel: $Utilities.restrictLevel(_p7._0)}),_1: $Effects.none};
+         case "SetNewCharacterName": return {ctor: "_Tuple2",_0: _U.update(model,{newCharacterName: _p7._0}),_1: $Effects.none};
+         case "AddMonster": var newMonsters = A2($List._op["::"],{ctor: "_Tuple2",_0: model.uid,_1: _p7._0},model.monsters);
            return {ctor: "_Tuple2",_0: _U.update(model,{monsters: newMonsters,uid: model.uid + 1}),_1: $Effects.none};
-         case "SetNewMonsterName": return {ctor: "_Tuple2",_0: _U.update(model,{newMonsterName: _p4._0}),_1: $Effects.none};
-         case "SetNewMonsterRating": var _p11 = _p4._0;
+         case "RemoveMonster": var newMonsters = A2($List.filter,function (_p14) {    var _p15 = _p14;return !_U.eq(_p15._0,_p7._0);},model.monsters);
+           return {ctor: "_Tuple2",_0: _U.update(model,{monsters: newMonsters}),_1: $Effects.none};
+         case "ModifyMonster": var updateMonster = function (_p16) {
+              var _p17 = _p16;
+              var _p19 = _p17._1;
+              var _p18 = _p17._0;
+              return _U.eq(_p7._0,_p18) ? {ctor: "_Tuple2",_0: _p18,_1: $Basics.fst(A2($Monster.update,_p7._1,_p19))} : {ctor: "_Tuple2",_0: _p18,_1: _p19};
+           };
+           var newMonsters = A2($List.map,updateMonster,model.monsters);
+           return {ctor: "_Tuple2",_0: _U.update(model,{monsters: newMonsters}),_1: $Effects.none};
+         case "SetNewMonsterName": return {ctor: "_Tuple2",_0: _U.update(model,{newMonsterName: _p7._0}),_1: $Effects.none};
+         case "SetNewMonsterRating": var _p20 = _p7._0;
            return {ctor: "_Tuple2"
-                  ,_0: _U.update(model,{newMonsterRating: A2($Debug.log,$Basics.toString(_p11),_p11),newMonsterXP: $Utilities.safeRatingToXP(_p11)})
+                  ,_0: _U.update(model,{newMonsterRating: A2($Debug.log,$Basics.toString(_p20),_p20),newMonsterXP: $Utilities.safeRatingToXP(_p20)})
                   ,_1: $Effects.none};
-         default: var _p12 = _p4._0;
-           return {ctor: "_Tuple2",_0: _U.update(model,{newMonsterRating: $Utilities.safeXPToRating(_p12),newMonsterXP: _p12}),_1: $Effects.none};}
+         default: var _p21 = _p7._0;
+           return {ctor: "_Tuple2",_0: _U.update(model,{newMonsterRating: $Utilities.safeXPToRating(_p21),newMonsterXP: _p21}),_1: $Effects.none};}
    });
    var initParty = _U.list([{ctor: "_Tuple2",_0: 1,_1: $Character.init}
                            ,{ctor: "_Tuple2",_0: 2,_1: $Character.init}
@@ -11172,6 +11191,8 @@ Elm.Encounter.make = function (_elm) {
                                   ,SetNewCharacterLevel: SetNewCharacterLevel
                                   ,SetNewCharacterName: SetNewCharacterName
                                   ,AddMonster: AddMonster
+                                  ,RemoveMonster: RemoveMonster
+                                  ,ModifyMonster: ModifyMonster
                                   ,SetNewMonsterName: SetNewMonsterName
                                   ,SetNewMonsterXP: SetNewMonsterXP
                                   ,SetNewMonsterRating: SetNewMonsterRating
@@ -11179,6 +11200,7 @@ Elm.Encounter.make = function (_elm) {
                                   ,view: view
                                   ,debugView: debugView
                                   ,addMonsterView: addMonsterView
+                                  ,monsterView: monsterView
                                   ,monsterRatingOptionsView: monsterRatingOptionsView
                                   ,monsterXpOptionsView: monsterXpOptionsView
                                   ,partyThresholdsView: partyThresholdsView
