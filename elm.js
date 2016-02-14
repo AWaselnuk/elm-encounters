@@ -10729,6 +10729,7 @@ Elm.Utilities.make = function (_elm) {
                               ,{ctor: "_Tuple2",_0: 30,_1: 155000}]);
    var xpList = A2($List.map,$Basics.snd,ratingXpList);
    var ratingList = A2($List.map,$Basics.fst,ratingXpList);
+   var levelList = _U.range(1,20);
    var initRating = A2($Maybe.withDefault,0,$List.head(ratingList));
    var ratingXPTable = $Dict.fromList(ratingXpList);
    var xpRatingTable = $Dict.fromList(A2($List.map,function (row) {    return {ctor: "_Tuple2",_0: $Basics.snd(row),_1: $Basics.fst(row)};},ratingXpList));
@@ -10744,6 +10745,7 @@ Elm.Utilities.make = function (_elm) {
                                   ,safeXPToRating: safeXPToRating
                                   ,ratingList: ratingList
                                   ,xpList: xpList
+                                  ,levelList: levelList
                                   ,ratingXPTable: ratingXPTable
                                   ,initRating: initRating};
 };
@@ -10780,24 +10782,30 @@ Elm.Character.make = function (_elm) {
    });
    var ModifyName = function (a) {    return {ctor: "ModifyName",_0: a};};
    var ModifyLevel = function (a) {    return {ctor: "ModifyLevel",_0: a};};
-   var view = F2(function (context,character) {
+   var levelOptionsView = F2(function (address,model) {
+      var levelOption = F2(function (level,isSelected) {
+         return A2($Html.option,_U.list([$Html$Attributes.value(level),$Html$Attributes.selected(isSelected)]),_U.list([$Html.text(level)]));
+      });
+      var levelOptions = A2($List.map,function (level) {    return A2(levelOption,$Basics.toString(level),_U.eq(level,model.level));},$Utilities.levelList);
+      return A2($Html.select,
+      _U.list([$Html$Attributes.name("character-level")
+              ,A3($Html$Events.on,
+              "change",
+              $Html$Events.targetValue,
+              function (level) {
+                 return A2($Signal.message,address,ModifyLevel($Utilities.safeStrToLevel(level)));
+              })]),
+      levelOptions);
+   });
+   var view = F2(function (context,model) {
       return A2($Html.div,
       _U.list([$Html$Attributes.$class("character")]),
-      _U.list([A2($Html.input,
-              _U.list([$Html$Attributes.$class("character-level")
-                      ,$Html$Attributes.type$("number")
-                      ,$Html$Attributes.value($Basics.toString(character.level))
-                      ,A3($Html$Events.on,
-                      "input",
-                      $Html$Events.targetValue,
-                      function (level) {
-                         return A2($Signal.message,context.actions,ModifyLevel($Utilities.safeStrToLevel(level)));
-                      })]),
-              _U.list([]))
+      _U.list([A2($Html.label,_U.list([$Html$Attributes.$for("character-level")]),_U.list([$Html.text("Level")]))
+              ,A2(levelOptionsView,context.actions,model)
               ,A2($Html.input,
               _U.list([$Html$Attributes.$class("character-name")
                       ,$Html$Attributes.type$("text")
-                      ,$Html$Attributes.value(character.name)
+                      ,$Html$Attributes.value(model.name)
                       ,A3($Html$Events.on,
                       "input",
                       $Html$Events.targetValue,
@@ -11084,6 +11092,25 @@ Elm.Encounter.make = function (_elm) {
    });
    var SetNewCharacterName = function (a) {    return {ctor: "SetNewCharacterName",_0: a};};
    var SetNewCharacterLevel = function (a) {    return {ctor: "SetNewCharacterLevel",_0: a};};
+   var levelOptionsView = F2(function (address,model) {
+      var levelOption = F2(function (level,isSelected) {
+         return A2($Html.option,_U.list([$Html$Attributes.value(level),$Html$Attributes.selected(isSelected)]),_U.list([$Html.text(level)]));
+      });
+      var levelOptions = A2($List.map,
+      function (level) {
+         return A2(levelOption,$Basics.toString(level),_U.eq(level,model.newCharacterLevel));
+      },
+      $Utilities.levelList);
+      return A2($Html.select,
+      _U.list([$Html$Attributes.name("character-level")
+              ,A3($Html$Events.on,
+              "change",
+              $Html$Events.targetValue,
+              function (level) {
+                 return A2($Signal.message,address,SetNewCharacterLevel($Utilities.safeStrToLevel(level)));
+              })]),
+      levelOptions);
+   });
    var ModifyCharacter = F2(function (a,b) {    return {ctor: "ModifyCharacter",_0: a,_1: b};});
    var RemoveCharacter = function (a) {    return {ctor: "RemoveCharacter",_0: a};};
    var characterView = F2(function (address,_p3) {
@@ -11099,16 +11126,7 @@ Elm.Encounter.make = function (_elm) {
       return A2($Html.div,
       _U.list([]),
       _U.list([A2($Html.label,_U.list([$Html$Attributes.$for("level")]),_U.list([$Html.text("Level")]))
-              ,A2($Html.input,
-              _U.list([$Html$Attributes.type$("number")
-                      ,$Html$Attributes.value($Basics.toString(model.newCharacterLevel))
-                      ,A3($Html$Events.on,
-                      "input",
-                      $Html$Events.targetValue,
-                      function (level) {
-                         return A2($Signal.message,address,SetNewCharacterLevel($Utilities.safeStrToLevel(level)));
-                      })]),
-              _U.list([]))
+              ,A2(levelOptionsView,address,model)
               ,A2($Html.label,_U.list([$Html$Attributes.$for("name")]),_U.list([$Html.text("Name")]))
               ,A2($Html.input,
               _U.list([$Html$Attributes.type$("text")
@@ -11229,6 +11247,7 @@ Elm.Encounter.make = function (_elm) {
                                   ,monsterXpOptionsView: monsterXpOptionsView
                                   ,partyThresholdsView: partyThresholdsView
                                   ,addCharacterView: addCharacterView
+                                  ,levelOptionsView: levelOptionsView
                                   ,characterView: characterView
                                   ,getThreshold: getThreshold
                                   ,calculatePartyThresholds: calculatePartyThresholds

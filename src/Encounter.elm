@@ -293,12 +293,7 @@ addCharacterView address model =
     [ label
         [ for "level" ]
         [ text "Level" ]
-    , input
-        [ type' "number" 
-        , value (toString model.newCharacterLevel) 
-        , on "input" targetValue (\level -> Signal.message address (SetNewCharacterLevel (safeStrToLevel level)))
-        ]
-        []
+    , levelOptionsView address model
     , label 
         [ for "name" ]
         [ text "Name" ]
@@ -312,6 +307,26 @@ addCharacterView address model =
         [ onClick address (AddCharacter (Character.new model.newCharacterLevel model.newCharacterName)) ]
         [ text "Add Character"]
     ] 
+
+levelOptionsView : Signal.Address Action -> Model -> Html
+levelOptionsView address model =
+  let 
+    levelOption level isSelected =
+      option
+        [ value level 
+        , selected isSelected
+        ]
+        [ text level ]
+    levelOptions =
+      List.map
+        (\level -> levelOption (toString level) (level == model.newCharacterLevel))
+        levelList
+  in
+    select 
+      [ name "character-level"
+      , on "change" targetValue (\level -> Signal.message address (SetNewCharacterLevel (safeStrToLevel level))) 
+      ]
+      levelOptions
 
 characterView : Signal.Address Action -> (ID, Character.Model) -> Html
 characterView address (id, model) =

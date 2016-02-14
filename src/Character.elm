@@ -38,28 +38,44 @@ type alias Context =
   }
 
 view : Context -> Model -> Html
-view context character =
+view context model =
   div
     [ class "character" ]
-    [
-      input
-        [
-          class "character-level"
-        , type' "number"
-        , value (toString character.level)
-        , on "input" targetValue (\level -> Signal.message context.actions (ModifyLevel (safeStrToLevel level)))
-        ] []
+    [ label
+        [ for "character-level" ]
+        [ text "Level" ]
+    , levelOptionsView context.actions model
     , input
         [
           class "character-name"
         , type' "text"
-        , value (character.name)
+        , value (model.name)
         , on "input" targetValue (\name -> Signal.message context.actions (ModifyName name))
         ] []
     , button
         [ onClick context.remove () ]
         [ text "Remove" ]
     ]
+
+levelOptionsView : Signal.Address Action -> Model -> Html
+levelOptionsView address model =
+  let 
+    levelOption level isSelected =
+      option
+        [ value level 
+        , selected isSelected
+        ]
+        [ text level ]
+    levelOptions =
+      List.map
+        (\level -> levelOption (toString level) (level == model.level))
+        levelList
+  in
+    select 
+      [ name "character-level"
+      , on "change" targetValue (\level -> Signal.message address (ModifyLevel (safeStrToLevel level))) 
+      ]
+      levelOptions
 
 init : Model
 init =

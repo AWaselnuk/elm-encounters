@@ -1,4 +1,4 @@
-module Utilities (safeStrToLevel, safeStrToRating, safeRatingToXP, safeXPToRating, ratingList, xpList, ratingXPTable, initRating) where
+module Utilities (safeStrToLevel, safeStrToRating, safeRatingToXP, safeXPToRating, ratingList, xpList, levelList, ratingXPTable, initRating) where
 
 import String
 import Dict
@@ -34,6 +34,9 @@ ratingXPTable =
 initRating : Float
 initRating =
   List.head ratingList |> Maybe.withDefault 0
+
+levelList : List Int
+levelList = [1..20]
 
 ratingList : List Float
 ratingList = 
