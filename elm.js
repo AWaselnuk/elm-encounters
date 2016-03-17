@@ -10802,6 +10802,7 @@ Elm.Character.make = function (_elm) {
       _U.list([$Html$Attributes.$class("character")]),
       _U.list([A2($Html.label,_U.list([$Html$Attributes.$for("character-level")]),_U.list([$Html.text("Level")]))
               ,A2(levelOptionsView,context.actions,model)
+              ,A2($Html.label,_U.list([$Html$Attributes.$for("character-name")]),_U.list([$Html.text("Name")]))
               ,A2($Html.input,
               _U.list([$Html$Attributes.$class("character-name")
                       ,$Html$Attributes.type$("text")

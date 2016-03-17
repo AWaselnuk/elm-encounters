@@ -45,6 +45,9 @@ view context model =
         [ for "character-level" ]
         [ text "Level" ]
     , levelOptionsView context.actions model
+    , label
+        [ for "character-name" ]
+        [ text "Name" ]
     , input
         [
           class "character-name"
