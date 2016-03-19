@@ -1,6 +1,7 @@
 module Monster (Model, init, new, Action, update, view, Context) where
 
 import Utilities exposing (..)
+import StatTables
 import Effects exposing (Effects)
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -84,7 +85,7 @@ monsterRatingOptionsView address model =
     monsterRatingOptions =
       List.map
         (\rating -> monsterRatingOption (toString rating) (rating == model.rating))
-        ratingList
+        StatTables.ratingList
   in
     select 
       [ name "monster-rating"
@@ -104,7 +105,7 @@ monsterXpOptionsView address model =
     monsterXpOptions =
       List.map
         (\xp -> monsterXpOption (toString xp) (xp == model.xp))
-        xpList
+        StatTables.xpList
   in
     select 
       [ name "monster-xp"

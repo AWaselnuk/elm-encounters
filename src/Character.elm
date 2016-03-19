@@ -1,6 +1,7 @@
 module Character (Model, init, new, Action, update, view, Context) where
 
 import Utilities exposing (..)
+import StatTables
 import Effects exposing (Effects)
 import Html exposing (..)
 import Html.Attributes exposing (..)
@@ -72,7 +73,7 @@ levelOptionsView address model =
     levelOptions =
       List.map
         (\level -> levelOption (toString level) (level == model.level))
-        levelList
+        StatTables.levelList
   in
     select 
       [ name "character-level"

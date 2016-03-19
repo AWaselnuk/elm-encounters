@@ -10678,11 +10678,11 @@ Elm.StartApp.make = function (_elm) {
    var Config = F4(function (a,b,c,d) {    return {init: a,update: b,view: c,inputs: d};});
    return _elm.StartApp.values = {_op: _op,start: start,Config: Config,App: App};
 };
-Elm.Utilities = Elm.Utilities || {};
-Elm.Utilities.make = function (_elm) {
+Elm.StatTables = Elm.StatTables || {};
+Elm.StatTables.make = function (_elm) {
    "use strict";
-   _elm.Utilities = _elm.Utilities || {};
-   if (_elm.Utilities.values) return _elm.Utilities.values;
+   _elm.StatTables = _elm.StatTables || {};
+   if (_elm.StatTables.values) return _elm.StatTables.values;
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
    $Debug = Elm.Debug.make(_elm),
@@ -10690,250 +10690,7 @@ Elm.Utilities.make = function (_elm) {
    $List = Elm.List.make(_elm),
    $Maybe = Elm.Maybe.make(_elm),
    $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm),
-   $String = Elm.String.make(_elm);
-   var _op = {};
-   var ratingXpList = _U.list([{ctor: "_Tuple2",_0: 0,_1: 10}
-                              ,{ctor: "_Tuple2",_0: 0.125,_1: 25}
-                              ,{ctor: "_Tuple2",_0: 0.25,_1: 50}
-                              ,{ctor: "_Tuple2",_0: 0.5,_1: 100}
-                              ,{ctor: "_Tuple2",_0: 1,_1: 200}
-                              ,{ctor: "_Tuple2",_0: 2,_1: 450}
-                              ,{ctor: "_Tuple2",_0: 3,_1: 700}
-                              ,{ctor: "_Tuple2",_0: 4,_1: 1100}
-                              ,{ctor: "_Tuple2",_0: 5,_1: 1800}
-                              ,{ctor: "_Tuple2",_0: 6,_1: 2300}
-                              ,{ctor: "_Tuple2",_0: 7,_1: 2900}
-                              ,{ctor: "_Tuple2",_0: 8,_1: 3900}
-                              ,{ctor: "_Tuple2",_0: 9,_1: 5000}
-                              ,{ctor: "_Tuple2",_0: 10,_1: 5900}
-                              ,{ctor: "_Tuple2",_0: 11,_1: 7200}
-                              ,{ctor: "_Tuple2",_0: 12,_1: 8400}
-                              ,{ctor: "_Tuple2",_0: 13,_1: 10000}
-                              ,{ctor: "_Tuple2",_0: 14,_1: 11500}
-                              ,{ctor: "_Tuple2",_0: 15,_1: 13000}
-                              ,{ctor: "_Tuple2",_0: 16,_1: 15000}
-                              ,{ctor: "_Tuple2",_0: 17,_1: 18000}
-                              ,{ctor: "_Tuple2",_0: 18,_1: 20000}
-                              ,{ctor: "_Tuple2",_0: 19,_1: 22000}
-                              ,{ctor: "_Tuple2",_0: 20,_1: 25000}
-                              ,{ctor: "_Tuple2",_0: 21,_1: 33000}
-                              ,{ctor: "_Tuple2",_0: 22,_1: 41000}
-                              ,{ctor: "_Tuple2",_0: 23,_1: 50000}
-                              ,{ctor: "_Tuple2",_0: 24,_1: 62000}
-                              ,{ctor: "_Tuple2",_0: 25,_1: 75000}
-                              ,{ctor: "_Tuple2",_0: 26,_1: 90000}
-                              ,{ctor: "_Tuple2",_0: 27,_1: 105000}
-                              ,{ctor: "_Tuple2",_0: 28,_1: 120000}
-                              ,{ctor: "_Tuple2",_0: 29,_1: 135000}
-                              ,{ctor: "_Tuple2",_0: 30,_1: 155000}]);
-   var xpList = A2($List.map,$Basics.snd,ratingXpList);
-   var ratingList = A2($List.map,$Basics.fst,ratingXpList);
-   var levelList = _U.range(1,20);
-   var initRating = A2($Maybe.withDefault,0,$List.head(ratingList));
-   var ratingXPTable = $Dict.fromList(ratingXpList);
-   var xpRatingTable = $Dict.fromList(A2($List.map,function (row) {    return {ctor: "_Tuple2",_0: $Basics.snd(row),_1: $Basics.fst(row)};},ratingXpList));
-   var highestXP = A2($Maybe.withDefault,0,$List.maximum(xpList));
-   var safeRatingToXP = function (rating) {    return A2($Maybe.withDefault,0,A2($Dict.get,rating,ratingXPTable));};
-   var safeXPToRating = function (xp) {    return A2($Maybe.withDefault,0,A2($Dict.get,xp,xpRatingTable));};
-   var safeStrToRating = function (_p0) {    return A2($Maybe.withDefault,0,$Result.toMaybe($String.toFloat(_p0)));};
-   var safeStrToLevel = function (_p1) {    return A2($Maybe.withDefault,0,$Result.toMaybe($String.toInt(_p1)));};
-   return _elm.Utilities.values = {_op: _op
-                                  ,safeStrToLevel: safeStrToLevel
-                                  ,safeStrToRating: safeStrToRating
-                                  ,safeRatingToXP: safeRatingToXP
-                                  ,safeXPToRating: safeXPToRating
-                                  ,ratingList: ratingList
-                                  ,xpList: xpList
-                                  ,levelList: levelList
-                                  ,ratingXPTable: ratingXPTable
-                                  ,initRating: initRating};
-};
-Elm.Character = Elm.Character || {};
-Elm.Character.make = function (_elm) {
-   "use strict";
-   _elm.Character = _elm.Character || {};
-   if (_elm.Character.values) return _elm.Character.values;
-   var _U = Elm.Native.Utils.make(_elm),
-   $Basics = Elm.Basics.make(_elm),
-   $Debug = Elm.Debug.make(_elm),
-   $Effects = Elm.Effects.make(_elm),
-   $Html = Elm.Html.make(_elm),
-   $Html$Attributes = Elm.Html.Attributes.make(_elm),
-   $Html$Events = Elm.Html.Events.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm),
-   $String = Elm.String.make(_elm),
-   $Utilities = Elm.Utilities.make(_elm);
-   var _op = {};
-   var randomName = "PC Name";
-   var $new = F2(function (level,name) {    return {level: level,name: _U.eq($String.length(name),0) ? randomName : name};});
-   var init = A2($new,1,randomName);
-   var Context = F2(function (a,b) {    return {actions: a,remove: b};});
-   var update = F2(function (action,model) {
-      var _p0 = action;
-      if (_p0.ctor === "ModifyLevel") {
-            return {ctor: "_Tuple2",_0: _U.update(model,{level: _p0._0}),_1: $Effects.none};
-         } else {
-            return {ctor: "_Tuple2",_0: _U.update(model,{name: _p0._0}),_1: $Effects.none};
-         }
-   });
-   var ModifyName = function (a) {    return {ctor: "ModifyName",_0: a};};
-   var ModifyLevel = function (a) {    return {ctor: "ModifyLevel",_0: a};};
-   var levelOptionsView = F2(function (address,model) {
-      var levelOption = F2(function (level,isSelected) {
-         return A2($Html.option,_U.list([$Html$Attributes.value(level),$Html$Attributes.selected(isSelected)]),_U.list([$Html.text(level)]));
-      });
-      var levelOptions = A2($List.map,function (level) {    return A2(levelOption,$Basics.toString(level),_U.eq(level,model.level));},$Utilities.levelList);
-      return A2($Html.select,
-      _U.list([$Html$Attributes.name("character-level")
-              ,A3($Html$Events.on,
-              "change",
-              $Html$Events.targetValue,
-              function (level) {
-                 return A2($Signal.message,address,ModifyLevel($Utilities.safeStrToLevel(level)));
-              })]),
-      levelOptions);
-   });
-   var view = F2(function (context,model) {
-      return A2($Html.div,
-      _U.list([$Html$Attributes.$class("character")]),
-      _U.list([A2($Html.label,_U.list([$Html$Attributes.$for("character-level")]),_U.list([$Html.text("Level")]))
-              ,A2(levelOptionsView,context.actions,model)
-              ,A2($Html.label,_U.list([$Html$Attributes.$for("character-name")]),_U.list([$Html.text("Name")]))
-              ,A2($Html.input,
-              _U.list([$Html$Attributes.$class("character-name")
-                      ,$Html$Attributes.type$("text")
-                      ,$Html$Attributes.value(model.name)
-                      ,A3($Html$Events.on,
-                      "input",
-                      $Html$Events.targetValue,
-                      function (name) {
-                         return A2($Signal.message,context.actions,ModifyName(name));
-                      })]),
-              _U.list([]))
-              ,A2($Html.button,_U.list([A2($Html$Events.onClick,context.remove,{ctor: "_Tuple0"})]),_U.list([$Html.text("Remove")]))]));
-   });
-   var Model = F2(function (a,b) {    return {level: a,name: b};});
-   return _elm.Character.values = {_op: _op,init: init,$new: $new,update: update,view: view,Model: Model,Context: Context};
-};
-Elm.Monster = Elm.Monster || {};
-Elm.Monster.make = function (_elm) {
-   "use strict";
-   _elm.Monster = _elm.Monster || {};
-   if (_elm.Monster.values) return _elm.Monster.values;
-   var _U = Elm.Native.Utils.make(_elm),
-   $Basics = Elm.Basics.make(_elm),
-   $Debug = Elm.Debug.make(_elm),
-   $Effects = Elm.Effects.make(_elm),
-   $Html = Elm.Html.make(_elm),
-   $Html$Attributes = Elm.Html.Attributes.make(_elm),
-   $Html$Events = Elm.Html.Events.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm),
-   $String = Elm.String.make(_elm),
-   $Utilities = Elm.Utilities.make(_elm);
-   var _op = {};
-   var randomName = "Monster Name";
-   var $new = F2(function (rating,name) {
-      return {xp: $Utilities.safeRatingToXP(rating),name: _U.eq($String.length(name),0) ? randomName : name,rating: rating};
-   });
-   var init = A2($new,1,randomName);
-   var Context = F2(function (a,b) {    return {actions: a,remove: b};});
-   var update = F2(function (action,model) {
-      var _p0 = action;
-      switch (_p0.ctor)
-      {case "ModifyRating": var _p1 = _p0._0;
-           return {ctor: "_Tuple2",_0: _U.update(model,{rating: _p1,xp: $Utilities.safeRatingToXP(_p1)}),_1: $Effects.none};
-         case "ModifyXP": var _p2 = _p0._0;
-           return {ctor: "_Tuple2",_0: _U.update(model,{rating: $Utilities.safeXPToRating(_p2),xp: _p2}),_1: $Effects.none};
-         default: return {ctor: "_Tuple2",_0: _U.update(model,{name: _p0._0}),_1: $Effects.none};}
-   });
-   var ModifyName = function (a) {    return {ctor: "ModifyName",_0: a};};
-   var ModifyRating = function (a) {    return {ctor: "ModifyRating",_0: a};};
-   var monsterRatingOptionsView = F2(function (address,model) {
-      var monsterRatingOption = F2(function (rating,isSelected) {
-         return A2($Html.option,_U.list([$Html$Attributes.value(rating),$Html$Attributes.selected(isSelected)]),_U.list([$Html.text(rating)]));
-      });
-      var monsterRatingOptions = A2($List.map,
-      function (rating) {
-         return A2(monsterRatingOption,$Basics.toString(rating),_U.eq(rating,model.rating));
-      },
-      $Utilities.ratingList);
-      return A2($Html.select,
-      _U.list([$Html$Attributes.name("monster-rating")
-              ,A3($Html$Events.on,
-              "change",
-              $Html$Events.targetValue,
-              function (rating) {
-                 return A2($Signal.message,address,ModifyRating($Utilities.safeStrToRating(rating)));
-              })]),
-      monsterRatingOptions);
-   });
-   var ModifyXP = function (a) {    return {ctor: "ModifyXP",_0: a};};
-   var monsterXpOptionsView = F2(function (address,model) {
-      var monsterXpOption = F2(function (xp,isSelected) {
-         return A2($Html.option,_U.list([$Html$Attributes.value(xp),$Html$Attributes.selected(isSelected)]),_U.list([$Html.text(xp)]));
-      });
-      var monsterXpOptions = A2($List.map,function (xp) {    return A2(monsterXpOption,$Basics.toString(xp),_U.eq(xp,model.xp));},$Utilities.xpList);
-      return A2($Html.select,
-      _U.list([$Html$Attributes.name("monster-xp")
-              ,A3($Html$Events.on,
-              "change",
-              $Html$Events.targetValue,
-              function (xp) {
-                 return A2($Signal.message,address,ModifyXP($Utilities.safeStrToLevel(xp)));
-              })]),
-      monsterXpOptions);
-   });
-   var view = F2(function (context,model) {
-      return A2($Html.div,
-      _U.list([$Html$Attributes.$class("monster")]),
-      _U.list([A2($Html.label,_U.list([$Html$Attributes.$for("monster-rating")]),_U.list([$Html.text("Challenge Rating")]))
-              ,A2(monsterRatingOptionsView,context.actions,model)
-              ,A2($Html.label,_U.list([$Html$Attributes.$for("monster-xp")]),_U.list([$Html.text("Experience Points")]))
-              ,A2(monsterXpOptionsView,context.actions,model)
-              ,A2($Html.label,_U.list([$Html$Attributes.$for("monster-name")]),_U.list([$Html.text("Name")]))
-              ,A2($Html.input,
-              _U.list([$Html$Attributes.$class("monster-name")
-                      ,$Html$Attributes.type$("text")
-                      ,$Html$Attributes.value(model.name)
-                      ,A3($Html$Events.on,
-                      "input",
-                      $Html$Events.targetValue,
-                      function (name) {
-                         return A2($Signal.message,context.actions,ModifyName(name));
-                      })]),
-              _U.list([]))
-              ,A2($Html.button,_U.list([A2($Html$Events.onClick,context.remove,{ctor: "_Tuple0"})]),_U.list([$Html.text("Remove")]))]));
-   });
-   var Model = F3(function (a,b,c) {    return {xp: a,rating: b,name: c};});
-   return _elm.Monster.values = {_op: _op,init: init,$new: $new,update: update,view: view,Model: Model,Context: Context};
-};
-Elm.Encounter = Elm.Encounter || {};
-Elm.Encounter.make = function (_elm) {
-   "use strict";
-   _elm.Encounter = _elm.Encounter || {};
-   if (_elm.Encounter.values) return _elm.Encounter.values;
-   var _U = Elm.Native.Utils.make(_elm),
-   $Basics = Elm.Basics.make(_elm),
-   $Character = Elm.Character.make(_elm),
-   $Debug = Elm.Debug.make(_elm),
-   $Dict = Elm.Dict.make(_elm),
-   $Effects = Elm.Effects.make(_elm),
-   $Html = Elm.Html.make(_elm),
-   $Html$Attributes = Elm.Html.Attributes.make(_elm),
-   $Html$Events = Elm.Html.Events.make(_elm),
-   $List = Elm.List.make(_elm),
-   $Maybe = Elm.Maybe.make(_elm),
-   $Monster = Elm.Monster.make(_elm),
-   $Result = Elm.Result.make(_elm),
-   $Signal = Elm.Signal.make(_elm),
-   $Utilities = Elm.Utilities.make(_elm);
+   $Signal = Elm.Signal.make(_elm);
    var _op = {};
    var deadlyThresholds = $Dict.fromList(_U.list([{ctor: "_Tuple2",_0: 1,_1: 100}
                                                  ,{ctor: "_Tuple2",_0: 2,_1: 200}
@@ -11015,12 +10772,287 @@ Elm.Encounter.make = function (_elm) {
                                                ,{ctor: "_Tuple2",_0: 18,_1: 2100}
                                                ,{ctor: "_Tuple2",_0: 19,_1: 2400}
                                                ,{ctor: "_Tuple2",_0: 20,_1: 2800}]));
+   var ratingXpList = _U.list([{ctor: "_Tuple2",_0: 0,_1: 10}
+                              ,{ctor: "_Tuple2",_0: 0.125,_1: 25}
+                              ,{ctor: "_Tuple2",_0: 0.25,_1: 50}
+                              ,{ctor: "_Tuple2",_0: 0.5,_1: 100}
+                              ,{ctor: "_Tuple2",_0: 1,_1: 200}
+                              ,{ctor: "_Tuple2",_0: 2,_1: 450}
+                              ,{ctor: "_Tuple2",_0: 3,_1: 700}
+                              ,{ctor: "_Tuple2",_0: 4,_1: 1100}
+                              ,{ctor: "_Tuple2",_0: 5,_1: 1800}
+                              ,{ctor: "_Tuple2",_0: 6,_1: 2300}
+                              ,{ctor: "_Tuple2",_0: 7,_1: 2900}
+                              ,{ctor: "_Tuple2",_0: 8,_1: 3900}
+                              ,{ctor: "_Tuple2",_0: 9,_1: 5000}
+                              ,{ctor: "_Tuple2",_0: 10,_1: 5900}
+                              ,{ctor: "_Tuple2",_0: 11,_1: 7200}
+                              ,{ctor: "_Tuple2",_0: 12,_1: 8400}
+                              ,{ctor: "_Tuple2",_0: 13,_1: 10000}
+                              ,{ctor: "_Tuple2",_0: 14,_1: 11500}
+                              ,{ctor: "_Tuple2",_0: 15,_1: 13000}
+                              ,{ctor: "_Tuple2",_0: 16,_1: 15000}
+                              ,{ctor: "_Tuple2",_0: 17,_1: 18000}
+                              ,{ctor: "_Tuple2",_0: 18,_1: 20000}
+                              ,{ctor: "_Tuple2",_0: 19,_1: 22000}
+                              ,{ctor: "_Tuple2",_0: 20,_1: 25000}
+                              ,{ctor: "_Tuple2",_0: 21,_1: 33000}
+                              ,{ctor: "_Tuple2",_0: 22,_1: 41000}
+                              ,{ctor: "_Tuple2",_0: 23,_1: 50000}
+                              ,{ctor: "_Tuple2",_0: 24,_1: 62000}
+                              ,{ctor: "_Tuple2",_0: 25,_1: 75000}
+                              ,{ctor: "_Tuple2",_0: 26,_1: 90000}
+                              ,{ctor: "_Tuple2",_0: 27,_1: 105000}
+                              ,{ctor: "_Tuple2",_0: 28,_1: 120000}
+                              ,{ctor: "_Tuple2",_0: 29,_1: 135000}
+                              ,{ctor: "_Tuple2",_0: 30,_1: 155000}]);
+   var xpList = A2($List.map,$Basics.snd,ratingXpList);
+   var ratingList = A2($List.map,$Basics.fst,ratingXpList);
+   var ratingXPTable = $Dict.fromList(ratingXpList);
+   var xpRatingTable = $Dict.fromList(A2($List.map,function (row) {    return {ctor: "_Tuple2",_0: $Basics.snd(row),_1: $Basics.fst(row)};},ratingXpList));
+   var levelList = _U.range(1,20);
+   return _elm.StatTables.values = {_op: _op
+                                   ,xpRatingTable: xpRatingTable
+                                   ,ratingXPTable: ratingXPTable
+                                   ,ratingList: ratingList
+                                   ,xpList: xpList
+                                   ,levelList: levelList
+                                   ,easyThresholds: easyThresholds
+                                   ,mediumThresholds: mediumThresholds
+                                   ,hardThresholds: hardThresholds
+                                   ,deadlyThresholds: deadlyThresholds};
+};
+Elm.Utilities = Elm.Utilities || {};
+Elm.Utilities.make = function (_elm) {
+   "use strict";
+   _elm.Utilities = _elm.Utilities || {};
+   if (_elm.Utilities.values) return _elm.Utilities.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Dict = Elm.Dict.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $StatTables = Elm.StatTables.make(_elm),
+   $String = Elm.String.make(_elm);
+   var _op = {};
    var getThreshold = F2(function (thresholds,level) {    return A2($Maybe.withDefault,0,A2($Dict.get,level,thresholds));});
+   var getDeadlyThreshold = getThreshold($StatTables.deadlyThresholds);
+   var getHardThreshold = getThreshold($StatTables.hardThresholds);
+   var getMediumThreshold = getThreshold($StatTables.mediumThresholds);
+   var getEasyThreshold = getThreshold($StatTables.easyThresholds);
+   var initRating = A2($Maybe.withDefault,0,$List.head($StatTables.ratingList));
+   var highestXP = A2($Maybe.withDefault,0,$List.maximum($StatTables.xpList));
+   var safeRatingToXP = function (rating) {    return A2($Maybe.withDefault,0,A2($Dict.get,rating,$StatTables.ratingXPTable));};
+   var safeXPToRating = function (xp) {    return A2($Maybe.withDefault,0,A2($Dict.get,xp,$StatTables.xpRatingTable));};
+   var safeStrToRating = function (_p0) {    return A2($Maybe.withDefault,0,$Result.toMaybe($String.toFloat(_p0)));};
+   var safeStrToLevel = function (_p1) {    return A2($Maybe.withDefault,0,$Result.toMaybe($String.toInt(_p1)));};
+   return _elm.Utilities.values = {_op: _op
+                                  ,safeStrToLevel: safeStrToLevel
+                                  ,safeStrToRating: safeStrToRating
+                                  ,safeRatingToXP: safeRatingToXP
+                                  ,safeXPToRating: safeXPToRating
+                                  ,initRating: initRating
+                                  ,getEasyThreshold: getEasyThreshold
+                                  ,getMediumThreshold: getMediumThreshold
+                                  ,getHardThreshold: getHardThreshold
+                                  ,getDeadlyThreshold: getDeadlyThreshold};
+};
+Elm.Character = Elm.Character || {};
+Elm.Character.make = function (_elm) {
+   "use strict";
+   _elm.Character = _elm.Character || {};
+   if (_elm.Character.values) return _elm.Character.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Effects = Elm.Effects.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $StatTables = Elm.StatTables.make(_elm),
+   $String = Elm.String.make(_elm),
+   $Utilities = Elm.Utilities.make(_elm);
+   var _op = {};
+   var randomName = "PC Name";
+   var $new = F2(function (level,name) {    return {level: level,name: _U.eq($String.length(name),0) ? randomName : name};});
+   var init = A2($new,1,randomName);
+   var Context = F2(function (a,b) {    return {actions: a,remove: b};});
+   var update = F2(function (action,model) {
+      var _p0 = action;
+      if (_p0.ctor === "ModifyLevel") {
+            return {ctor: "_Tuple2",_0: _U.update(model,{level: _p0._0}),_1: $Effects.none};
+         } else {
+            return {ctor: "_Tuple2",_0: _U.update(model,{name: _p0._0}),_1: $Effects.none};
+         }
+   });
+   var ModifyName = function (a) {    return {ctor: "ModifyName",_0: a};};
+   var ModifyLevel = function (a) {    return {ctor: "ModifyLevel",_0: a};};
+   var levelOptionsView = F2(function (address,model) {
+      var levelOption = F2(function (level,isSelected) {
+         return A2($Html.option,_U.list([$Html$Attributes.value(level),$Html$Attributes.selected(isSelected)]),_U.list([$Html.text(level)]));
+      });
+      var levelOptions = A2($List.map,function (level) {    return A2(levelOption,$Basics.toString(level),_U.eq(level,model.level));},$StatTables.levelList);
+      return A2($Html.select,
+      _U.list([$Html$Attributes.name("character-level")
+              ,A3($Html$Events.on,
+              "change",
+              $Html$Events.targetValue,
+              function (level) {
+                 return A2($Signal.message,address,ModifyLevel($Utilities.safeStrToLevel(level)));
+              })]),
+      levelOptions);
+   });
+   var view = F2(function (context,model) {
+      return A2($Html.div,
+      _U.list([$Html$Attributes.$class("character")]),
+      _U.list([A2($Html.label,_U.list([$Html$Attributes.$for("character-level")]),_U.list([$Html.text("Level")]))
+              ,A2(levelOptionsView,context.actions,model)
+              ,A2($Html.label,_U.list([$Html$Attributes.$for("character-name")]),_U.list([$Html.text("Name")]))
+              ,A2($Html.input,
+              _U.list([$Html$Attributes.$class("character-name")
+                      ,$Html$Attributes.type$("text")
+                      ,$Html$Attributes.value(model.name)
+                      ,A3($Html$Events.on,
+                      "input",
+                      $Html$Events.targetValue,
+                      function (name) {
+                         return A2($Signal.message,context.actions,ModifyName(name));
+                      })]),
+              _U.list([]))
+              ,A2($Html.button,_U.list([A2($Html$Events.onClick,context.remove,{ctor: "_Tuple0"})]),_U.list([$Html.text("Remove")]))]));
+   });
+   var Model = F2(function (a,b) {    return {level: a,name: b};});
+   return _elm.Character.values = {_op: _op,init: init,$new: $new,update: update,view: view,Model: Model,Context: Context};
+};
+Elm.Monster = Elm.Monster || {};
+Elm.Monster.make = function (_elm) {
+   "use strict";
+   _elm.Monster = _elm.Monster || {};
+   if (_elm.Monster.values) return _elm.Monster.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Effects = Elm.Effects.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $StatTables = Elm.StatTables.make(_elm),
+   $String = Elm.String.make(_elm),
+   $Utilities = Elm.Utilities.make(_elm);
+   var _op = {};
+   var randomName = "Monster Name";
+   var $new = F2(function (rating,name) {
+      return {xp: $Utilities.safeRatingToXP(rating),name: _U.eq($String.length(name),0) ? randomName : name,rating: rating};
+   });
+   var init = A2($new,1,randomName);
+   var Context = F2(function (a,b) {    return {actions: a,remove: b};});
+   var update = F2(function (action,model) {
+      var _p0 = action;
+      switch (_p0.ctor)
+      {case "ModifyRating": var _p1 = _p0._0;
+           return {ctor: "_Tuple2",_0: _U.update(model,{rating: _p1,xp: $Utilities.safeRatingToXP(_p1)}),_1: $Effects.none};
+         case "ModifyXP": var _p2 = _p0._0;
+           return {ctor: "_Tuple2",_0: _U.update(model,{rating: $Utilities.safeXPToRating(_p2),xp: _p2}),_1: $Effects.none};
+         default: return {ctor: "_Tuple2",_0: _U.update(model,{name: _p0._0}),_1: $Effects.none};}
+   });
+   var ModifyName = function (a) {    return {ctor: "ModifyName",_0: a};};
+   var ModifyRating = function (a) {    return {ctor: "ModifyRating",_0: a};};
+   var monsterRatingOptionsView = F2(function (address,model) {
+      var monsterRatingOption = F2(function (rating,isSelected) {
+         return A2($Html.option,_U.list([$Html$Attributes.value(rating),$Html$Attributes.selected(isSelected)]),_U.list([$Html.text(rating)]));
+      });
+      var monsterRatingOptions = A2($List.map,
+      function (rating) {
+         return A2(monsterRatingOption,$Basics.toString(rating),_U.eq(rating,model.rating));
+      },
+      $StatTables.ratingList);
+      return A2($Html.select,
+      _U.list([$Html$Attributes.name("monster-rating")
+              ,A3($Html$Events.on,
+              "change",
+              $Html$Events.targetValue,
+              function (rating) {
+                 return A2($Signal.message,address,ModifyRating($Utilities.safeStrToRating(rating)));
+              })]),
+      monsterRatingOptions);
+   });
+   var ModifyXP = function (a) {    return {ctor: "ModifyXP",_0: a};};
+   var monsterXpOptionsView = F2(function (address,model) {
+      var monsterXpOption = F2(function (xp,isSelected) {
+         return A2($Html.option,_U.list([$Html$Attributes.value(xp),$Html$Attributes.selected(isSelected)]),_U.list([$Html.text(xp)]));
+      });
+      var monsterXpOptions = A2($List.map,function (xp) {    return A2(monsterXpOption,$Basics.toString(xp),_U.eq(xp,model.xp));},$StatTables.xpList);
+      return A2($Html.select,
+      _U.list([$Html$Attributes.name("monster-xp")
+              ,A3($Html$Events.on,
+              "change",
+              $Html$Events.targetValue,
+              function (xp) {
+                 return A2($Signal.message,address,ModifyXP($Utilities.safeStrToLevel(xp)));
+              })]),
+      monsterXpOptions);
+   });
+   var view = F2(function (context,model) {
+      return A2($Html.div,
+      _U.list([$Html$Attributes.$class("monster")]),
+      _U.list([A2($Html.label,_U.list([$Html$Attributes.$for("monster-rating")]),_U.list([$Html.text("Challenge Rating")]))
+              ,A2(monsterRatingOptionsView,context.actions,model)
+              ,A2($Html.label,_U.list([$Html$Attributes.$for("monster-xp")]),_U.list([$Html.text("Experience Points")]))
+              ,A2(monsterXpOptionsView,context.actions,model)
+              ,A2($Html.label,_U.list([$Html$Attributes.$for("monster-name")]),_U.list([$Html.text("Name")]))
+              ,A2($Html.input,
+              _U.list([$Html$Attributes.$class("monster-name")
+                      ,$Html$Attributes.type$("text")
+                      ,$Html$Attributes.value(model.name)
+                      ,A3($Html$Events.on,
+                      "input",
+                      $Html$Events.targetValue,
+                      function (name) {
+                         return A2($Signal.message,context.actions,ModifyName(name));
+                      })]),
+              _U.list([]))
+              ,A2($Html.button,_U.list([A2($Html$Events.onClick,context.remove,{ctor: "_Tuple0"})]),_U.list([$Html.text("Remove")]))]));
+   });
+   var Model = F3(function (a,b,c) {    return {xp: a,rating: b,name: c};});
+   return _elm.Monster.values = {_op: _op,init: init,$new: $new,update: update,view: view,Model: Model,Context: Context};
+};
+Elm.Encounter = Elm.Encounter || {};
+Elm.Encounter.make = function (_elm) {
+   "use strict";
+   _elm.Encounter = _elm.Encounter || {};
+   if (_elm.Encounter.values) return _elm.Encounter.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $Character = Elm.Character.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Effects = Elm.Effects.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $Html$Events = Elm.Html.Events.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $Monster = Elm.Monster.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm),
+   $StatTables = Elm.StatTables.make(_elm),
+   $Utilities = Elm.Utilities.make(_elm);
+   var _op = {};
    var calculatePartyThresholds = function (levels) {
-      var deadlyPartyThresholds = A2($List.map,getThreshold(deadlyThresholds),levels);
-      var hardPartyThresholds = A2($List.map,getThreshold(hardThresholds),levels);
-      var mediumPartyThresholds = A2($List.map,getThreshold(mediumThresholds),levels);
-      var easyPartyThresholds = A2($List.map,getThreshold(easyThresholds),levels);
+      var deadlyPartyThresholds = A2($List.map,$Utilities.getDeadlyThreshold,levels);
+      var hardPartyThresholds = A2($List.map,$Utilities.getHardThreshold,levels);
+      var mediumPartyThresholds = A2($List.map,$Utilities.getMediumThreshold,levels);
+      var easyPartyThresholds = A2($List.map,$Utilities.getEasyThreshold,levels);
       return {easy: $List.sum(easyPartyThresholds)
              ,medium: $List.sum(mediumPartyThresholds)
              ,hard: $List.sum(hardPartyThresholds)
@@ -11037,7 +11069,7 @@ Elm.Encounter.make = function (_elm) {
       function (rating) {
          return A2(monsterRatingOption,$Basics.toString(rating),_U.eq(rating,model.newMonsterRating));
       },
-      $Utilities.ratingList);
+      $StatTables.ratingList);
       return A2($Html.select,
       _U.list([$Html$Attributes.name("monster-rating")
               ,A3($Html$Events.on,
@@ -11053,7 +11085,7 @@ Elm.Encounter.make = function (_elm) {
       var monsterXpOption = F2(function (xp,isSelected) {
          return A2($Html.option,_U.list([$Html$Attributes.value(xp),$Html$Attributes.selected(isSelected)]),_U.list([$Html.text(xp)]));
       });
-      var monsterXpOptions = A2($List.map,function (xp) {    return A2(monsterXpOption,$Basics.toString(xp),_U.eq(xp,model.newMonsterXP));},$Utilities.xpList);
+      var monsterXpOptions = A2($List.map,function (xp) {    return A2(monsterXpOption,$Basics.toString(xp),_U.eq(xp,model.newMonsterXP));},$StatTables.xpList);
       return A2($Html.select,
       _U.list([$Html$Attributes.name("monster-xp")
               ,A3($Html$Events.on,
@@ -11101,7 +11133,7 @@ Elm.Encounter.make = function (_elm) {
       function (level) {
          return A2(levelOption,$Basics.toString(level),_U.eq(level,model.newCharacterLevel));
       },
-      $Utilities.levelList);
+      $StatTables.levelList);
       return A2($Html.select,
       _U.list([$Html$Attributes.name("character-level")
               ,A3($Html$Events.on,
@@ -11250,12 +11282,7 @@ Elm.Encounter.make = function (_elm) {
                                   ,addCharacterView: addCharacterView
                                   ,levelOptionsView: levelOptionsView
                                   ,characterView: characterView
-                                  ,getThreshold: getThreshold
-                                  ,calculatePartyThresholds: calculatePartyThresholds
-                                  ,easyThresholds: easyThresholds
-                                  ,mediumThresholds: mediumThresholds
-                                  ,hardThresholds: hardThresholds
-                                  ,deadlyThresholds: deadlyThresholds};
+                                  ,calculatePartyThresholds: calculatePartyThresholds};
 };
 Elm.Main = Elm.Main || {};
 Elm.Main.make = function (_elm) {
