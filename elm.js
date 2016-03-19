@@ -11072,6 +11072,36 @@ Elm.Encounter.make = function (_elm) {
    };
    var partyThresholdsView = function (partyThresholds) {    return A2($Html.p,_U.list([]),_U.list([$Html.text($Basics.toString(partyThresholds))]));};
    var debugView = function (model) {    return A2($Html.p,_U.list([]),_U.list([$Html.text($Basics.toString(model))]));};
+   var monsterSummaryView = function (model) {
+      var threat = A2($Basics._op["++"],"XP: ",$Basics.toString(model.monsterXpTotal));
+      var monsters = A2($Basics._op["++"],"Monsters: ",$Basics.toString($List.length(model.monsters)));
+      return A2($Html.div,
+      _U.list([$Html$Attributes.$class("monster-summary")]),
+      _U.list([$Html.text(A2($Basics._op["++"],monsters,A2($Basics._op["++"]," ",threat)))]));
+   };
+   var partySummaryView = function (model) {
+      var thresholds = A2($Basics._op["++"],
+      "XP: ",
+      A2($Basics._op["++"],
+      $Basics.toString(model.partyThresholds.easy),
+      A2($Basics._op["++"],
+      " | ",
+      A2($Basics._op["++"],
+      $Basics.toString(model.partyThresholds.medium),
+      A2($Basics._op["++"],
+      " | ",
+      A2($Basics._op["++"],$Basics.toString(model.partyThresholds.hard),A2($Basics._op["++"]," | ",$Basics.toString(model.partyThresholds.deadly))))))));
+      var members = A2($Basics._op["++"],"Members: ",$Basics.toString($List.length(model.party)));
+      return A2($Html.div,
+      _U.list([$Html$Attributes.$class("party-summary")]),
+      _U.list([$Html.text(A2($Basics._op["++"],members,A2($Basics._op["++"]," ",thresholds)))]));
+   };
+   var titleSectionView = A2($Html.section,
+   _U.list([$Html$Attributes.$class("title-section")]),
+   _U.list([A2($Html.h1,_U.list([$Html$Attributes.$class("title")]),_U.list([$Html.text("D&D 5th Edition Encounter Builder")]))
+           ,A2($Html.p,
+           _U.list([$Html$Attributes.$class("description")]),
+           _U.list([$Html.text("This encounter builder allows you to easily determine the difficulty\n          of your 5th edition encounters. Simply create a list of party members\n          and a list of monsters, and the encounter builder will tell you if\n          it will be a cake walk or a total party kill.")]))]));
    var SetNewMonsterRating = function (a) {    return {ctor: "SetNewMonsterRating",_0: a};};
    var monsterRatingOptionsView = F2(function (address,model) {
       var monsterRatingOption = F2(function (rating,isSelected) {
@@ -11117,6 +11147,7 @@ Elm.Encounter.make = function (_elm) {
       var context = A2($Monster.Context,A2($Signal.forwardTo,address,ModifyMonster(_p2)),A2($Signal.forwardTo,address,$Basics.always(RemoveMonster(_p2))));
       return A2($Monster.view,context,_p1._1);
    });
+   var monsterListView = F2(function (address,model) {    return A2($Html.div,_U.list([]),A2($List.map,monsterView(address),model.monsters));});
    var AddMonster = function (a) {    return {ctor: "AddMonster",_0: a};};
    var addMonsterView = F2(function (address,model) {
       return A2($Html.div,
@@ -11134,6 +11165,21 @@ Elm.Encounter.make = function (_elm) {
               ,A2($Html.button,
               _U.list([A2($Html$Events.onClick,address,AddMonster(A2($Monster.$new,model.newMonsterRating,model.newMonsterName)))]),
               _U.list([$Html.text("Add Monster")]))]));
+   });
+   var monsterSectionView = F2(function (address,model) {
+      return A2($Html.section,
+      _U.list([$Html$Attributes.$class("monster-section")]),
+      _U.list([A2($Html.h2,_U.list([]),_U.list([$Html.text("The monsters")]))
+              ,monsterSummaryView(model)
+              ,A2($Html.h3,_U.list([]),_U.list([$Html.text("Add new monster")]))
+              ,A2(addMonsterView,address,model)
+              ,A2($Html.h3,_U.list([]),_U.list([$Html.text("Current monsters")]))
+              ,A2($Html.div,
+              _U.list([$Html$Attributes.$class("current-monster-tools")]),
+              _U.list([A2($Html.button,_U.list([$Html$Attributes.$class("set-monster-cr-view")]),_U.list([$Html.text("CR")]))
+                      ,A2($Html.button,_U.list([$Html$Attributes.$class("set-monster-xp-view")]),_U.list([$Html.text("XP")]))
+                      ,A2($Html.button,_U.list([$Html$Attributes.$class("toggle-monster-view")]),_U.list([$Html.text("view current monsters")]))]))
+              ,A2(monsterListView,address,model)]));
    });
    var SetNewCharacterName = function (a) {    return {ctor: "SetNewCharacterName",_0: a};};
    var SetNewCharacterLevel = function (a) {    return {ctor: "SetNewCharacterLevel",_0: a};};
@@ -11166,6 +11212,9 @@ Elm.Encounter.make = function (_elm) {
       A2($Signal.forwardTo,address,$Basics.always(RemoveCharacter(_p5))));
       return A2($Character.view,context,_p4._1);
    });
+   var characterListView = F2(function (address,model) {
+      return A2($Html.div,_U.list([$Html$Attributes.$class("characters")]),A2($List.map,characterView(address),model.party));
+   });
    var AddCharacter = function (a) {    return {ctor: "AddCharacter",_0: a};};
    var addCharacterView = F2(function (address,model) {
       return A2($Html.div,
@@ -11187,15 +11236,23 @@ Elm.Encounter.make = function (_elm) {
               _U.list([A2($Html$Events.onClick,address,AddCharacter(A2($Character.$new,model.newCharacterLevel,model.newCharacterName)))]),
               _U.list([$Html.text("Add Character")]))]));
    });
+   var partySectionView = F2(function (address,model) {
+      return A2($Html.section,
+      _U.list([$Html$Attributes.$class("party-section")]),
+      _U.list([A2($Html.h2,_U.list([]),_U.list([$Html.text("The party")]))
+              ,partySummaryView(model)
+              ,A2($Html.h3,_U.list([]),_U.list([$Html.text("Add new character")]))
+              ,A2(addCharacterView,address,model)
+              ,A2($Html.h3,_U.list([]),_U.list([$Html.text("Current party")]))
+              ,A2($Html.div,
+              _U.list([$Html$Attributes.$class("current-party-tools")]),
+              _U.list([A2($Html.button,_U.list([$Html$Attributes.$class("toggle-party-view")]),_U.list([$Html.text("view current party")]))]))
+              ,A2(characterListView,address,model)]));
+   });
    var view = F2(function (address,model) {
       return A2($Html.div,
-      _U.list([]),
-      _U.list([debugView(model)
-              ,partyThresholdsView(model.partyThresholds)
-              ,A2(addCharacterView,address,model)
-              ,A2($Html.div,_U.list([]),A2($List.map,characterView(address),model.party))
-              ,A2(addMonsterView,address,model)
-              ,A2($Html.div,_U.list([]),A2($List.map,monsterView(address),model.monsters))]));
+      _U.list([$Html$Attributes.$class("main")]),
+      _U.list([titleSectionView,A2(partySectionView,address,model),A2(monsterSectionView,address,model),debugView(model)]));
    });
    var NoOp = {ctor: "NoOp"};
    var levelsFromParty = function (party) {    return A2($List.map,function (_p6) {    return function (_) {    return _.level;}($Basics.snd(_p6));},party);};
@@ -11315,6 +11372,13 @@ Elm.Encounter.make = function (_elm) {
                                   ,SetNewMonsterRating: SetNewMonsterRating
                                   ,update: update
                                   ,view: view
+                                  ,titleSectionView: titleSectionView
+                                  ,partySectionView: partySectionView
+                                  ,partySummaryView: partySummaryView
+                                  ,characterListView: characterListView
+                                  ,monsterSectionView: monsterSectionView
+                                  ,monsterSummaryView: monsterSummaryView
+                                  ,monsterListView: monsterListView
                                   ,debugView: debugView
                                   ,addMonsterView: addMonsterView
                                   ,monsterView: monsterView

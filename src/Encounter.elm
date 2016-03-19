@@ -200,19 +200,128 @@ update action model =
 view : Signal.Address Action -> Model -> Html
 view address model =
   div
-    []
+    [ class "main" ]
     [
-      debugView model
-    , partyThresholdsView model.partyThresholds
-    , addCharacterView address model
-    , div
-        []
-        (List.map (characterView address) model.party)
-    , addMonsterView address model
-    , div
-        []
-        (List.map (monsterView address) model.monsters)
+      titleSectionView
+    , partySectionView address model
+    , monsterSectionView address model
+    , encounterSummaryView address model
+    , debugView model
     ]
+
+encounterSummaryView : Signal.Address Action -> Model -> Html
+encounterSummaryView =
+  section 
+    [ class "encounter-summary-section" ]
+    [
+      difficultyBadgeView model
+    , partySummaryView address model 
+    , monsterSummaryView address model
+    ]
+
+difficultyBadgeView : Model -> Html
+difficultyBadgeView model =
+  let
+    badgeClass = "badge badge--" ++ calculateDifficulty model
+  in
+    div 
+      [ class badgeClass ]
+      [ strong [ class "difficulty" ] [text <| calculateDifficulty model] ]
+
+titleSectionView : Html
+titleSectionView =
+  section
+    [ class "title-section" ]
+    [
+      h1 [ class "title" ] [ text "D&D 5th Edition Encounter Builder" ]
+    , p
+        [ class "description" ]
+        [ text "This encounter builder allows you to easily determine the difficulty
+          of your 5th edition encounters. Simply create a list of party members
+          and a list of monsters, and the encounter builder will tell you if
+          it will be a cake walk or a total party kill." ]
+    ]
+
+partySectionView : Signal.Address Action -> Model -> Html
+partySectionView address model = 
+  section 
+    [ class "party-section" ]
+    [
+      h2 [] [text "The party"]
+    , partySummaryView model
+    , h3 [] [text "Add new character"]
+    , addCharacterView address model
+    , h3 [] [text "Current party"]
+    , div
+        [ class "current-party-tools" ]
+        [
+          button [ class "toggle-party-view" ] [ text "view current party" ]
+        ]
+    , characterListView address model
+    ]
+
+partySummaryView : Model -> Html
+partySummaryView model =
+  let
+    members = "Members: " ++ (toString <| List.length model.party)
+    thresholds = 
+      "XP: " ++
+      toString model.partyThresholds.easy ++ " | " ++
+      toString model.partyThresholds.medium ++ " | " ++
+      toString model.partyThresholds.hard ++ " | " ++
+      toString model.partyThresholds.deadly
+  in
+    div
+      [ class "party-summary" ]
+      [
+        text (members ++ " " ++ thresholds)
+      ]
+
+characterListView : Signal.Address Action -> Model -> Html
+characterListView address model =
+  div
+    [ class "characters" ]
+    (List.map (characterView address) model.party)
+
+monsterSectionView : Signal.Address Action -> Model -> Html
+monsterSectionView address model = 
+  section 
+    [ class "monster-section" ]
+    [
+      h2 [] [text "The monsters"]
+    , monsterSummaryView model
+    , h3 [] [text "Add new monster"]
+    , addMonsterView address model
+    , h3 [] [text "Current monsters"]
+    , div
+        [ class "current-monster-tools" ]
+        [
+          button [ class "set-monster-cr-view" ] [ text "CR" ]
+        , button [ class "set-monster-xp-view" ] [ text "XP" ]
+        , button [ class "toggle-monster-view" ] [ text "view current monsters" ]
+        ]
+    , monsterListView address model
+    ]
+
+monsterSummaryView : Model -> Html
+monsterSummaryView model =
+  let
+    monsters = "Monsters: " ++ (toString <| List.length model.monsters)
+    threat = 
+      "XP: " ++
+      toString model.monsterXpTotal
+  in
+    div
+      [ class "monster-summary" ]
+      [
+        text (monsters ++ " " ++ threat)
+      ]
+
+monsterListView : Signal.Address Action -> Model -> Html
+monsterListView address model =
+  div
+    []
+    (List.map (monsterView address) model.monsters)
 
 debugView model =
   p [] [ text <| toString <| model ]
@@ -396,3 +505,15 @@ calculateMonsterXPTotal taggedMonsters =
   in
     toFloat totalMonsterXPs * multiplier
 
+calculateDifficulty : Model -> String
+calculateDifficulty model =
+  if (model.monsterXpTotal < model.partyThresholds.easy) then
+    "easy"
+  else if (model.monsterXpTotal < model.partyThresholds.medium) then
+    "medium"
+  else if (model.monsterXpTotal < model.partyThresholds.hard) then
+    "hard"
+  else if (model.monsterXpTotal < model.partyThresholds.deadly) then
+    "deadly"
+  else
+    "TPK"
