@@ -35,6 +35,13 @@ import Debug
 -- 4. Modify monster total for multiple monsters
 -- 5. Compare XP. Closest party threshold that is lower than monster XP determines difficulty
 
+-- TODO
+-- Remember char list with localStorage
+-- Design UI
+-- Enhance flows by shifting focus
+-- Display difficulty
+
+
 -- MODEL
 
 type alias ID = Int
