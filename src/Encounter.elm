@@ -210,13 +210,13 @@ view address model =
     ]
 
 encounterSummaryView : Signal.Address Action -> Model -> Html
-encounterSummaryView =
+encounterSummaryView address model =
   section 
     [ class "encounter-summary-section" ]
     [
       difficultyBadgeView model
-    , partySummaryView address model 
-    , monsterSummaryView address model
+    , partySummaryView model 
+    , monsterSummaryView model
     ]
 
 difficultyBadgeView : Model -> Html
@@ -507,13 +507,13 @@ calculateMonsterXPTotal taggedMonsters =
 
 calculateDifficulty : Model -> String
 calculateDifficulty model =
-  if (model.monsterXpTotal < model.partyThresholds.easy) then
+  if (round model.monsterXpTotal < model.partyThresholds.easy) then
     "easy"
-  else if (model.monsterXpTotal < model.partyThresholds.medium) then
+  else if (round model.monsterXpTotal < model.partyThresholds.medium) then
     "medium"
-  else if (model.monsterXpTotal < model.partyThresholds.hard) then
+  else if (round model.monsterXpTotal < model.partyThresholds.hard) then
     "hard"
-  else if (model.monsterXpTotal < model.partyThresholds.deadly) then
+  else if (round model.monsterXpTotal < model.partyThresholds.deadly) then
     "deadly"
   else
     "TPK"

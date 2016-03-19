@@ -11048,6 +11048,11 @@ Elm.Encounter.make = function (_elm) {
    $StatTables = Elm.StatTables.make(_elm),
    $Utilities = Elm.Utilities.make(_elm);
    var _op = {};
+   var calculateDifficulty = function (model) {
+      return _U.cmp($Basics.round(model.monsterXpTotal),model.partyThresholds.easy) < 0 ? "easy" : _U.cmp($Basics.round(model.monsterXpTotal),
+      model.partyThresholds.medium) < 0 ? "medium" : _U.cmp($Basics.round(model.monsterXpTotal),
+      model.partyThresholds.hard) < 0 ? "hard" : _U.cmp($Basics.round(model.monsterXpTotal),model.partyThresholds.deadly) < 0 ? "deadly" : "TPK";
+   };
    var calculateMonsterMultiplier = function (taggedMonsters) {
       var monsterCount = $List.length(taggedMonsters);
       return _U.eq(monsterCount,0) || _U.eq(monsterCount,1) ? 1 : _U.cmp(monsterCount,2) > -1 || _U.cmp(monsterCount,3) < 0 ? 1.5 : _U.cmp(monsterCount,
@@ -11102,6 +11107,17 @@ Elm.Encounter.make = function (_elm) {
            ,A2($Html.p,
            _U.list([$Html$Attributes.$class("description")]),
            _U.list([$Html.text("This encounter builder allows you to easily determine the difficulty\n          of your 5th edition encounters. Simply create a list of party members\n          and a list of monsters, and the encounter builder will tell you if\n          it will be a cake walk or a total party kill.")]))]));
+   var difficultyBadgeView = function (model) {
+      var badgeClass = A2($Basics._op["++"],"badge badge--",calculateDifficulty(model));
+      return A2($Html.div,
+      _U.list([$Html$Attributes.$class(badgeClass)]),
+      _U.list([A2($Html.strong,_U.list([$Html$Attributes.$class("difficulty")]),_U.list([$Html.text(calculateDifficulty(model))]))]));
+   };
+   var encounterSummaryView = F2(function (address,model) {
+      return A2($Html.section,
+      _U.list([$Html$Attributes.$class("encounter-summary-section")]),
+      _U.list([difficultyBadgeView(model),partySummaryView(model),monsterSummaryView(model)]));
+   });
    var SetNewMonsterRating = function (a) {    return {ctor: "SetNewMonsterRating",_0: a};};
    var monsterRatingOptionsView = F2(function (address,model) {
       var monsterRatingOption = F2(function (rating,isSelected) {
@@ -11252,7 +11268,11 @@ Elm.Encounter.make = function (_elm) {
    var view = F2(function (address,model) {
       return A2($Html.div,
       _U.list([$Html$Attributes.$class("main")]),
-      _U.list([titleSectionView,A2(partySectionView,address,model),A2(monsterSectionView,address,model),debugView(model)]));
+      _U.list([titleSectionView
+              ,A2(partySectionView,address,model)
+              ,A2(monsterSectionView,address,model)
+              ,A2(encounterSummaryView,address,model)
+              ,debugView(model)]));
    });
    var NoOp = {ctor: "NoOp"};
    var levelsFromParty = function (party) {    return A2($List.map,function (_p6) {    return function (_) {    return _.level;}($Basics.snd(_p6));},party);};
@@ -11372,6 +11392,8 @@ Elm.Encounter.make = function (_elm) {
                                   ,SetNewMonsterRating: SetNewMonsterRating
                                   ,update: update
                                   ,view: view
+                                  ,encounterSummaryView: encounterSummaryView
+                                  ,difficultyBadgeView: difficultyBadgeView
                                   ,titleSectionView: titleSectionView
                                   ,partySectionView: partySectionView
                                   ,partySummaryView: partySummaryView
@@ -11390,7 +11412,8 @@ Elm.Encounter.make = function (_elm) {
                                   ,characterView: characterView
                                   ,calculatePartyThresholds: calculatePartyThresholds
                                   ,calculateMonsterMultiplier: calculateMonsterMultiplier
-                                  ,calculateMonsterXPTotal: calculateMonsterXPTotal};
+                                  ,calculateMonsterXPTotal: calculateMonsterXPTotal
+                                  ,calculateDifficulty: calculateDifficulty};
 };
 Elm.Main = Elm.Main || {};
 Elm.Main.make = function (_elm) {
