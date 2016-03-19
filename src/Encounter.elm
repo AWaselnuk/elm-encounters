@@ -53,6 +53,7 @@ type alias Model =
   , newCharacterLevel : Int
   , newCharacterName : String
   , monsters : List (ID, Monster.Model)
+  , monsterXpTotal : Float
   , newMonsterName : String
   , newMonsterRating : Float
   , newMonsterXP : Int
@@ -83,6 +84,7 @@ init =
     , newCharacterLevel = 1
     , newCharacterName = "" 
     , monsters = []
+    , monsterXpTotal = 0
     , newMonsterName = "" 
     , newMonsterRating = initRating 
     , newMonsterXP = safeRatingToXP initRating }
@@ -149,6 +151,7 @@ update action model =
       in
         ({ model |
              monsters = newMonsters,
+             monsterXpTotal = calculateMonsterXPTotal newMonsters,
              uid = model.uid + 1 }
         , Effects.none)
     RemoveMonster id ->
@@ -156,7 +159,8 @@ update action model =
         newMonsters = List.filter (\(monsterID, _) -> monsterID /= id) model.monsters 
       in
         ({ model |
-             monsters = newMonsters }
+             monsters = newMonsters,
+             monsterXpTotal = calculateMonsterXPTotal newMonsters }
         , Effects.none)
     ModifyMonster id monsterAction ->
       let
@@ -168,7 +172,8 @@ update action model =
         newMonsters = List.map updateMonster model.monsters 
       in
         ({ model |
-             monsters = newMonsters }
+             monsters = newMonsters,
+             monsterXpTotal = calculateMonsterXPTotal newMonsters }
         , Effects.none)
     SetNewMonsterName name ->
       ({ model | newMonsterName = name }, Effects.none)
@@ -356,3 +361,31 @@ calculatePartyThresholds levels =
     , hard = List.sum hardPartyThresholds
     , deadly = List.sum deadlyPartyThresholds
     }
+
+calculateMonsterMultiplier : List (ID, Monster.Model) -> Float
+calculateMonsterMultiplier taggedMonsters =
+  let
+    monsterCount = List.length taggedMonsters
+  in
+    if (monsterCount == 0 || monsterCount == 1) then
+      1
+    else if (monsterCount >= 2 || monsterCount < 3) then
+      1.5
+    else if (monsterCount >= 3 || monsterCount < 7) then
+      2
+    else if (monsterCount >= 7 || monsterCount < 11) then
+      2.5
+    else if (monsterCount >= 11 || monsterCount < 15) then
+      3
+    else
+      4
+
+calculateMonsterXPTotal : List (ID, Monster.Model) -> Float
+calculateMonsterXPTotal taggedMonsters =
+  let
+    monsters = List.map snd taggedMonsters
+    totalMonsterXPs = List.sum (List.map .xp monsters)
+    multiplier = calculateMonsterMultiplier taggedMonsters
+  in
+    toFloat totalMonsterXPs * multiplier
+
