@@ -46,16 +46,10 @@ import Debug
 
 type alias ID = Int
 
-type alias PartyThresholds =
-  { easy : Int
-  , medium : Int
-  , hard : Int
-  , deadly : Int
-  }
 
 type alias Model =
   { uid : ID
-  , partyThresholds : PartyThresholds
+  , characters : CharacterList.Model
   , monsters : List (ID, Monster.Model)
   , monsterXpTotal : Float
   , newMonsterName : String
@@ -63,31 +57,10 @@ type alias Model =
   , newMonsterXP : Int
   }
 
--- TODO: load init character list from local storage
-initParty : CharacterList 
-initParty =
-  [ (1, Character.init)
-  , (2, Character.init)
-  , (3, Character.init)
-  , (4, Character.init)
-  , (5, Character.init)
-  ]
-
-levelsFromParty : CharacterList -> List Int
-levelsFromParty party =
-  List.map (snd >> .level) party
-
-initPartyThresholds : PartyThresholds
-initPartyThresholds =
-  calculatePartyThresholds <| levelsFromParty initParty
-
 init : (Model, Effects Action)
 init =
-  ( { uid = List.length initParty + 1
-    , party = initParty
-    , partyThresholds = initPartyThresholds
-    , newCharacterLevel = 1
-    , newCharacterName = "" 
+  ( { uid = 1 
+    , characters = CharacterList.init
     , monsters = []
     , monsterXpTotal = 0
     , newMonsterName = "" 
@@ -162,7 +135,7 @@ view address model =
     [ class "main" ]
     [
       titleSectionView
-    , partySectionView address model
+    , partySectionView address model.characters
     , monsterSectionView address model
     , encounterSummaryView address model
     , debugView model
@@ -174,7 +147,7 @@ encounterSummaryView address model =
     [ class "encounter-summary-section" ]
     [
       difficultyBadgeView model
-    , partySummaryView model 
+    , CharacterList.summaryView model.characters
     , monsterSummaryView model
     ]
 
@@ -201,13 +174,13 @@ titleSectionView =
           it will be a cake walk or a total party kill." ]
     ]
 
-partySectionView : Signal.Address Action -> Model -> Html
+partySectionView : Signal.Address Action -> CharacterList.Model -> Html
 partySectionView address model = 
   section 
     [ class "party-section" ]
     [
       h2 [] [text "The party"]
-    , partySummaryView model
+    , CharacterList.summaryView model
     , h3 [] [text "Add new character"]
     , CharacterList.addCharacterView address model
     , h3 [] [text "Current party"]
@@ -218,23 +191,6 @@ partySectionView address model =
         ]
     , CharacterList.view address model
     ]
-
-partySummaryView : Model -> Html
-partySummaryView model =
-  let
-    members = "Members: " ++ (toString <| List.length model.party)
-    thresholds = 
-      "XP: " ++
-      toString model.partyThresholds.easy ++ " | " ++
-      toString model.partyThresholds.medium ++ " | " ++
-      toString model.partyThresholds.hard ++ " | " ++
-      toString model.partyThresholds.deadly
-  in
-    div
-      [ class "party-summary" ]
-      [
-        text (members ++ " " ++ thresholds)
-      ]
 
 monsterSectionView : Signal.Address Action -> Model -> Html
 monsterSectionView address model = 
@@ -355,30 +311,6 @@ monsterXpOptionsView address model =
       ]
       monsterXpOptions
 
-partyThresholdsView : PartyThresholds -> Html
-partyThresholdsView partyThresholds =
-  p
-    []
-    [ text (partyThresholds |> toString) ]
-
-calculatePartyThresholds : List Int -> PartyThresholds
-calculatePartyThresholds levels =
-  let
-    easyPartyThresholds =
-      List.map getEasyThreshold levels
-    mediumPartyThresholds =
-      List.map getMediumThreshold levels
-    hardPartyThresholds =
-      List.map getHardThreshold levels
-    deadlyPartyThresholds =
-      List.map getDeadlyThreshold levels
-  in
-    { easy = List.sum easyPartyThresholds
-    , medium = List.sum mediumPartyThresholds
-    , hard = List.sum hardPartyThresholds
-    , deadly = List.sum deadlyPartyThresholds
-    }
-
 calculateMonsterMultiplier : List (ID, Monster.Model) -> Float
 calculateMonsterMultiplier taggedMonsters =
   let
@@ -408,13 +340,13 @@ calculateMonsterXPTotal taggedMonsters =
 
 calculateDifficulty : Model -> String
 calculateDifficulty model =
-  if (round model.monsterXpTotal < model.partyThresholds.easy) then
+  if (round model.monsterXpTotal < model.characters.partyThresholds.easy) then
     "easy"
-  else if (round model.monsterXpTotal < model.partyThresholds.medium) then
+  else if (round model.monsterXpTotal < model.characters.partyThresholds.medium) then
     "medium"
-  else if (round model.monsterXpTotal < model.partyThresholds.hard) then
+  else if (round model.monsterXpTotal < model.characters.partyThresholds.hard) then
     "hard"
-  else if (round model.monsterXpTotal < model.partyThresholds.deadly) then
+  else if (round model.monsterXpTotal < model.characters.partyThresholds.deadly) then
     "deadly"
   else
     "TPK"

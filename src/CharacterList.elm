@@ -3,6 +3,7 @@ module CharacterList where
 import Utilities exposing (..)
 import StatTables
 import Character
+import Effects exposing (Effects)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -14,12 +15,65 @@ type alias ID = Int
 -- TODO: Party will become CharacterList
 type alias CharacterList = List (ID, Character.Model)
 
+type alias PartyThresholds =
+  { easy : Int
+  , medium : Int
+  , hard : Int
+  , deadly : Int
+  }
+
 type alias Model = 
   { uid : ID
   , characterList : CharacterList 
+  , partyThresholds : PartyThresholds
   , newCharacterLevel : Int
   , newCharacterName : String
   }
+
+init : Model
+init =
+  { uid = 6
+  , characterList = initCharacterList
+  , partyThresholds = initPartyThresholds
+  , newCharacterLevel = 1
+  , newCharacterName = "" 
+  }
+
+-- TODO: load init character list from local storage
+initCharacterList : CharacterList
+initCharacterList = 
+  [ (1, Character.init)
+  , (2, Character.init)
+  , (3, Character.init)
+  , (4, Character.init)
+  , (5, Character.init)
+  ]
+
+levelsFromCharacterList : CharacterList -> List Int
+levelsFromCharacterList characterList =
+  List.map (snd >> .level) characterList
+
+initPartyThresholds : PartyThresholds
+initPartyThresholds =
+  calculatePartyThresholds <| levelsFromCharacterList initCharacterList
+
+calculatePartyThresholds : List Int -> PartyThresholds
+calculatePartyThresholds levels =
+  let
+    easyPartyThresholds =
+      List.map getEasyThreshold levels
+    mediumPartyThresholds =
+      List.map getMediumThreshold levels
+    hardPartyThresholds =
+      List.map getHardThreshold levels
+    deadlyPartyThresholds =
+      List.map getDeadlyThreshold levels
+  in
+    { easy = List.sum easyPartyThresholds
+    , medium = List.sum mediumPartyThresholds
+    , hard = List.sum hardPartyThresholds
+    , deadly = List.sum deadlyPartyThresholds
+    }
 
 -- UPDATE
 
@@ -31,27 +85,27 @@ type Action
   | SetNewCharacterLevel Int
   | SetNewCharacterName String
 
-update: Action -> Model -> (Model, Effects.Action)
-update =
+update: Action -> Model -> (Model, Effects Action)
+update action model =
   case action of
     NoOp ->
       (model, Effects.none)
     AddCharacter character ->
       let
-        newParty = (model.uid, character) :: model.party
+        newCharacterList = (model.uid, character) :: model.characterList
       in
         ({ model |
-             party = newParty,
-             partyThresholds = calculatePartyThresholds <| levelsFromParty newParty,
+             characterList = newCharacterList,
+             partyThresholds = calculatePartyThresholds <| levelsFromCharacterList newCharacterList,
              uid = model.uid + 1 }
         , Effects.none)
     RemoveCharacter id ->
       let
-        newParty = List.filter (\(characterID, _) -> characterID /= id) model.party 
+        newCharacterList = List.filter (\(characterID, _) -> characterID /= id) model.characterList 
       in
         ({ model |
-             party = newParty,
-             partyThresholds = calculatePartyThresholds <| levelsFromParty newParty }
+             characterList = newCharacterList,
+             partyThresholds = calculatePartyThresholds <| levelsFromCharacterList newCharacterList }
         , Effects.none)
     ModifyCharacter id characterAction ->
       let
@@ -60,11 +114,11 @@ update =
             (characterID, fst <| Character.update characterAction characterModel)
           else
             (characterID, characterModel)
-        newParty = List.map updateCharacter model.party 
+        newCharacterList = List.map updateCharacter model.characterList 
       in
         ({ model |
-             party = newParty,
-             partyThresholds = calculatePartyThresholds <| levelsFromParty newParty }
+             characterList = newCharacterList,
+             partyThresholds = calculatePartyThresholds <| levelsFromCharacterList newCharacterList }
         , Effects.none)
     SetNewCharacterLevel level ->
       ({ model | newCharacterLevel = level }, Effects.none)
@@ -77,7 +131,7 @@ view : Signal.Address Action -> Model -> Html
 view address model =
   div
     [ class "characters" ]
-    (List.map (characterView address) model.party)
+    (List.map (characterView address) model.characterList)
 
 characterView : Signal.Address Action -> (ID, Character.Model) -> Html
 characterView address (id, model) =
@@ -130,4 +184,27 @@ levelOptionsView address model =
       , on "change" targetValue (\level -> Signal.message address (SetNewCharacterLevel (safeStrToLevel level))) 
       ]
       levelOptions
+
+partyThresholdsView : PartyThresholds -> Html
+partyThresholdsView partyThresholds =
+  p
+    []
+    [ text (partyThresholds |> toString) ]
+
+summaryView : Model -> Html
+summaryView model =
+  let
+    members = "Members: " ++ (toString <| List.length model.characterList)
+    thresholds = 
+      "XP: " ++
+      toString model.partyThresholds.easy ++ " | " ++
+      toString model.partyThresholds.medium ++ " | " ++
+      toString model.partyThresholds.hard ++ " | " ++
+      toString model.partyThresholds.deadly
+  in
+    div
+      [ class "party-summary" ]
+      [
+        text (members ++ " " ++ thresholds)
+      ]
 
