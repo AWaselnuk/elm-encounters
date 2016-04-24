@@ -2,6 +2,11 @@
 
 This is an encounter builder for Dungeons & Dragons 5th edition written in Elm.
 
+## Next Steps
+
+1. Current build is broken because I can't figure out how to extract CharacterList properly. Figure that out and then extract MonsterList.
+2. All of the UI design and CSS.
+
 ## Development
 
 Start local server in root directory:
