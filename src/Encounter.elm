@@ -78,6 +78,7 @@ type Action
   | SetNewMonsterName String
   | SetNewMonsterXP Int
   | SetNewMonsterRating Float
+  | CharacterListAction CharacterList.Action
 
 update : Action -> Model -> (Model, Effects Action)
 update action model =
@@ -126,6 +127,9 @@ update action model =
            newMonsterRating = safeXPToRating xp,
            newMonsterXP = xp }
        , Effects.none)
+    CharacterListAction a ->
+      let (clModel, clEffects) = CharacterList.update a model.characters in
+      ({ model | characters = clModel }, Effects.map CharacterListAction clEffects)
 
 -- VIEW
 
@@ -182,14 +186,14 @@ partySectionView address model =
       h2 [] [text "The party"]
     , CharacterList.summaryView model
     , h3 [] [text "Add new character"]
-    , CharacterList.addCharacterView address model
+    , CharacterList.addCharacterView (Signal.forwardTo address CharacterListAction) model
     , h3 [] [text "Current party"]
     , div
         [ class "current-party-tools" ]
         [
           button [ class "toggle-party-view" ] [ text "view current party" ]
         ]
-    , CharacterList.view address model
+    , CharacterList.view (Signal.forwardTo address CharacterListAction) model
     ]
 
 monsterSectionView : Signal.Address Action -> Model -> Html
