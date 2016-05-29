@@ -2,7 +2,6 @@ module Monster exposing (Model, init, new, Msg, update, view, Context)
 
 import Utilities exposing (..)
 import StatTables
-import Effects exposing (Effects)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -23,21 +22,21 @@ type Msg
   | ModifyRating Float
   | ModifyName String
 
-update : Msg -> Model -> (Model, Effects Msg)
+update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
     ModifyRating rating ->
       ({ model |
            rating = rating,
            xp = safeRatingToXP rating }
-       , Effects.none)
+       , Cmd.none)
     ModifyXP xp ->
       ({ model |
            rating = safeXPToRating xp,
            xp = xp }
-       , Effects.none)
+       , Cmd.none)
     ModifyName name ->
-      ({ model | name = name }, Effects.none)
+      ({ model | name = name }, Cmd.none)
 
 -- VIEW
 

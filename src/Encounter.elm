@@ -3,7 +3,6 @@ module Encounter exposing (..)
 import Utilities exposing (..)
 import CharacterList exposing (CharacterList)
 import MonsterList exposing (MonsterList)
-import Effects exposing (Effects)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -49,11 +48,11 @@ type alias Model =
   , monsters : MonsterList.Model
   }
 
-init : (Model, Effects Msg)
+init : (Model, Cmd Msg)
 init =
   ( { characters = CharacterList.init
     , monsters = MonsterList.init }
-  , Effects.none)
+  , Cmd.none)
 
 -- UPDATE
 
@@ -62,21 +61,21 @@ type Msg
   | CharacterListMsg CharacterList.Msg
   | MonsterListMsg MonsterList.Msg
 
-update : Msg -> Model -> (Model, Effects Msg)
+update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
     NoOp ->
-      (model, Effects.none)
+      (model, Cmd.none)
     CharacterListMsg msg ->
       let
-        (clModel, clEffects) = CharacterList.update msg model.characters
+        (clModel, clCmd) = CharacterList.update msg model.characters
       in
-        ({ model | characters = clModel }, Effects.map CharacterListMsg clEffects)
+        ({ model | characters = clModel }, Cmd.map CharacterListMsg clCmd)
     MonsterListMsg msg ->
       let
-        (mlModel, mlEffects) = MonsterList.update msg model.monsters
+        (mlModel, mlCmd) = MonsterList.update msg model.monsters
       in
-        ({ model | monsters = mlModel }, Effects.map MonsterListMsg mlEffects)
+        ({ model | monsters = mlModel }, Cmd.map MonsterListMsg mlCmd)
 
 -- VIEW
 

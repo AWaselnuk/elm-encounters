@@ -3,7 +3,6 @@ module MonsterList exposing (..)
 import Utilities exposing (..)
 import StatTables
 import Monster
-import Effects exposing (Effects)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -42,7 +41,7 @@ type Msg
   | SetNewMonsterXP Int
   | SetNewMonsterRating Float
 
-update : Msg -> Model -> (Model, Effects Msg)
+update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
     AddMonster monster ->
@@ -53,7 +52,7 @@ update msg model =
              monsterList = newMonsterList,
              monsterXpTotal = calculateMonsterXPTotal newMonsterList,
              uid = model.uid + 1 }
-        , Effects.none)
+        , Cmd.none)
     RemoveMonster id ->
       let
         newMonsterList = List.filter (\(monsterID, _) -> monsterID /= id) model.monsterList
@@ -61,7 +60,7 @@ update msg model =
         ({ model |
              monsterList = newMonsterList,
              monsterXpTotal = calculateMonsterXPTotal newMonsterList }
-        , Effects.none)
+        , Cmd.none)
     ModifyMonster id monsterMsg ->
       let
         updateMonster (monsterID, monsterModel) =
@@ -74,19 +73,19 @@ update msg model =
         ({ model |
              monsterList = newMonsterList,
              monsterXpTotal = calculateMonsterXPTotal newMonsterList }
-        , Effects.none)
+        , Cmd.none)
     SetNewMonsterName name ->
-      ({ model | newMonsterName = name }, Effects.none)
+      ({ model | newMonsterName = name }, Cmd.none)
     SetNewMonsterRating rating ->
       ({ model |
            newMonsterRating = Debug.log (toString rating) rating,
            newMonsterXP = safeRatingToXP rating }
-       , Effects.none)
+       , Cmd.none)
     SetNewMonsterXP xp ->
       ({ model |
            newMonsterRating = safeXPToRating xp,
            newMonsterXP = xp }
-       , Effects.none)
+       , Cmd.none)
 
 -- VIEW
 

@@ -2,7 +2,6 @@ module Character exposing (Model, init, new, Msg, update, view, Context)
 
 import Utilities exposing (..)
 import StatTables
-import Effects exposing (Effects)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -23,13 +22,13 @@ type Msg
   = ModifyLevel Int
   | ModifyName String
 
-update : Msg -> Model -> (Model, Effects Msg)
+update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
     ModifyLevel level ->
-      ({ model | level = level }, Effects.none)
+      ({ model | level = level }, Cmd.none)
     ModifyName name ->
-      ({ model | name = name }, Effects.none)
+      ({ model | name = name }, Cmd.none)
 
 -- VIEW
 

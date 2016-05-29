@@ -3,7 +3,6 @@ module CharacterList exposing (..)
 import Utilities exposing (..)
 import StatTables
 import Character
-import Effects exposing (Effects)
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
@@ -85,11 +84,11 @@ type Msg
   | SetNewCharacterLevel Int
   | SetNewCharacterName String
 
-update: Msg -> Model -> (Model, Effects Msg)
+update: Msg -> Model -> (Model, Cmd Msg)
 update msg model =
   case msg of
     NoOp ->
-      (model, Effects.none)
+      (model, Cmd.none)
     AddCharacter character ->
       let
         newCharacterList = (model.uid, character) :: model.characterList
@@ -98,7 +97,7 @@ update msg model =
              characterList = newCharacterList,
              partyThresholds = calculatePartyThresholds <| levelsFromCharacterList newCharacterList,
              uid = model.uid + 1 }
-        , Effects.none)
+        , Cmd.none)
     RemoveCharacter id ->
       let
         newCharacterList = List.filter (\(characterID, _) -> characterID /= id) model.characterList
@@ -106,7 +105,7 @@ update msg model =
         ({ model |
              characterList = newCharacterList,
              partyThresholds = calculatePartyThresholds <| levelsFromCharacterList newCharacterList }
-        , Effects.none)
+        , Cmd.none)
     ModifyCharacter id characterMsg ->
       let
         updateCharacter (characterID, characterModel) =
@@ -119,11 +118,11 @@ update msg model =
         ({ model |
              characterList = newCharacterList,
              partyThresholds = calculatePartyThresholds <| levelsFromCharacterList newCharacterList }
-        , Effects.none)
+        , Cmd.none)
     SetNewCharacterLevel level ->
-      ({ model | newCharacterLevel = level }, Effects.none)
+      ({ model | newCharacterLevel = level }, Cmd.none)
     SetNewCharacterName name ->
-      ({ model | newCharacterName = name }, Effects.none)
+      ({ model | newCharacterName = name }, Cmd.none)
 
 -- VIEW
 
