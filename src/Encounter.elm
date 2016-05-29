@@ -45,15 +45,13 @@ import Debug
 type alias ID = Int
 
 type alias Model =
-  { uid : ID
-  , characters : CharacterList.Model
+  { characters : CharacterList.Model
   , monsters : MonsterList.Model
   }
 
 init : (Model, Effects Action)
 init =
-  ( { uid = 1 
-    , characters = CharacterList.init
+  ( { characters = CharacterList.init
     , monsters = MonsterList.init }
   , Effects.none)
 

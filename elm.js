@@ -11445,8 +11445,8 @@ Elm.Encounter.make = function (_elm) {
               ,debugView(model)]));
    });
    var NoOp = {ctor: "NoOp"};
-   var init = {ctor: "_Tuple2",_0: {uid: 1,characters: $CharacterList.init,monsters: $MonsterList.init},_1: $Effects.none};
-   var Model = F3(function (a,b,c) {    return {uid: a,characters: b,monsters: c};});
+   var init = {ctor: "_Tuple2",_0: {characters: $CharacterList.init,monsters: $MonsterList.init},_1: $Effects.none};
+   var Model = F2(function (a,b) {    return {characters: a,monsters: b};});
    return _elm.Encounter.values = {_op: _op
                                   ,Model: Model
                                   ,init: init
