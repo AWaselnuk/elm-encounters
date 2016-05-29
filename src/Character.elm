@@ -1,4 +1,4 @@
-module Character exposing (Model, init, new, Action, update, view, Context)
+module Character exposing (Model, init, new, Msg, update, view, Context)
 
 import Utilities exposing (..)
 import StatTables
@@ -19,13 +19,13 @@ type alias Model =
 
 type alias ID = Int
 
-type Action
+type Msg
   = ModifyLevel Int
   | ModifyName String
 
-update : Action -> Model -> (Model, Effects Action)
-update action model =
-  case action of
+update : Msg -> Model -> (Model, Effects Msg)
+update msg model =
+  case msg of
     ModifyLevel level ->
       ({ model | level = level }, Effects.none)
     ModifyName name ->
@@ -34,7 +34,7 @@ update action model =
 -- VIEW
 
 type alias Context =
-  { actions : Signal.Address Action
+  { msgs : Signal.Address Msg
   , remove : Signal.Address ()
   }
 
@@ -45,7 +45,7 @@ view context model =
     [ label
         [ for "character-level" ]
         [ text "Level" ]
-    , levelOptionsView context.actions model
+    , levelOptionsView context.msgs model
     , label
         [ for "character-name" ]
         [ text "Name" ]
@@ -54,14 +54,14 @@ view context model =
           class "character-name"
         , type' "text"
         , value (model.name)
-        , on "input" targetValue (\name -> Signal.message context.actions (ModifyName name))
+        , on "input" targetValue (\name -> Signal.message context.msgs (ModifyName name))
         ] []
     , button
         [ onClick context.remove () ]
         [ text "Remove" ]
     ]
 
-levelOptionsView : Signal.Address Action -> Model -> Html
+levelOptionsView : Signal.Address Msg -> Model -> Html
 levelOptionsView address model =
   let
     levelOption level isSelected =

@@ -34,17 +34,17 @@ init =
 
 -- UPDATE
 
-type Action
+type Msg
   = AddMonster Monster.Model
   | RemoveMonster ID
-  | ModifyMonster ID Monster.Action
+  | ModifyMonster ID Monster.Msg
   | SetNewMonsterName String
   | SetNewMonsterXP Int
   | SetNewMonsterRating Float
 
-update : Action -> Model -> (Model, Effects Action)
-update action model =
-  case action of
+update : Msg -> Model -> (Model, Effects Msg)
+update msg model =
+  case msg of
     AddMonster monster ->
       let
         newMonsterList = (model.uid, monster) :: model.monsterList
@@ -62,11 +62,11 @@ update action model =
              monsterList = newMonsterList,
              monsterXpTotal = calculateMonsterXPTotal newMonsterList }
         , Effects.none)
-    ModifyMonster id monsterAction ->
+    ModifyMonster id monsterMsg ->
       let
         updateMonster (monsterID, monsterModel) =
           if id == monsterID then
-            (monsterID, fst <| Monster.update monsterAction monsterModel)
+            (monsterID, fst <| Monster.update monsterMsg monsterModel)
           else
             (monsterID, monsterModel)
         newMonsterList = List.map updateMonster model.monsterList
@@ -90,13 +90,13 @@ update action model =
 
 -- VIEW
 
-view : Signal.Address Action -> Model -> Html
+view : Signal.Address Msg -> Model -> Html
 view address model =
   div
     []
     (List.map (monsterView address) model.monsterList)
 
-monsterView : Signal.Address Action -> (ID, Monster.Model) -> Html
+monsterView : Signal.Address Msg -> (ID, Monster.Model) -> Html
 monsterView address (id, model) =
   let
     context =
@@ -120,7 +120,7 @@ summaryView model =
         text (monsters ++ " " ++ threat)
       ]
 
-addMonsterView : Signal.Address Action -> Model -> Html
+addMonsterView : Signal.Address Msg -> Model -> Html
 addMonsterView address model =
   div
     []
@@ -146,7 +146,7 @@ addMonsterView address model =
         [ text "Add Monster"]
     ]
 
-monsterRatingOptionsView : Signal.Address Action -> Model -> Html
+monsterRatingOptionsView : Signal.Address Msg -> Model -> Html
 monsterRatingOptionsView address model =
   let
     monsterRatingOption rating isSelected =
@@ -166,7 +166,7 @@ monsterRatingOptionsView address model =
       ]
       monsterRatingOptions
 
-monsterXpOptionsView : Signal.Address Action -> Model -> Html
+monsterXpOptionsView : Signal.Address Msg -> Model -> Html
 monsterXpOptionsView address model =
   let
     monsterXpOption xp isSelected =

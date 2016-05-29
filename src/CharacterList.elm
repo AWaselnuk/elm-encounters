@@ -77,17 +77,17 @@ calculatePartyThresholds levels =
 
 -- UPDATE
 
-type Action
+type Msg
   = NoOp
   | AddCharacter Character.Model
   | RemoveCharacter ID
-  | ModifyCharacter ID Character.Action
+  | ModifyCharacter ID Character.Msg
   | SetNewCharacterLevel Int
   | SetNewCharacterName String
 
-update: Action -> Model -> (Model, Effects Action)
-update action model =
-  case action of
+update: Msg -> Model -> (Model, Effects Msg)
+update msg model =
+  case msg of
     NoOp ->
       (model, Effects.none)
     AddCharacter character ->
@@ -107,11 +107,11 @@ update action model =
              characterList = newCharacterList,
              partyThresholds = calculatePartyThresholds <| levelsFromCharacterList newCharacterList }
         , Effects.none)
-    ModifyCharacter id characterAction ->
+    ModifyCharacter id characterMsg ->
       let
         updateCharacter (characterID, characterModel) =
           if id == characterID then
-            (characterID, fst <| Character.update characterAction characterModel)
+            (characterID, fst <| Character.update characterMsg characterModel)
           else
             (characterID, characterModel)
         newCharacterList = List.map updateCharacter model.characterList
@@ -127,13 +127,13 @@ update action model =
 
 -- VIEW
 
-view : Signal.Address Action -> Model -> Html
+view : Signal.Address Msg -> Model -> Html
 view address model =
   div
     [ class "characters" ]
     (List.map (characterView address) model.characterList)
 
-characterView : Signal.Address Action -> (ID, Character.Model) -> Html
+characterView : Signal.Address Msg -> (ID, Character.Model) -> Html
 characterView address (id, model) =
   let
     context =
@@ -143,7 +143,7 @@ characterView address (id, model) =
   in
     Character.view context model
 
-addCharacterView : Signal.Address Action -> Model -> Html
+addCharacterView : Signal.Address Msg -> Model -> Html
 addCharacterView address model =
   div
     []
@@ -165,7 +165,7 @@ addCharacterView address model =
         [ text "Add Character"]
     ]
 
-levelOptionsView : Signal.Address Action -> Model -> Html
+levelOptionsView : Signal.Address Msg -> Model -> Html
 levelOptionsView address model =
   let
     levelOption level isSelected =

@@ -49,7 +49,7 @@ type alias Model =
   , monsters : MonsterList.Model
   }
 
-init : (Model, Effects Action)
+init : (Model, Effects Msg)
 init =
   ( { characters = CharacterList.init
     , monsters = MonsterList.init }
@@ -57,30 +57,30 @@ init =
 
 -- UPDATE
 
-type Action
+type Msg
   = NoOp
-  | CharacterListAction CharacterList.Action
-  | MonsterListAction MonsterList.Action
+  | CharacterListMsg CharacterList.Msg
+  | MonsterListMsg MonsterList.Msg
 
-update : Action -> Model -> (Model, Effects Action)
-update action model =
-  case action of
+update : Msg -> Model -> (Model, Effects Msg)
+update msg model =
+  case msg of
     NoOp ->
       (model, Effects.none)
-    CharacterListAction action ->
+    CharacterListMsg msg ->
       let
-        (clModel, clEffects) = CharacterList.update action model.characters
+        (clModel, clEffects) = CharacterList.update msg model.characters
       in
-        ({ model | characters = clModel }, Effects.map CharacterListAction clEffects)
-    MonsterListAction action ->
+        ({ model | characters = clModel }, Effects.map CharacterListMsg clEffects)
+    MonsterListMsg msg ->
       let
-        (mlModel, mlEffects) = MonsterList.update action model.monsters
+        (mlModel, mlEffects) = MonsterList.update msg model.monsters
       in
-        ({ model | monsters = mlModel }, Effects.map MonsterListAction mlEffects)
+        ({ model | monsters = mlModel }, Effects.map MonsterListMsg mlEffects)
 
 -- VIEW
 
-view : Signal.Address Action -> Model -> Html
+view : Signal.Address Msg -> Model -> Html
 view address model =
   div
     [ class "main" ]
@@ -92,7 +92,7 @@ view address model =
     , debugView model
     ]
 
-encounterSummaryView : Signal.Address Action -> Model -> Html
+encounterSummaryView : Signal.Address Msg -> Model -> Html
 encounterSummaryView address model =
   section
     [ class "encounter-summary-section" ]
@@ -125,7 +125,7 @@ titleSectionView =
           it will be a cake walk or a total party kill." ]
     ]
 
-partySectionView : Signal.Address Action -> CharacterList.Model -> Html
+partySectionView : Signal.Address Msg -> CharacterList.Model -> Html
 partySectionView address model =
   section
     [ class "party-section" ]
@@ -133,17 +133,17 @@ partySectionView address model =
       h2 [] [text "The party"]
     , CharacterList.summaryView model
     , h3 [] [text "Add new character"]
-    , CharacterList.addCharacterView (Signal.forwardTo address CharacterListAction) model
+    , CharacterList.addCharacterView (Signal.forwardTo address CharacterListMsg) model
     , h3 [] [text "Current party"]
     , div
         [ class "current-party-tools" ]
         [
           button [ class "toggle-party-view" ] [ text "view current party" ]
         ]
-    , CharacterList.view (Signal.forwardTo address CharacterListAction) model
+    , CharacterList.view (Signal.forwardTo address CharacterListMsg) model
     ]
 
-monsterSectionView : Signal.Address Action -> MonsterList.Model -> Html
+monsterSectionView : Signal.Address Msg -> MonsterList.Model -> Html
 monsterSectionView address model =
   section
     [ class "monster-section" ]
@@ -151,7 +151,7 @@ monsterSectionView address model =
       h2 [] [text "The monsters"]
     , MonsterList.summaryView model
     , h3 [] [text "Add new monster"]
-    , MonsterList.addMonsterView (Signal.forwardTo address MonsterListAction) model
+    , MonsterList.addMonsterView (Signal.forwardTo address MonsterListMsg) model
     , h3 [] [text "Current monsters"]
     , div
         [ class "current-monster-tools" ]
@@ -160,7 +160,7 @@ monsterSectionView address model =
         , button [ class "set-monster-xp-view" ] [ text "XP" ]
         , button [ class "toggle-monster-view" ] [ text "view current monsters" ]
         ]
-    , MonsterList.view (Signal.forwardTo address MonsterListAction) model
+    , MonsterList.view (Signal.forwardTo address MonsterListMsg) model
     ]
 
 calculateDifficulty : Model -> String

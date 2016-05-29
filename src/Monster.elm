@@ -1,4 +1,4 @@
-module Monster exposing (Model, init, new, Action, update, view, Context)
+module Monster exposing (Model, init, new, Msg, update, view, Context)
 
 import Utilities exposing (..)
 import StatTables
@@ -18,14 +18,14 @@ type alias Model =
 
 -- UPDATE
 
-type Action
+type Msg
   = ModifyXP Int
   | ModifyRating Float
   | ModifyName String
 
-update : Action -> Model -> (Model, Effects Action)
-update action model =
-  case action of
+update : Msg -> Model -> (Model, Effects Msg)
+update msg model =
+  case msg of
     ModifyRating rating ->
       ({ model |
            rating = rating,
@@ -42,7 +42,7 @@ update action model =
 -- VIEW
 
 type alias Context =
-  { actions : Signal.Address Action
+  { msgs : Signal.Address Msg
   , remove : Signal.Address ()
   }
 
@@ -53,11 +53,11 @@ view context model =
     [ label
         [ for "monster-rating" ]
         [ text "Challenge Rating" ]
-    , monsterRatingOptionsView context.actions model
+    , monsterRatingOptionsView context.msgs model
     , label
         [ for "monster-xp" ]
         [ text "Experience Points" ]
-    , monsterXpOptionsView context.actions model
+    , monsterXpOptionsView context.msgs model
     , label
         [ for "monster-name" ]
         [ text "Name" ]
@@ -66,14 +66,14 @@ view context model =
           class "monster-name"
         , type' "text"
         , value (model.name)
-        , on "input" targetValue (\name -> Signal.message context.actions (ModifyName name))
+        , on "input" targetValue (\name -> Signal.message context.msgs (ModifyName name))
         ] []
     , button
         [ onClick context.remove () ]
         [ text "Remove" ]
     ]
 
-monsterRatingOptionsView : Signal.Address Action -> Model -> Html
+monsterRatingOptionsView : Signal.Address Msg -> Model -> Html
 monsterRatingOptionsView address model =
   let
     monsterRatingOption rating isSelected =
@@ -93,7 +93,7 @@ monsterRatingOptionsView address model =
       ]
       monsterRatingOptions
 
-monsterXpOptionsView : Signal.Address Action -> Model -> Html
+monsterXpOptionsView : Signal.Address Msg -> Model -> Html
 monsterXpOptionsView address model =
   let
     monsterXpOption xp isSelected =
