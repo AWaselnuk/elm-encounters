@@ -11191,14 +11191,13 @@ Elm.Monster.make = function (_elm) {
    var Model = F3(function (a,b,c) {    return {xp: a,rating: b,name: c};});
    return _elm.Monster.values = {_op: _op,init: init,$new: $new,update: update,view: view,Model: Model,Context: Context};
 };
-Elm.Encounter = Elm.Encounter || {};
-Elm.Encounter.make = function (_elm) {
+Elm.MonsterList = Elm.MonsterList || {};
+Elm.MonsterList.make = function (_elm) {
    "use strict";
-   _elm.Encounter = _elm.Encounter || {};
-   if (_elm.Encounter.values) return _elm.Encounter.values;
+   _elm.MonsterList = _elm.MonsterList || {};
+   if (_elm.MonsterList.values) return _elm.MonsterList.values;
    var _U = Elm.Native.Utils.make(_elm),
    $Basics = Elm.Basics.make(_elm),
-   $CharacterList = Elm.CharacterList.make(_elm),
    $Debug = Elm.Debug.make(_elm),
    $Effects = Elm.Effects.make(_elm),
    $Html = Elm.Html.make(_elm),
@@ -11212,12 +11211,6 @@ Elm.Encounter.make = function (_elm) {
    $StatTables = Elm.StatTables.make(_elm),
    $Utilities = Elm.Utilities.make(_elm);
    var _op = {};
-   var calculateDifficulty = function (model) {
-      return _U.cmp($Basics.round(model.monsterXpTotal),model.characters.partyThresholds.easy) < 0 ? "easy" : _U.cmp($Basics.round(model.monsterXpTotal),
-      model.characters.partyThresholds.medium) < 0 ? "medium" : _U.cmp($Basics.round(model.monsterXpTotal),
-      model.characters.partyThresholds.hard) < 0 ? "hard" : _U.cmp($Basics.round(model.monsterXpTotal),
-      model.characters.partyThresholds.deadly) < 0 ? "deadly" : "TPK";
-   };
    var calculateMonsterMultiplier = function (taggedMonsters) {
       var monsterCount = $List.length(taggedMonsters);
       return _U.eq(monsterCount,0) || _U.eq(monsterCount,1) ? 1 : _U.cmp(monsterCount,2) > -1 || _U.cmp(monsterCount,3) < 0 ? 1.5 : _U.cmp(monsterCount,
@@ -11230,74 +11223,41 @@ Elm.Encounter.make = function (_elm) {
       var totalMonsterXPs = $List.sum(A2($List.map,function (_) {    return _.xp;},monsters));
       return $Basics.toFloat(totalMonsterXPs) * multiplier;
    };
-   var debugView = function (model) {    return A2($Html.p,_U.list([]),_U.list([$Html.text($Basics.toString(model))]));};
-   var monsterSummaryView = function (model) {
+   var summaryView = function (model) {
       var threat = A2($Basics._op["++"],"XP: ",$Basics.toString(model.monsterXpTotal));
-      var monsters = A2($Basics._op["++"],"Monsters: ",$Basics.toString($List.length(model.monsters)));
+      var monsters = A2($Basics._op["++"],"Monsters: ",$Basics.toString($List.length(model.monsterList)));
       return A2($Html.div,
       _U.list([$Html$Attributes.$class("monster-summary")]),
       _U.list([$Html.text(A2($Basics._op["++"],monsters,A2($Basics._op["++"]," ",threat)))]));
    };
-   var titleSectionView = A2($Html.section,
-   _U.list([$Html$Attributes.$class("title-section")]),
-   _U.list([A2($Html.h1,_U.list([$Html$Attributes.$class("title")]),_U.list([$Html.text("D&D 5th Edition Encounter Builder")]))
-           ,A2($Html.p,
-           _U.list([$Html$Attributes.$class("description")]),
-           _U.list([$Html.text("This encounter builder allows you to easily determine the difficulty\n          of your 5th edition encounters. Simply create a list of party members\n          and a list of monsters, and the encounter builder will tell you if\n          it will be a cake walk or a total party kill.")]))]));
-   var difficultyBadgeView = function (model) {
-      var badgeClass = A2($Basics._op["++"],"badge badge--",calculateDifficulty(model));
-      return A2($Html.div,
-      _U.list([$Html$Attributes.$class(badgeClass)]),
-      _U.list([A2($Html.strong,_U.list([$Html$Attributes.$class("difficulty")]),_U.list([$Html.text(calculateDifficulty(model))]))]));
-   };
-   var encounterSummaryView = F2(function (address,model) {
-      return A2($Html.section,
-      _U.list([$Html$Attributes.$class("encounter-summary-section")]),
-      _U.list([difficultyBadgeView(model),$CharacterList.summaryView(model.characters),monsterSummaryView(model)]));
-   });
-   var CharacterListAction = function (a) {    return {ctor: "CharacterListAction",_0: a};};
    var update = F2(function (action,model) {
       var _p0 = action;
       switch (_p0.ctor)
-      {case "NoOp": return {ctor: "_Tuple2",_0: model,_1: $Effects.none};
-         case "AddMonster": var newMonsters = A2($List._op["::"],{ctor: "_Tuple2",_0: model.uid,_1: _p0._0},model.monsters);
+      {case "AddMonster": var newMonsterList = A2($List._op["::"],{ctor: "_Tuple2",_0: model.uid,_1: _p0._0},model.monsterList);
            return {ctor: "_Tuple2"
-                  ,_0: _U.update(model,{monsters: newMonsters,monsterXpTotal: calculateMonsterXPTotal(newMonsters),uid: model.uid + 1})
+                  ,_0: _U.update(model,{monsterList: newMonsterList,monsterXpTotal: calculateMonsterXPTotal(newMonsterList),uid: model.uid + 1})
                   ,_1: $Effects.none};
-         case "RemoveMonster": var newMonsters = A2($List.filter,function (_p1) {    var _p2 = _p1;return !_U.eq(_p2._0,_p0._0);},model.monsters);
-           return {ctor: "_Tuple2",_0: _U.update(model,{monsters: newMonsters,monsterXpTotal: calculateMonsterXPTotal(newMonsters)}),_1: $Effects.none};
+         case "RemoveMonster": var newMonsterList = A2($List.filter,function (_p1) {    var _p2 = _p1;return !_U.eq(_p2._0,_p0._0);},model.monsterList);
+           return {ctor: "_Tuple2"
+                  ,_0: _U.update(model,{monsterList: newMonsterList,monsterXpTotal: calculateMonsterXPTotal(newMonsterList)})
+                  ,_1: $Effects.none};
          case "ModifyMonster": var updateMonster = function (_p3) {
               var _p4 = _p3;
               var _p6 = _p4._1;
               var _p5 = _p4._0;
               return _U.eq(_p0._0,_p5) ? {ctor: "_Tuple2",_0: _p5,_1: $Basics.fst(A2($Monster.update,_p0._1,_p6))} : {ctor: "_Tuple2",_0: _p5,_1: _p6};
            };
-           var newMonsters = A2($List.map,updateMonster,model.monsters);
-           return {ctor: "_Tuple2",_0: _U.update(model,{monsters: newMonsters,monsterXpTotal: calculateMonsterXPTotal(newMonsters)}),_1: $Effects.none};
+           var newMonsterList = A2($List.map,updateMonster,model.monsterList);
+           return {ctor: "_Tuple2"
+                  ,_0: _U.update(model,{monsterList: newMonsterList,monsterXpTotal: calculateMonsterXPTotal(newMonsterList)})
+                  ,_1: $Effects.none};
          case "SetNewMonsterName": return {ctor: "_Tuple2",_0: _U.update(model,{newMonsterName: _p0._0}),_1: $Effects.none};
          case "SetNewMonsterRating": var _p7 = _p0._0;
            return {ctor: "_Tuple2"
                   ,_0: _U.update(model,{newMonsterRating: A2($Debug.log,$Basics.toString(_p7),_p7),newMonsterXP: $Utilities.safeRatingToXP(_p7)})
                   ,_1: $Effects.none};
-         case "SetNewMonsterXP": var _p8 = _p0._0;
-           return {ctor: "_Tuple2",_0: _U.update(model,{newMonsterRating: $Utilities.safeXPToRating(_p8),newMonsterXP: _p8}),_1: $Effects.none};
-         default: var _p9 = A2($CharacterList.update,_p0._0,model.characters);
-           var clModel = _p9._0;
-           var clEffects = _p9._1;
-           return {ctor: "_Tuple2",_0: _U.update(model,{characters: clModel}),_1: A2($Effects.map,CharacterListAction,clEffects)};}
-   });
-   var partySectionView = F2(function (address,model) {
-      return A2($Html.section,
-      _U.list([$Html$Attributes.$class("party-section")]),
-      _U.list([A2($Html.h2,_U.list([]),_U.list([$Html.text("The party")]))
-              ,$CharacterList.summaryView(model)
-              ,A2($Html.h3,_U.list([]),_U.list([$Html.text("Add new character")]))
-              ,A2($CharacterList.addCharacterView,A2($Signal.forwardTo,address,CharacterListAction),model)
-              ,A2($Html.h3,_U.list([]),_U.list([$Html.text("Current party")]))
-              ,A2($Html.div,
-              _U.list([$Html$Attributes.$class("current-party-tools")]),
-              _U.list([A2($Html.button,_U.list([$Html$Attributes.$class("toggle-party-view")]),_U.list([$Html.text("view current party")]))]))
-              ,A2($CharacterList.view,A2($Signal.forwardTo,address,CharacterListAction),model)]));
+         default: var _p8 = _p0._0;
+           return {ctor: "_Tuple2",_0: _U.update(model,{newMonsterRating: $Utilities.safeXPToRating(_p8),newMonsterXP: _p8}),_1: $Effects.none};}
    });
    var SetNewMonsterRating = function (a) {    return {ctor: "SetNewMonsterRating",_0: a};};
    var monsterRatingOptionsView = F2(function (address,model) {
@@ -11338,13 +11298,13 @@ Elm.Encounter.make = function (_elm) {
    var SetNewMonsterName = function (a) {    return {ctor: "SetNewMonsterName",_0: a};};
    var ModifyMonster = F2(function (a,b) {    return {ctor: "ModifyMonster",_0: a,_1: b};});
    var RemoveMonster = function (a) {    return {ctor: "RemoveMonster",_0: a};};
-   var monsterView = F2(function (address,_p10) {
-      var _p11 = _p10;
-      var _p12 = _p11._0;
-      var context = A2($Monster.Context,A2($Signal.forwardTo,address,ModifyMonster(_p12)),A2($Signal.forwardTo,address,$Basics.always(RemoveMonster(_p12))));
-      return A2($Monster.view,context,_p11._1);
+   var monsterView = F2(function (address,_p9) {
+      var _p10 = _p9;
+      var _p11 = _p10._0;
+      var context = A2($Monster.Context,A2($Signal.forwardTo,address,ModifyMonster(_p11)),A2($Signal.forwardTo,address,$Basics.always(RemoveMonster(_p11))));
+      return A2($Monster.view,context,_p10._1);
    });
-   var monsterListView = F2(function (address,model) {    return A2($Html.div,_U.list([]),A2($List.map,monsterView(address),model.monsters));});
+   var view = F2(function (address,model) {    return A2($Html.div,_U.list([]),A2($List.map,monsterView(address),model.monsterList));});
    var AddMonster = function (a) {    return {ctor: "AddMonster",_0: a};};
    var addMonsterView = F2(function (address,model) {
       return A2($Html.div,
@@ -11363,54 +11323,136 @@ Elm.Encounter.make = function (_elm) {
               _U.list([A2($Html$Events.onClick,address,AddMonster(A2($Monster.$new,model.newMonsterRating,model.newMonsterName)))]),
               _U.list([$Html.text("Add Monster")]))]));
    });
+   var init = {uid: 1
+              ,monsterList: _U.list([])
+              ,monsterXpTotal: 0
+              ,newMonsterName: ""
+              ,newMonsterRating: $Utilities.initRating
+              ,newMonsterXP: $Utilities.safeRatingToXP($Utilities.initRating)};
+   var Model = F6(function (a,b,c,d,e,f) {    return {uid: a,monsterList: b,monsterXpTotal: c,newMonsterName: d,newMonsterRating: e,newMonsterXP: f};});
+   return _elm.MonsterList.values = {_op: _op
+                                    ,Model: Model
+                                    ,init: init
+                                    ,AddMonster: AddMonster
+                                    ,RemoveMonster: RemoveMonster
+                                    ,ModifyMonster: ModifyMonster
+                                    ,SetNewMonsterName: SetNewMonsterName
+                                    ,SetNewMonsterXP: SetNewMonsterXP
+                                    ,SetNewMonsterRating: SetNewMonsterRating
+                                    ,update: update
+                                    ,view: view
+                                    ,monsterView: monsterView
+                                    ,summaryView: summaryView
+                                    ,addMonsterView: addMonsterView
+                                    ,monsterRatingOptionsView: monsterRatingOptionsView
+                                    ,monsterXpOptionsView: monsterXpOptionsView
+                                    ,calculateMonsterMultiplier: calculateMonsterMultiplier
+                                    ,calculateMonsterXPTotal: calculateMonsterXPTotal};
+};
+Elm.Encounter = Elm.Encounter || {};
+Elm.Encounter.make = function (_elm) {
+   "use strict";
+   _elm.Encounter = _elm.Encounter || {};
+   if (_elm.Encounter.values) return _elm.Encounter.values;
+   var _U = Elm.Native.Utils.make(_elm),
+   $Basics = Elm.Basics.make(_elm),
+   $CharacterList = Elm.CharacterList.make(_elm),
+   $Debug = Elm.Debug.make(_elm),
+   $Effects = Elm.Effects.make(_elm),
+   $Html = Elm.Html.make(_elm),
+   $Html$Attributes = Elm.Html.Attributes.make(_elm),
+   $List = Elm.List.make(_elm),
+   $Maybe = Elm.Maybe.make(_elm),
+   $MonsterList = Elm.MonsterList.make(_elm),
+   $Result = Elm.Result.make(_elm),
+   $Signal = Elm.Signal.make(_elm);
+   var _op = {};
+   var debugView = function (model) {    return A2($Html.p,_U.list([]),_U.list([$Html.text($Basics.toString(model))]));};
+   var calculateDifficulty = function (model) {
+      return _U.cmp($Basics.round(model.monsters.monsterXpTotal),
+      model.characters.partyThresholds.easy) < 0 ? "easy" : _U.cmp($Basics.round(model.monsters.monsterXpTotal),
+      model.characters.partyThresholds.medium) < 0 ? "medium" : _U.cmp($Basics.round(model.monsters.monsterXpTotal),
+      model.characters.partyThresholds.hard) < 0 ? "hard" : _U.cmp($Basics.round(model.monsters.monsterXpTotal),
+      model.characters.partyThresholds.deadly) < 0 ? "deadly" : "TPK";
+   };
+   var titleSectionView = A2($Html.section,
+   _U.list([$Html$Attributes.$class("title-section")]),
+   _U.list([A2($Html.h1,_U.list([$Html$Attributes.$class("title")]),_U.list([$Html.text("D&D 5th Edition Encounter Builder")]))
+           ,A2($Html.p,
+           _U.list([$Html$Attributes.$class("description")]),
+           _U.list([$Html.text("This encounter builder allows you to easily determine the difficulty\n          of your 5th edition encounters. Simply create a list of party members\n          and a list of monsters, and the encounter builder will tell you if\n          it will be a cake walk or a total party kill.")]))]));
+   var difficultyBadgeView = function (model) {
+      var badgeClass = A2($Basics._op["++"],"badge badge--",calculateDifficulty(model));
+      return A2($Html.div,
+      _U.list([$Html$Attributes.$class(badgeClass)]),
+      _U.list([A2($Html.strong,_U.list([$Html$Attributes.$class("difficulty")]),_U.list([$Html.text(calculateDifficulty(model))]))]));
+   };
+   var encounterSummaryView = F2(function (address,model) {
+      return A2($Html.section,
+      _U.list([$Html$Attributes.$class("encounter-summary-section")]),
+      _U.list([difficultyBadgeView(model),$CharacterList.summaryView(model.characters),$MonsterList.summaryView(model.monsters)]));
+   });
+   var MonsterListAction = function (a) {    return {ctor: "MonsterListAction",_0: a};};
    var monsterSectionView = F2(function (address,model) {
       return A2($Html.section,
       _U.list([$Html$Attributes.$class("monster-section")]),
       _U.list([A2($Html.h2,_U.list([]),_U.list([$Html.text("The monsters")]))
-              ,monsterSummaryView(model)
+              ,$MonsterList.summaryView(model)
               ,A2($Html.h3,_U.list([]),_U.list([$Html.text("Add new monster")]))
-              ,A2(addMonsterView,address,model)
+              ,A2($MonsterList.addMonsterView,A2($Signal.forwardTo,address,MonsterListAction),model)
               ,A2($Html.h3,_U.list([]),_U.list([$Html.text("Current monsters")]))
               ,A2($Html.div,
               _U.list([$Html$Attributes.$class("current-monster-tools")]),
               _U.list([A2($Html.button,_U.list([$Html$Attributes.$class("set-monster-cr-view")]),_U.list([$Html.text("CR")]))
                       ,A2($Html.button,_U.list([$Html$Attributes.$class("set-monster-xp-view")]),_U.list([$Html.text("XP")]))
                       ,A2($Html.button,_U.list([$Html$Attributes.$class("toggle-monster-view")]),_U.list([$Html.text("view current monsters")]))]))
-              ,A2(monsterListView,address,model)]));
+              ,A2($MonsterList.view,A2($Signal.forwardTo,address,MonsterListAction),model)]));
+   });
+   var CharacterListAction = function (a) {    return {ctor: "CharacterListAction",_0: a};};
+   var update = F2(function (action,model) {
+      var _p0 = action;
+      switch (_p0.ctor)
+      {case "NoOp": return {ctor: "_Tuple2",_0: model,_1: $Effects.none};
+         case "CharacterListAction": var _p1 = A2($CharacterList.update,_p0._0,model.characters);
+           var clModel = _p1._0;
+           var clEffects = _p1._1;
+           return {ctor: "_Tuple2",_0: _U.update(model,{characters: clModel}),_1: A2($Effects.map,CharacterListAction,clEffects)};
+         default: var _p2 = A2($MonsterList.update,_p0._0,model.monsters);
+           var mlModel = _p2._0;
+           var mlEffects = _p2._1;
+           return {ctor: "_Tuple2",_0: _U.update(model,{monsters: mlModel}),_1: A2($Effects.map,MonsterListAction,mlEffects)};}
+   });
+   var partySectionView = F2(function (address,model) {
+      return A2($Html.section,
+      _U.list([$Html$Attributes.$class("party-section")]),
+      _U.list([A2($Html.h2,_U.list([]),_U.list([$Html.text("The party")]))
+              ,$CharacterList.summaryView(model)
+              ,A2($Html.h3,_U.list([]),_U.list([$Html.text("Add new character")]))
+              ,A2($CharacterList.addCharacterView,A2($Signal.forwardTo,address,CharacterListAction),model)
+              ,A2($Html.h3,_U.list([]),_U.list([$Html.text("Current party")]))
+              ,A2($Html.div,
+              _U.list([$Html$Attributes.$class("current-party-tools")]),
+              _U.list([A2($Html.button,_U.list([$Html$Attributes.$class("toggle-party-view")]),_U.list([$Html.text("view current party")]))]))
+              ,A2($CharacterList.view,A2($Signal.forwardTo,address,CharacterListAction),model)]));
    });
    var view = F2(function (address,model) {
       return A2($Html.div,
       _U.list([$Html$Attributes.$class("main")]),
       _U.list([titleSectionView
               ,A2(partySectionView,address,model.characters)
-              ,A2(monsterSectionView,address,model)
+              ,A2(monsterSectionView,address,model.monsters)
               ,A2(encounterSummaryView,address,model)
               ,debugView(model)]));
    });
    var NoOp = {ctor: "NoOp"};
-   var init = {ctor: "_Tuple2"
-              ,_0: {uid: 1
-                   ,characters: $CharacterList.init
-                   ,monsters: _U.list([])
-                   ,monsterXpTotal: 0
-                   ,newMonsterName: ""
-                   ,newMonsterRating: $Utilities.initRating
-                   ,newMonsterXP: $Utilities.safeRatingToXP($Utilities.initRating)}
-              ,_1: $Effects.none};
-   var Model = F7(function (a,b,c,d,e,f,g) {
-      return {uid: a,characters: b,monsters: c,monsterXpTotal: d,newMonsterName: e,newMonsterRating: f,newMonsterXP: g};
-   });
+   var init = {ctor: "_Tuple2",_0: {uid: 1,characters: $CharacterList.init,monsters: $MonsterList.init},_1: $Effects.none};
+   var Model = F3(function (a,b,c) {    return {uid: a,characters: b,monsters: c};});
    return _elm.Encounter.values = {_op: _op
                                   ,Model: Model
                                   ,init: init
                                   ,NoOp: NoOp
-                                  ,AddMonster: AddMonster
-                                  ,RemoveMonster: RemoveMonster
-                                  ,ModifyMonster: ModifyMonster
-                                  ,SetNewMonsterName: SetNewMonsterName
-                                  ,SetNewMonsterXP: SetNewMonsterXP
-                                  ,SetNewMonsterRating: SetNewMonsterRating
                                   ,CharacterListAction: CharacterListAction
+                                  ,MonsterListAction: MonsterListAction
                                   ,update: update
                                   ,view: view
                                   ,encounterSummaryView: encounterSummaryView
@@ -11418,16 +11460,8 @@ Elm.Encounter.make = function (_elm) {
                                   ,titleSectionView: titleSectionView
                                   ,partySectionView: partySectionView
                                   ,monsterSectionView: monsterSectionView
-                                  ,monsterSummaryView: monsterSummaryView
-                                  ,monsterListView: monsterListView
-                                  ,debugView: debugView
-                                  ,addMonsterView: addMonsterView
-                                  ,monsterView: monsterView
-                                  ,monsterRatingOptionsView: monsterRatingOptionsView
-                                  ,monsterXpOptionsView: monsterXpOptionsView
-                                  ,calculateMonsterMultiplier: calculateMonsterMultiplier
-                                  ,calculateMonsterXPTotal: calculateMonsterXPTotal
-                                  ,calculateDifficulty: calculateDifficulty};
+                                  ,calculateDifficulty: calculateDifficulty
+                                  ,debugView: debugView};
 };
 Elm.Main = Elm.Main || {};
 Elm.Main.make = function (_elm) {
