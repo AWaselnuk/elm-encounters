@@ -73,8 +73,8 @@ view context model =
         [ text "Remove" ]
     ]
 
-monsterRatingOptionsView : Signal.Address Msg -> Model -> Html
-monsterRatingOptionsView address model =
+monsterRatingOptionsView : Model -> Html Msg
+monsterRatingOptionsView model =
   let
     monsterRatingOption rating isSelected =
       option
@@ -93,8 +93,8 @@ monsterRatingOptionsView address model =
       ]
       monsterRatingOptions
 
-monsterXpOptionsView : Signal.Address Msg -> Model -> Html
-monsterXpOptionsView address model =
+monsterXpOptionsView : Model -> Html Msg
+monsterXpOptionsView model =
   let
     monsterXpOption xp isSelected =
       option

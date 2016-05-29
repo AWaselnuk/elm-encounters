@@ -90,14 +90,14 @@ update msg model =
 
 -- VIEW
 
-view : Signal.Address Msg -> Model -> Html
-view address model =
+view : Model -> Html Msg
+view model =
   div
     []
-    (List.map (monsterView address) model.monsterList)
+    (List.map monsterView model.monsterList)
 
-monsterView : Signal.Address Msg -> (ID, Monster.Model) -> Html
-monsterView address (id, model) =
+monsterView : (ID, Monster.Model) -> Html Msg
+monsterView (id, model) =
   let
     context =
       Monster.Context
@@ -120,34 +120,34 @@ summaryView model =
         text (monsters ++ " " ++ threat)
       ]
 
-addMonsterView : Signal.Address Msg -> Model -> Html
-addMonsterView address model =
+addMonsterView : Model -> Html Msg
+addMonsterView model =
   div
     []
     [ label
         [ for "monster-rating" ]
         [ text "Challenge Rating" ]
-    , monsterRatingOptionsView address model
+    , monsterRatingOptionsView model
     , label
         [ for "monster-xp" ]
         [ text "Experience Points" ]
-    , monsterXpOptionsView address model
+    , monsterXpOptionsView model
     , label
         [ for "monster-name" ]
         [ text "Name" ]
     , input
         [ type' "text"
         , value model.newMonsterName
-        , on "input" targetValue (\name -> Signal.message address (SetNewMonsterName name))
+        , onInput SetNewMonsterName
         ]
         []
     , button
-        [ onClick address (AddMonster (Monster.new model.newMonsterRating model.newMonsterName)) ]
+        [ onClick AddMonster (Monster.new model.newMonsterRating model.newMonsterName) ]
         [ text "Add Monster"]
     ]
 
-monsterRatingOptionsView : Signal.Address Msg -> Model -> Html
-monsterRatingOptionsView address model =
+monsterRatingOptionsView : Model -> Html Msg
+monsterRatingOptionsView model =
   let
     monsterRatingOption rating isSelected =
       option
@@ -166,8 +166,8 @@ monsterRatingOptionsView address model =
       ]
       monsterRatingOptions
 
-monsterXpOptionsView : Signal.Address Msg -> Model -> Html
-monsterXpOptionsView address model =
+monsterXpOptionsView : Model -> Html Msg
+monsterXpOptionsView model =
   let
     monsterXpOption xp isSelected =
       option

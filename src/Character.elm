@@ -61,8 +61,8 @@ view context model =
         [ text "Remove" ]
     ]
 
-levelOptionsView : Signal.Address Msg -> Model -> Html
-levelOptionsView address model =
+levelOptionsView : Model -> Html Msg
+levelOptionsView model =
   let
     levelOption level isSelected =
       option

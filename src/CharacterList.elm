@@ -127,14 +127,14 @@ update msg model =
 
 -- VIEW
 
-view : Signal.Address Msg -> Model -> Html
-view address model =
+view : Model -> Html Msg
+view model =
   div
     [ class "characters" ]
-    (List.map (characterView address) model.characterList)
+    (List.map characterView model.characterList)
 
-characterView : Signal.Address Msg -> (ID, Character.Model) -> Html
-characterView address (id, model) =
+characterView : (ID, Character.Model) -> Html Msg
+characterView (id, model) =
   let
     context =
       Character.Context
@@ -143,30 +143,30 @@ characterView address (id, model) =
   in
     Character.view context model
 
-addCharacterView : Signal.Address Msg -> Model -> Html
-addCharacterView address model =
+addCharacterView : Model -> Html Msg
+addCharacterView model =
   div
     []
     [ label
         [ for "level" ]
         [ text "Level" ]
-    , levelOptionsView address model
+    , levelOptionsView model
     , label
         [ for "name" ]
         [ text "Name" ]
     , input
         [ type' "text"
         , value model.newCharacterName
-        , on "input" targetValue (\name -> Signal.message address (SetNewCharacterName name))
+        , onInput SetNewCharacterName
         ]
         []
     , button
-        [ onClick address (AddCharacter (Character.new model.newCharacterLevel model.newCharacterName)) ]
+        [ onClick (AddCharacter (Character.new model.newCharacterLevel model.newCharacterName)) ]
         [ text "Add Character"]
     ]
 
-levelOptionsView : Signal.Address Msg -> Model -> Html
-levelOptionsView address model =
+levelOptionsView : Model -> Html Msg
+levelOptionsView model =
   let
     levelOption level isSelected =
       option

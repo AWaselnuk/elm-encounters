@@ -80,20 +80,20 @@ update msg model =
 
 -- VIEW
 
-view : Signal.Address Msg -> Model -> Html
-view address model =
+view : Model -> Html Msg
+view model =
   div
     [ class "main" ]
     [
       titleSectionView
-    , partySectionView address model.characters
-    , monsterSectionView address model.monsters
-    , encounterSummaryView address model
+    , partySectionView model.characters
+    , monsterSectionView model.monsters
+    , encounterSummaryView model
     , debugView model
     ]
 
-encounterSummaryView : Signal.Address Msg -> Model -> Html
-encounterSummaryView address model =
+encounterSummaryView : Model -> Html Msg
+encounterSummaryView model =
   section
     [ class "encounter-summary-section" ]
     [
@@ -125,33 +125,33 @@ titleSectionView =
           it will be a cake walk or a total party kill." ]
     ]
 
-partySectionView : Signal.Address Msg -> CharacterList.Model -> Html
-partySectionView address model =
+partySectionView : CharacterList.Model -> Html Msg
+partySectionView model =
   section
     [ class "party-section" ]
     [
       h2 [] [text "The party"]
     , CharacterList.summaryView model
     , h3 [] [text "Add new character"]
-    , CharacterList.addCharacterView (Signal.forwardTo address CharacterListMsg) model
+    , map CharacterListMsg (CharacterList.addCharacterView model)
     , h3 [] [text "Current party"]
     , div
         [ class "current-party-tools" ]
         [
           button [ class "toggle-party-view" ] [ text "view current party" ]
         ]
-    , CharacterList.view (Signal.forwardTo address CharacterListMsg) model
+    , map CharacterListMsg (CharacterList.view model)
     ]
 
-monsterSectionView : Signal.Address Msg -> MonsterList.Model -> Html
-monsterSectionView address model =
+monsterSectionView : MonsterList.Model -> Html Msg
+monsterSectionView model =
   section
     [ class "monster-section" ]
     [
       h2 [] [text "The monsters"]
     , MonsterList.summaryView model
     , h3 [] [text "Add new monster"]
-    , MonsterList.addMonsterView (Signal.forwardTo address MonsterListMsg) model
+    , map MonsterListMsg (MonsterList.addMonsterView model)
     , h3 [] [text "Current monsters"]
     , div
         [ class "current-monster-tools" ]
@@ -160,7 +160,7 @@ monsterSectionView address model =
         , button [ class "set-monster-xp-view" ] [ text "XP" ]
         , button [ class "toggle-monster-view" ] [ text "view current monsters" ]
         ]
-    , MonsterList.view (Signal.forwardTo address MonsterListMsg) model
+    , map MonsterListMsg (MonsterList.view model)
     ]
 
 calculateDifficulty : Model -> String
