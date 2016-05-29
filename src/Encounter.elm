@@ -1,4 +1,4 @@
-module Encounter where
+module Encounter exposing (..)
 
 import Utilities exposing (..)
 import CharacterList exposing (CharacterList)
@@ -68,12 +68,12 @@ update action model =
     NoOp ->
       (model, Effects.none)
     CharacterListAction action ->
-      let 
+      let
         (clModel, clEffects) = CharacterList.update action model.characters
       in
         ({ model | characters = clModel }, Effects.map CharacterListAction clEffects)
     MonsterListAction action ->
-      let 
+      let
         (mlModel, mlEffects) = MonsterList.update action model.monsters
       in
         ({ model | monsters = mlModel }, Effects.map MonsterListAction mlEffects)
@@ -94,7 +94,7 @@ view address model =
 
 encounterSummaryView : Signal.Address Action -> Model -> Html
 encounterSummaryView address model =
-  section 
+  section
     [ class "encounter-summary-section" ]
     [
       difficultyBadgeView model
@@ -107,7 +107,7 @@ difficultyBadgeView model =
   let
     badgeClass = "badge badge--" ++ calculateDifficulty model
   in
-    div 
+    div
       [ class badgeClass ]
       [ strong [ class "difficulty" ] [text <| calculateDifficulty model] ]
 
@@ -126,8 +126,8 @@ titleSectionView =
     ]
 
 partySectionView : Signal.Address Action -> CharacterList.Model -> Html
-partySectionView address model = 
-  section 
+partySectionView address model =
+  section
     [ class "party-section" ]
     [
       h2 [] [text "The party"]
@@ -144,8 +144,8 @@ partySectionView address model =
     ]
 
 monsterSectionView : Signal.Address Action -> MonsterList.Model -> Html
-monsterSectionView address model = 
-  section 
+monsterSectionView address model =
+  section
     [ class "monster-section" ]
     [
       h2 [] [text "The monsters"]

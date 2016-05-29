@@ -1,4 +1,4 @@
-module Character (Model, init, new, Action, update, view, Context) where
+module Character exposing (Model, init, new, Action, update, view, Context)
 
 import Utilities exposing (..)
 import StatTables
@@ -12,7 +12,7 @@ import String
 
 type alias Model =
   { level : Int
-  , name : String 
+  , name : String
   }
 
 -- UPDATE
@@ -63,10 +63,10 @@ view context model =
 
 levelOptionsView : Signal.Address Action -> Model -> Html
 levelOptionsView address model =
-  let 
+  let
     levelOption level isSelected =
       option
-        [ value level 
+        [ value level
         , selected isSelected
         ]
         [ text level ]
@@ -75,9 +75,9 @@ levelOptionsView address model =
         (\level -> levelOption (toString level) (level == model.level))
         StatTables.levelList
   in
-    select 
+    select
       [ name "character-level"
-      , on "change" targetValue (\level -> Signal.message address (ModifyLevel (safeStrToLevel level))) 
+      , on "change" targetValue (\level -> Signal.message address (ModifyLevel (safeStrToLevel level)))
       ]
       levelOptions
 
@@ -87,8 +87,8 @@ init =
 
 new : Int -> String -> Model
 new level name =
-  { level = level 
-  , name = if String.length name == 0 then randomName else name 
+  { level = level
+  , name = if String.length name == 0 then randomName else name
   }
 
 randomName : String

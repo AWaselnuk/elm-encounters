@@ -1,4 +1,4 @@
-module CharacterList where
+module CharacterList exposing (..)
 
 import Utilities exposing (..)
 import StatTables
@@ -22,9 +22,9 @@ type alias PartyThresholds =
   , deadly : Int
   }
 
-type alias Model = 
+type alias Model =
   { uid : ID
-  , characterList : CharacterList 
+  , characterList : CharacterList
   , partyThresholds : PartyThresholds
   , newCharacterLevel : Int
   , newCharacterName : String
@@ -36,12 +36,12 @@ init =
   , characterList = initCharacterList
   , partyThresholds = initPartyThresholds
   , newCharacterLevel = 1
-  , newCharacterName = "" 
+  , newCharacterName = ""
   }
 
 -- TODO: load init character list from local storage
 initCharacterList : CharacterList
-initCharacterList = 
+initCharacterList =
   [ (1, Character.init)
   , (2, Character.init)
   , (3, Character.init)
@@ -101,7 +101,7 @@ update action model =
         , Effects.none)
     RemoveCharacter id ->
       let
-        newCharacterList = List.filter (\(characterID, _) -> characterID /= id) model.characterList 
+        newCharacterList = List.filter (\(characterID, _) -> characterID /= id) model.characterList
       in
         ({ model |
              characterList = newCharacterList,
@@ -114,7 +114,7 @@ update action model =
             (characterID, fst <| Character.update characterAction characterModel)
           else
             (characterID, characterModel)
-        newCharacterList = List.map updateCharacter model.characterList 
+        newCharacterList = List.map updateCharacter model.characterList
       in
         ({ model |
              characterList = newCharacterList,
@@ -124,7 +124,7 @@ update action model =
       ({ model | newCharacterLevel = level }, Effects.none)
     SetNewCharacterName name ->
       ({ model | newCharacterName = name }, Effects.none)
- 
+
 -- VIEW
 
 view : Signal.Address Action -> Model -> Html
@@ -136,7 +136,7 @@ view address model =
 characterView : Signal.Address Action -> (ID, Character.Model) -> Html
 characterView address (id, model) =
   let
-    context = 
+    context =
       Character.Context
         (Signal.forwardTo address (ModifyCharacter id))
         (Signal.forwardTo address (always (RemoveCharacter id)))
@@ -145,13 +145,13 @@ characterView address (id, model) =
 
 addCharacterView : Signal.Address Action -> Model -> Html
 addCharacterView address model =
-  div 
+  div
     []
     [ label
         [ for "level" ]
         [ text "Level" ]
     , levelOptionsView address model
-    , label 
+    , label
         [ for "name" ]
         [ text "Name" ]
     , input
@@ -163,14 +163,14 @@ addCharacterView address model =
     , button
         [ onClick address (AddCharacter (Character.new model.newCharacterLevel model.newCharacterName)) ]
         [ text "Add Character"]
-    ] 
+    ]
 
 levelOptionsView : Signal.Address Action -> Model -> Html
 levelOptionsView address model =
-  let 
+  let
     levelOption level isSelected =
       option
-        [ value level 
+        [ value level
         , selected isSelected
         ]
         [ text level ]
@@ -179,9 +179,9 @@ levelOptionsView address model =
         (\level -> levelOption (toString level) (level == model.newCharacterLevel))
         StatTables.levelList
   in
-    select 
+    select
       [ name "character-level"
-      , on "change" targetValue (\level -> Signal.message address (SetNewCharacterLevel (safeStrToLevel level))) 
+      , on "change" targetValue (\level -> Signal.message address (SetNewCharacterLevel (safeStrToLevel level)))
       ]
       levelOptions
 
@@ -195,7 +195,7 @@ summaryView : Model -> Html
 summaryView model =
   let
     members = "Members: " ++ (toString <| List.length model.characterList)
-    thresholds = 
+    thresholds =
       "XP: " ++
       toString model.partyThresholds.easy ++ " | " ++
       toString model.partyThresholds.medium ++ " | " ++

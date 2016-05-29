@@ -1,4 +1,4 @@
-module Utilities (safeStrToLevel, safeStrToRating, safeRatingToXP, safeXPToRating, initRating, getEasyThreshold, getMediumThreshold, getHardThreshold, getDeadlyThreshold) where
+module Utilities exposing (safeStrToLevel, safeStrToRating, safeRatingToXP, safeXPToRating, initRating, getEasyThreshold, getMediumThreshold, getHardThreshold, getDeadlyThreshold)
 
 import StatTables
 import String
@@ -34,7 +34,7 @@ getEasyThreshold =
 getMediumThreshold =
   getThreshold StatTables.mediumThresholds
 
-getHardThreshold = 
+getHardThreshold =
   getThreshold StatTables.hardThresholds
 
 getDeadlyThreshold =

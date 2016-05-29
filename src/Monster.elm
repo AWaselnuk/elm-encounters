@@ -1,4 +1,4 @@
-module Monster (Model, init, new, Action, update, view, Context) where
+module Monster exposing (Model, init, new, Action, update, view, Context)
 
 import Utilities exposing (..)
 import StatTables
@@ -12,8 +12,8 @@ import String
 
 type alias Model =
   { xp : Int
-  , rating : Float 
-  , name : String 
+  , rating : Float
+  , name : String
   }
 
 -- UPDATE
@@ -75,10 +75,10 @@ view context model =
 
 monsterRatingOptionsView : Signal.Address Action -> Model -> Html
 monsterRatingOptionsView address model =
-  let 
+  let
     monsterRatingOption rating isSelected =
       option
-        [ value rating 
+        [ value rating
         , selected isSelected
         ]
         [ text rating ]
@@ -87,19 +87,19 @@ monsterRatingOptionsView address model =
         (\rating -> monsterRatingOption (toString rating) (rating == model.rating))
         StatTables.ratingList
   in
-    select 
+    select
       [ name "monster-rating"
-      , on "change" targetValue (\rating -> Signal.message address (ModifyRating (safeStrToRating rating))) 
+      , on "change" targetValue (\rating -> Signal.message address (ModifyRating (safeStrToRating rating)))
       ]
       monsterRatingOptions
 
 monsterXpOptionsView : Signal.Address Action -> Model -> Html
 monsterXpOptionsView address model =
-  let 
+  let
     monsterXpOption xp isSelected =
       option
-        [ value xp 
-        , selected isSelected  
+        [ value xp
+        , selected isSelected
         ]
         [ text xp ]
     monsterXpOptions =
@@ -107,7 +107,7 @@ monsterXpOptionsView address model =
         (\xp -> monsterXpOption (toString xp) (xp == model.xp))
         StatTables.xpList
   in
-    select 
+    select
       [ name "monster-xp"
       , on "change" targetValue (\xp -> Signal.message address (ModifyXP (safeStrToLevel xp)))
       ]
@@ -119,9 +119,9 @@ init =
 
 new : Float -> String -> Model
 new rating name =
-  { xp = safeRatingToXP rating 
-  , name = if String.length name == 0 then randomName else name 
-  , rating = rating 
+  { xp = safeRatingToXP rating
+  , name = if String.length name == 0 then randomName else name
+  , rating = rating
   }
 
 randomName : String

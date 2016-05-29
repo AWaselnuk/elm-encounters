@@ -1,4 +1,4 @@
-module StatTables (xpRatingTable, ratingXPTable, ratingList, xpList, levelList, easyThresholds, mediumThresholds, hardThresholds, deadlyThresholds) where
+module StatTables exposing (xpRatingTable, ratingXPTable, ratingList, xpList, levelList, easyThresholds, mediumThresholds, hardThresholds, deadlyThresholds)
 
 import String
 import Dict exposing (Dict)
@@ -13,21 +13,21 @@ levelList = [1..20]
 xpRatingTable : Dict.Dict Int Float
 xpRatingTable =
   Dict.fromList <| List.map (\row -> (snd row, fst row)) ratingXpList
-  
+
 ratingXPTable : Dict.Dict Float Int
 ratingXPTable =
   Dict.fromList ratingXpList
 
 ratingList : List Float
-ratingList = 
+ratingList =
   List.map fst ratingXpList
 
 xpList : List Int
-xpList = 
+xpList =
   List.map snd ratingXpList
 
 ratingXpList : List (Float, Int)
-ratingXpList = 
+ratingXpList =
   [ (0, 10)
   , (0.125, 25)
   , (0.25, 50)

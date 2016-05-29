@@ -1,4 +1,4 @@
-module MonsterList where
+module MonsterList exposing (..)
 
 import Utilities exposing (..)
 import StatTables
@@ -16,7 +16,7 @@ type alias MonsterList = List (ID, Monster.Model)
 
 type alias Model =
   { uid : ID
-  , monsterList : MonsterList 
+  , monsterList : MonsterList
   , monsterXpTotal : Float
   , newMonsterName : String
   , newMonsterRating : Float
@@ -28,8 +28,8 @@ init =
   { uid = 1
   , monsterList = []
   , monsterXpTotal = 0
-  , newMonsterName = "" 
-  , newMonsterRating = initRating 
+  , newMonsterName = ""
+  , newMonsterRating = initRating
   , newMonsterXP = safeRatingToXP initRating }
 
 -- UPDATE
@@ -56,7 +56,7 @@ update action model =
         , Effects.none)
     RemoveMonster id ->
       let
-        newMonsterList = List.filter (\(monsterID, _) -> monsterID /= id) model.monsterList 
+        newMonsterList = List.filter (\(monsterID, _) -> monsterID /= id) model.monsterList
       in
         ({ model |
              monsterList = newMonsterList,
@@ -69,7 +69,7 @@ update action model =
             (monsterID, fst <| Monster.update monsterAction monsterModel)
           else
             (monsterID, monsterModel)
-        newMonsterList = List.map updateMonster model.monsterList 
+        newMonsterList = List.map updateMonster model.monsterList
       in
         ({ model |
              monsterList = newMonsterList,
@@ -87,7 +87,7 @@ update action model =
            newMonsterRating = safeXPToRating xp,
            newMonsterXP = xp }
        , Effects.none)
- 
+
 -- VIEW
 
 view : Signal.Address Action -> Model -> Html
@@ -99,7 +99,7 @@ view address model =
 monsterView : Signal.Address Action -> (ID, Monster.Model) -> Html
 monsterView address (id, model) =
   let
-    context = 
+    context =
       Monster.Context
         (Signal.forwardTo address (ModifyMonster id))
         (Signal.forwardTo address (always (RemoveMonster id)))
@@ -110,7 +110,7 @@ summaryView : Model -> Html
 summaryView model =
   let
     monsters = "Monsters: " ++ (toString <| List.length model.monsterList)
-    threat = 
+    threat =
       "XP: " ++
       toString model.monsterXpTotal
   in
@@ -136,7 +136,7 @@ addMonsterView address model =
         [ for "monster-name" ]
         [ text "Name" ]
     , input
-        [ type' "text" 
+        [ type' "text"
         , value model.newMonsterName
         , on "input" targetValue (\name -> Signal.message address (SetNewMonsterName name))
         ]
@@ -148,10 +148,10 @@ addMonsterView address model =
 
 monsterRatingOptionsView : Signal.Address Action -> Model -> Html
 monsterRatingOptionsView address model =
-  let 
+  let
     monsterRatingOption rating isSelected =
       option
-        [ value rating 
+        [ value rating
         , selected isSelected
         ]
         [ text rating ]
@@ -160,19 +160,19 @@ monsterRatingOptionsView address model =
         (\rating -> monsterRatingOption (toString rating) (rating == model.newMonsterRating))
         StatTables.ratingList
   in
-    select 
+    select
       [ name "monster-rating"
-      , on "change" targetValue (\rating -> Signal.message address (SetNewMonsterRating (safeStrToRating rating))) 
+      , on "change" targetValue (\rating -> Signal.message address (SetNewMonsterRating (safeStrToRating rating)))
       ]
       monsterRatingOptions
 
 monsterXpOptionsView : Signal.Address Action -> Model -> Html
 monsterXpOptionsView address model =
-  let 
+  let
     monsterXpOption xp isSelected =
       option
-        [ value xp 
-        , selected isSelected  
+        [ value xp
+        , selected isSelected
         ]
         [ text xp ]
     monsterXpOptions =
@@ -180,7 +180,7 @@ monsterXpOptionsView address model =
         (\xp -> monsterXpOption (toString xp) (xp == model.newMonsterXP))
         StatTables.xpList
   in
-    select 
+    select
       [ name "monster-xp"
       , on "change" targetValue (\xp -> Signal.message address (SetNewMonsterXP (safeStrToLevel xp)))
       ]

@@ -1,4 +1,3 @@
-
 import Encounter
 
 import StartApp
