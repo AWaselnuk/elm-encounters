@@ -4,14 +4,15 @@ import Utilities exposing (..)
 import StatTables
 import Character
 import Html exposing (..)
+import Html.App as App
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import Json.Decode as Json
 
 -- MODEL
 
 type alias ID = Int
 
--- TODO: Party will become CharacterList
 type alias CharacterList = List (ID, Character.Model)
 
 type alias PartyThresholds =
@@ -130,17 +131,17 @@ view : Model -> Html Msg
 view model =
   div
     [ class "characters" ]
-    (List.map characterView model.characterList)
+    (List.map indexedCharacterView model.characterList)
 
-characterView : (ID, Character.Model) -> Html Msg
-characterView (id, model) =
-  let
-    context =
-      Character.Context
-        (Signal.forwardTo address (ModifyCharacter id))
-        (Signal.forwardTo address (always (RemoveCharacter id)))
-  in
-    Character.view context model
+indexedCharacterView : (ID, Character.Model) -> Html Msg
+indexedCharacterView (id, model) =
+  div
+    []
+    [ App.map (ModifyCharacter id) (Character.view model)
+    , button
+        [ onClick (RemoveCharacter id) ]
+        [ text "Remove" ]
+    ]
 
 addCharacterView : Model -> Html Msg
 addCharacterView model =
@@ -167,6 +168,8 @@ addCharacterView model =
 levelOptionsView : Model -> Html Msg
 levelOptionsView model =
   let
+    levelDecoder =
+      Json.at ["target", "value"] Json.int
     levelOption level isSelected =
       option
         [ value level
@@ -180,17 +183,17 @@ levelOptionsView model =
   in
     select
       [ name "character-level"
-      , on "change" targetValue (\level -> Signal.message address (SetNewCharacterLevel (safeStrToLevel level)))
+      , on "change" (Json.map SetNewCharacterLevel levelDecoder)
       ]
       levelOptions
 
-partyThresholdsView : PartyThresholds -> Html
+partyThresholdsView : PartyThresholds -> Html Msg
 partyThresholdsView partyThresholds =
   p
     []
     [ text (partyThresholds |> toString) ]
 
-summaryView : Model -> Html
+summaryView : Model -> Html Msg
 summaryView model =
   let
     members = "Members: " ++ (toString <| List.length model.characterList)

@@ -4,8 +4,10 @@ import Utilities exposing (..)
 import StatTables
 import Monster
 import Html exposing (..)
+import Html.App as App
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import Json.Decode as Json
 
 -- MODEL
 
@@ -92,20 +94,20 @@ update msg model =
 view : Model -> Html Msg
 view model =
   div
+    [ class "monsters" ]
+    (List.map indexedMonsterView model.monsterList)
+
+indexedMonsterView : (ID, Monster.Model) -> Html Msg
+indexedMonsterView (id, model) =
+  div
     []
-    (List.map monsterView model.monsterList)
+    [ App.map (ModifyMonster id) (Monster.view model)
+    , button
+        [ onClick (RemoveMonster id) ]
+        [ text "Remove" ]
+    ]
 
-monsterView : (ID, Monster.Model) -> Html Msg
-monsterView (id, model) =
-  let
-    context =
-      Monster.Context
-        (Signal.forwardTo address (ModifyMonster id))
-        (Signal.forwardTo address (always (RemoveMonster id)))
-  in
-    Monster.view context model
-
-summaryView : Model -> Html
+summaryView : Model -> Html Msg
 summaryView model =
   let
     monsters = "Monsters: " ++ (toString <| List.length model.monsterList)
@@ -141,13 +143,15 @@ addMonsterView model =
         ]
         []
     , button
-        [ onClick AddMonster (Monster.new model.newMonsterRating model.newMonsterName) ]
+        [ onClick (AddMonster (Monster.new model.newMonsterRating model.newMonsterName)) ]
         [ text "Add Monster"]
     ]
 
 monsterRatingOptionsView : Model -> Html Msg
 monsterRatingOptionsView model =
   let
+    monsterRatingDecoder =
+      Json.at ["target", "value"] Json.float
     monsterRatingOption rating isSelected =
       option
         [ value rating
@@ -161,13 +165,15 @@ monsterRatingOptionsView model =
   in
     select
       [ name "monster-rating"
-      , on "change" targetValue (\rating -> Signal.message address (SetNewMonsterRating (safeStrToRating rating)))
+      , on "change" (Json.map SetNewMonsterRating monsterRatingDecoder)
       ]
       monsterRatingOptions
 
 monsterXpOptionsView : Model -> Html Msg
 monsterXpOptionsView model =
   let
+    monsterXpDecoder =
+      Json.at ["target", "value"] Json.int
     monsterXpOption xp isSelected =
       option
         [ value xp
@@ -181,7 +187,7 @@ monsterXpOptionsView model =
   in
     select
       [ name "monster-xp"
-      , on "change" targetValue (\xp -> Signal.message address (SetNewMonsterXP (safeStrToLevel xp)))
+      , on "change" (Json.map SetNewMonsterXP monsterXpDecoder)
       ]
       monsterXpOptions
 

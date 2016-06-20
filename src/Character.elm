@@ -1,10 +1,11 @@
-module Character exposing (Model, init, new, Msg, update, view, Context)
+module Character exposing (Model, init, new, Msg, update, view)
 
 import Utilities exposing (..)
 import StatTables
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import Json.Decode as Json
 import String
 
 -- MODEL
@@ -32,19 +33,14 @@ update msg model =
 
 -- VIEW
 
-type alias Context =
-  { msgs : Signal.Address Msg
-  , remove : Signal.Address ()
-  }
-
-view : Context -> Model -> Html
-view context model =
+view : Model -> Html Msg
+view model =
   div
     [ class "character" ]
     [ label
         [ for "character-level" ]
         [ text "Level" ]
-    , levelOptionsView context.msgs model
+    , levelOptionsView model
     , label
         [ for "character-name" ]
         [ text "Name" ]
@@ -53,16 +49,15 @@ view context model =
           class "character-name"
         , type' "text"
         , value (model.name)
-        , on "input" targetValue (\name -> Signal.message context.msgs (ModifyName name))
+        , onInput ModifyName
         ] []
-    , button
-        [ onClick context.remove () ]
-        [ text "Remove" ]
     ]
 
 levelOptionsView : Model -> Html Msg
 levelOptionsView model =
   let
+    levelDecoder =
+      Json.at ["target", "value"] Json.int
     levelOption level isSelected =
       option
         [ value level
@@ -76,7 +71,7 @@ levelOptionsView model =
   in
     select
       [ name "character-level"
-      , on "change" targetValue (\level -> Signal.message address (ModifyLevel (safeStrToLevel level)))
+      , on "change" (Json.map ModifyLevel levelDecoder)
       ]
       levelOptions
 

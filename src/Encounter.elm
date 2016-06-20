@@ -1,14 +1,10 @@
 module Encounter exposing (..)
 
-import Utilities exposing (..)
 import CharacterList exposing (CharacterList)
 import MonsterList exposing (MonsterList)
 import Html exposing (..)
+import Html.App as App
 import Html.Attributes exposing (..)
-import Html.Events exposing (..)
-import Dict exposing (Dict)
-import String
-import Debug
 
 -- FEATURES
 
@@ -97,11 +93,11 @@ encounterSummaryView model =
     [ class "encounter-summary-section" ]
     [
       difficultyBadgeView model
-    , CharacterList.summaryView model.characters
-    , MonsterList.summaryView model.monsters
+    , App.map CharacterListMsg (CharacterList.summaryView model.characters)
+    , App.map MonsterListMsg (MonsterList.summaryView model.monsters)
     ]
 
-difficultyBadgeView : Model -> Html
+difficultyBadgeView : Model -> Html Msg
 difficultyBadgeView model =
   let
     badgeClass = "badge badge--" ++ calculateDifficulty model
@@ -110,7 +106,7 @@ difficultyBadgeView model =
       [ class badgeClass ]
       [ strong [ class "difficulty" ] [text <| calculateDifficulty model] ]
 
-titleSectionView : Html
+titleSectionView : Html Msg
 titleSectionView =
   section
     [ class "title-section" ]
@@ -130,16 +126,16 @@ partySectionView model =
     [ class "party-section" ]
     [
       h2 [] [text "The party"]
-    , CharacterList.summaryView model
+    , App.map CharacterListMsg (CharacterList.summaryView model)
     , h3 [] [text "Add new character"]
-    , map CharacterListMsg (CharacterList.addCharacterView model)
+    , App.map CharacterListMsg (CharacterList.addCharacterView model)
     , h3 [] [text "Current party"]
     , div
         [ class "current-party-tools" ]
         [
           button [ class "toggle-party-view" ] [ text "view current party" ]
         ]
-    , map CharacterListMsg (CharacterList.view model)
+    , App.map CharacterListMsg (CharacterList.view model)
     ]
 
 monsterSectionView : MonsterList.Model -> Html Msg
@@ -148,9 +144,9 @@ monsterSectionView model =
     [ class "monster-section" ]
     [
       h2 [] [text "The monsters"]
-    , MonsterList.summaryView model
+    , App.map MonsterListMsg (MonsterList.summaryView model)
     , h3 [] [text "Add new monster"]
-    , map MonsterListMsg (MonsterList.addMonsterView model)
+    , App.map MonsterListMsg (MonsterList.addMonsterView model)
     , h3 [] [text "Current monsters"]
     , div
         [ class "current-monster-tools" ]
@@ -159,7 +155,7 @@ monsterSectionView model =
         , button [ class "set-monster-xp-view" ] [ text "XP" ]
         , button [ class "toggle-monster-view" ] [ text "view current monsters" ]
         ]
-    , map MonsterListMsg (MonsterList.view model)
+    , App.map MonsterListMsg (MonsterList.view model)
     ]
 
 calculateDifficulty : Model -> String

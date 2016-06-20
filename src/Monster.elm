@@ -1,10 +1,11 @@
-module Monster exposing (Model, init, new, Msg, update, view, Context)
+module Monster exposing (Model, init, new, Msg, update, view)
 
 import Utilities exposing (..)
 import StatTables
 import Html exposing (..)
 import Html.Attributes exposing (..)
 import Html.Events exposing (..)
+import Json.Decode as Json
 import String
 
 -- MODEL
@@ -40,23 +41,18 @@ update msg model =
 
 -- VIEW
 
-type alias Context =
-  { msgs : Signal.Address Msg
-  , remove : Signal.Address ()
-  }
-
-view : Context -> Model -> Html
-view context model =
+view : Model -> Html Msg
+view model =
   div
     [ class "monster" ]
     [ label
         [ for "monster-rating" ]
         [ text "Challenge Rating" ]
-    , monsterRatingOptionsView context.msgs model
+    , monsterRatingOptionsView model
     , label
         [ for "monster-xp" ]
         [ text "Experience Points" ]
-    , monsterXpOptionsView context.msgs model
+    , monsterXpOptionsView model
     , label
         [ for "monster-name" ]
         [ text "Name" ]
@@ -65,16 +61,15 @@ view context model =
           class "monster-name"
         , type' "text"
         , value (model.name)
-        , on "input" targetValue (\name -> Signal.message context.msgs (ModifyName name))
+        , onInput ModifyName
         ] []
-    , button
-        [ onClick context.remove () ]
-        [ text "Remove" ]
     ]
 
 monsterRatingOptionsView : Model -> Html Msg
 monsterRatingOptionsView model =
   let
+    monsterRatingDecoder =
+      Json.at ["target", "value"] Json.float
     monsterRatingOption rating isSelected =
       option
         [ value rating
@@ -88,13 +83,15 @@ monsterRatingOptionsView model =
   in
     select
       [ name "monster-rating"
-      , on "change" targetValue (\rating -> Signal.message address (ModifyRating (safeStrToRating rating)))
+      , on "change" (Json.map ModifyRating monsterRatingDecoder)
       ]
       monsterRatingOptions
 
 monsterXpOptionsView : Model -> Html Msg
 monsterXpOptionsView model =
   let
+    monsterXpDecoder =
+      Json.at ["target", "value"] Json.int
     monsterXpOption xp isSelected =
       option
         [ value xp
@@ -108,7 +105,7 @@ monsterXpOptionsView model =
   in
     select
       [ name "monster-xp"
-      , on "change" targetValue (\xp -> Signal.message address (ModifyXP (safeStrToLevel xp)))
+      , on "change" (Json.map ModifyXP monsterXpDecoder)
       ]
       monsterXpOptions
 

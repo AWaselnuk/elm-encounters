@@ -1,7 +1,6 @@
 import Encounter
 import Html.App as Html
 
-main : Program flags
 main =
   Html.program
     { view = Encounter.view

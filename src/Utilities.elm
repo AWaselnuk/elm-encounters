@@ -3,6 +3,8 @@ module Utilities exposing (safeStrToLevel, safeStrToRating, safeRatingToXP, safe
 import StatTables
 import String
 import Dict exposing (Dict)
+import Json.Decode as Json
+import Html.Events exposing (..)
 
 safeStrToLevel : String -> Int
 safeStrToLevel =
