@@ -1,12 +1,17 @@
 {
   "private": true,
   "scripts": {
-    "build": "elm-make --yes src/Main.elm --output=./elm.js && cp index.template.html index.html",
+    "build": "npm run build-styles && npm run build-elm",
+    "build-elm": "elm-make --yes src/Main.elm --output=./elm.js && cp index.template.html index.html",
+    "build-styles": "postcss --use precss -c postcss-options.json -o public/css/application.css src/application.scss",
     "watch": "node watch.js",
     "server": "python -m SimpleHTTPServer 5000",
     "open": "npm run build && open ./index.html"
   },
   "dependencies": {
     "watch": "^0.16.0"
+  },
+  "devDependencies": {
+    "precss": "^1.4.0"
   }
 }
