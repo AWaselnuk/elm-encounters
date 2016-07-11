@@ -111,13 +111,21 @@ titleSectionView =
   section
     [ class "title-section" ]
     [
-      h1 [ class "title" ] [ text "D&D 5th Edition Encounter Builder" ]
+      h1 [ class "title" ] [ text "Dungeons & Dragons 5th Edition Encounter Builder" ]
     , p
         [ class "description" ]
         [ text "This encounter builder allows you to easily determine the difficulty
-          of your 5th edition encounters. Simply create a list of party members
-          and a list of monsters, and the encounter builder will tell you if
-          it will be a cake walk or a total party kill." ]
+          of your 5th edition Dungeons & Dragons encounters. Simply create a list
+          of party members and a list of monsters, and the encounter builder will
+          tell you if it will be a cake walk or a total party kill." ]
+    ]
+
+sectionHeading : String -> Html Msg
+sectionHeading headingText =
+  div
+    [ class "section-heading" ]
+    [ a [ name headingText ] []
+    , h2 [] [ text headingText ]
     ]
 
 partySectionView : CharacterList.Model -> Html Msg
@@ -125,7 +133,7 @@ partySectionView model =
   section
     [ class "party-section" ]
     [
-      h2 [] [text "The party"]
+      sectionHeading "Party"
     , App.map CharacterListMsg (CharacterList.summaryView model)
     , h3 [] [text "Add new character"]
     , App.map CharacterListMsg (CharacterList.addCharacterView model)

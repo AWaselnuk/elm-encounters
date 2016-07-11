@@ -8408,6 +8408,33 @@ var _user$elm_encounters$Encounter$calculateDifficulty = function (model) {
 		_elm_lang$core$Basics$round(model.monsters.monsterXpTotal),
 		model.characters.partyThresholds.deadly) < 0) ? 'deadly' : 'TPK')));
 };
+var _user$elm_encounters$Encounter$sectionHeading = function (headingText) {
+	return A2(
+		_elm_lang$html$Html$div,
+		_elm_lang$core$Native_List.fromArray(
+			[
+				_elm_lang$html$Html_Attributes$class('section-heading')
+			]),
+		_elm_lang$core$Native_List.fromArray(
+			[
+				A2(
+				_elm_lang$html$Html$a,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$name(headingText)
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[])),
+				A2(
+				_elm_lang$html$Html$h2,
+				_elm_lang$core$Native_List.fromArray(
+					[]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text(headingText)
+					]))
+			]));
+};
 var _user$elm_encounters$Encounter$titleSectionView = A2(
 	_elm_lang$html$Html$section,
 	_elm_lang$core$Native_List.fromArray(
@@ -8424,7 +8451,7 @@ var _user$elm_encounters$Encounter$titleSectionView = A2(
 				]),
 			_elm_lang$core$Native_List.fromArray(
 				[
-					_elm_lang$html$Html$text('D&D 5th Edition Encounter Builder')
+					_elm_lang$html$Html$text('Dungeons & Dragons 5th Edition Encounter Builder')
 				])),
 			A2(
 			_elm_lang$html$Html$p,
@@ -8434,7 +8461,7 @@ var _user$elm_encounters$Encounter$titleSectionView = A2(
 				]),
 			_elm_lang$core$Native_List.fromArray(
 				[
-					_elm_lang$html$Html$text('This encounter builder allows you to easily determine the difficulty\n          of your 5th edition encounters. Simply create a list of party members\n          and a list of monsters, and the encounter builder will tell you if\n          it will be a cake walk or a total party kill.')
+					_elm_lang$html$Html$text('This encounter builder allows you to easily determine the difficulty\n          of your 5th edition Dungeons & Dragons encounters. Simply create a list\n          of party members and a list of monsters, and the encounter builder will\n          tell you if it will be a cake walk or a total party kill.')
 				]))
 		]));
 var _user$elm_encounters$Encounter$difficultyBadgeView = function (model) {
@@ -8623,14 +8650,7 @@ var _user$elm_encounters$Encounter$partySectionView = function (model) {
 			]),
 		_elm_lang$core$Native_List.fromArray(
 			[
-				A2(
-				_elm_lang$html$Html$h2,
-				_elm_lang$core$Native_List.fromArray(
-					[]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text('The party')
-					])),
+				_user$elm_encounters$Encounter$sectionHeading('Party'),
 				A2(
 				_elm_lang$html$Html_App$map,
 				_user$elm_encounters$Encounter$CharacterListMsg,
