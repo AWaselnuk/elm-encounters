@@ -168,8 +168,6 @@ addCharacterView model =
 levelOptionsView : Model -> Html Msg
 levelOptionsView model =
   let
-    levelDecoder =
-      Json.at ["target", "value"] Json.int
     levelOption level isSelected =
       option
         [ value level
@@ -183,7 +181,7 @@ levelOptionsView model =
   in
     select
       [ name "character-level"
-      , on "change" (Json.map SetNewCharacterLevel levelDecoder)
+      , on "change" (Json.map SetNewCharacterLevel targetValueIntDecoder)
       ]
       levelOptions
 

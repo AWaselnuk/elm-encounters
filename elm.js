@@ -7368,17 +7368,21 @@ var _user$elm_encounters$StatTables$xpRatingTable = _elm_lang$core$Dict$fromList
 		_user$elm_encounters$StatTables$ratingXpList));
 var _user$elm_encounters$StatTables$levelList = _elm_lang$core$Native_List.range(1, 20);
 
-var _user$elm_encounters$Utilities$targetValueIntDecoder = A2(
-	_elm_lang$core$Json_Decode$andThen,
-	_elm_lang$html$Html_Events$targetValue,
-	function (val) {
-		var _p0 = _elm_lang$core$String$toInt(val);
-		if (_p0.ctor === 'Ok') {
-			return _elm_lang$core$Json_Decode$succeed(_p0._0);
-		} else {
-			return _elm_lang$core$Json_Decode$fail(_p0._0);
-		}
-	});
+var _user$elm_encounters$Utilities$targetValueDecoder = function (stringConverter) {
+	return A2(
+		_elm_lang$core$Json_Decode$andThen,
+		_elm_lang$html$Html_Events$targetValue,
+		function (val) {
+			var _p0 = stringConverter(val);
+			if (_p0.ctor === 'Ok') {
+				return _elm_lang$core$Json_Decode$succeed(_p0._0);
+			} else {
+				return _elm_lang$core$Json_Decode$fail(_p0._0);
+			}
+		});
+};
+var _user$elm_encounters$Utilities$targetValueIntDecoder = _user$elm_encounters$Utilities$targetValueDecoder(_elm_lang$core$String$toInt);
+var _user$elm_encounters$Utilities$targetValueFloatDecoder = _user$elm_encounters$Utilities$targetValueDecoder(_elm_lang$core$String$toFloat);
 var _user$elm_encounters$Utilities$getThreshold = F2(
 	function (thresholds, level) {
 		return A2(
@@ -7757,11 +7761,6 @@ var _user$elm_encounters$CharacterList$levelOptionsView = function (model) {
 				_elm_lang$core$Native_Utils.eq(level, model.newCharacterLevel));
 		},
 		_user$elm_encounters$StatTables$levelList);
-	var levelDecoder = A2(
-		_elm_lang$core$Json_Decode$at,
-		_elm_lang$core$Native_List.fromArray(
-			['target', 'value']),
-		_elm_lang$core$Json_Decode$int);
 	return A2(
 		_elm_lang$html$Html$select,
 		_elm_lang$core$Native_List.fromArray(
@@ -7770,7 +7769,7 @@ var _user$elm_encounters$CharacterList$levelOptionsView = function (model) {
 				A2(
 				_elm_lang$html$Html_Events$on,
 				'change',
-				A2(_elm_lang$core$Json_Decode$map, _user$elm_encounters$CharacterList$SetNewCharacterLevel, levelDecoder))
+				A2(_elm_lang$core$Json_Decode$map, _user$elm_encounters$CharacterList$SetNewCharacterLevel, _user$elm_encounters$Utilities$targetValueIntDecoder))
 			]),
 		levelOptions);
 };
@@ -7957,11 +7956,6 @@ var _user$elm_encounters$Monster$monsterRatingOptionsView = function (model) {
 				_elm_lang$core$Native_Utils.eq(rating, model.rating));
 		},
 		_user$elm_encounters$StatTables$ratingList);
-	var monsterRatingDecoder = A2(
-		_elm_lang$core$Json_Decode$at,
-		_elm_lang$core$Native_List.fromArray(
-			['target', 'value']),
-		_elm_lang$core$Json_Decode$float);
 	return A2(
 		_elm_lang$html$Html$select,
 		_elm_lang$core$Native_List.fromArray(
@@ -7970,7 +7964,7 @@ var _user$elm_encounters$Monster$monsterRatingOptionsView = function (model) {
 				A2(
 				_elm_lang$html$Html_Events$on,
 				'change',
-				A2(_elm_lang$core$Json_Decode$map, _user$elm_encounters$Monster$ModifyRating, monsterRatingDecoder))
+				A2(_elm_lang$core$Json_Decode$map, _user$elm_encounters$Monster$ModifyRating, _user$elm_encounters$Utilities$targetValueFloatDecoder))
 			]),
 		monsterRatingOptions);
 };
@@ -8001,11 +7995,6 @@ var _user$elm_encounters$Monster$monsterXpOptionsView = function (model) {
 				_elm_lang$core$Native_Utils.eq(xp, model.xp));
 		},
 		_user$elm_encounters$StatTables$xpList);
-	var monsterXpDecoder = A2(
-		_elm_lang$core$Json_Decode$at,
-		_elm_lang$core$Native_List.fromArray(
-			['target', 'value']),
-		_elm_lang$core$Json_Decode$int);
 	return A2(
 		_elm_lang$html$Html$select,
 		_elm_lang$core$Native_List.fromArray(
@@ -8014,7 +8003,7 @@ var _user$elm_encounters$Monster$monsterXpOptionsView = function (model) {
 				A2(
 				_elm_lang$html$Html_Events$on,
 				'change',
-				A2(_elm_lang$core$Json_Decode$map, _user$elm_encounters$Monster$ModifyXP, monsterXpDecoder))
+				A2(_elm_lang$core$Json_Decode$map, _user$elm_encounters$Monster$ModifyXP, _user$elm_encounters$Utilities$targetValueIntDecoder))
 			]),
 		monsterXpOptions);
 };
@@ -8252,11 +8241,6 @@ var _user$elm_encounters$MonsterList$monsterRatingOptionsView = function (model)
 				_elm_lang$core$Native_Utils.eq(rating, model.newMonsterRating));
 		},
 		_user$elm_encounters$StatTables$ratingList);
-	var monsterRatingDecoder = A2(
-		_elm_lang$core$Json_Decode$at,
-		_elm_lang$core$Native_List.fromArray(
-			['target', 'value']),
-		_elm_lang$core$Json_Decode$float);
 	return A2(
 		_elm_lang$html$Html$select,
 		_elm_lang$core$Native_List.fromArray(
@@ -8265,7 +8249,7 @@ var _user$elm_encounters$MonsterList$monsterRatingOptionsView = function (model)
 				A2(
 				_elm_lang$html$Html_Events$on,
 				'change',
-				A2(_elm_lang$core$Json_Decode$map, _user$elm_encounters$MonsterList$SetNewMonsterRating, monsterRatingDecoder))
+				A2(_elm_lang$core$Json_Decode$map, _user$elm_encounters$MonsterList$SetNewMonsterRating, _user$elm_encounters$Utilities$targetValueFloatDecoder))
 			]),
 		monsterRatingOptions);
 };
@@ -8296,11 +8280,6 @@ var _user$elm_encounters$MonsterList$monsterXpOptionsView = function (model) {
 				_elm_lang$core$Native_Utils.eq(xp, model.newMonsterXP));
 		},
 		_user$elm_encounters$StatTables$xpList);
-	var monsterXpDecoder = A2(
-		_elm_lang$core$Json_Decode$at,
-		_elm_lang$core$Native_List.fromArray(
-			['target', 'value']),
-		_elm_lang$core$Json_Decode$int);
 	return A2(
 		_elm_lang$html$Html$select,
 		_elm_lang$core$Native_List.fromArray(
@@ -8309,7 +8288,7 @@ var _user$elm_encounters$MonsterList$monsterXpOptionsView = function (model) {
 				A2(
 				_elm_lang$html$Html_Events$on,
 				'change',
-				A2(_elm_lang$core$Json_Decode$map, _user$elm_encounters$MonsterList$SetNewMonsterXP, monsterXpDecoder))
+				A2(_elm_lang$core$Json_Decode$map, _user$elm_encounters$MonsterList$SetNewMonsterXP, _user$elm_encounters$Utilities$targetValueIntDecoder))
 			]),
 		monsterXpOptions);
 };

@@ -150,8 +150,6 @@ addMonsterView model =
 monsterRatingOptionsView : Model -> Html Msg
 monsterRatingOptionsView model =
   let
-    monsterRatingDecoder =
-      Json.at ["target", "value"] Json.float
     monsterRatingOption rating isSelected =
       option
         [ value rating
@@ -165,15 +163,13 @@ monsterRatingOptionsView model =
   in
     select
       [ name "monster-rating"
-      , on "change" (Json.map SetNewMonsterRating monsterRatingDecoder)
+      , on "change" (Json.map SetNewMonsterRating targetValueFloatDecoder)
       ]
       monsterRatingOptions
 
 monsterXpOptionsView : Model -> Html Msg
 monsterXpOptionsView model =
   let
-    monsterXpDecoder =
-      Json.at ["target", "value"] Json.int
     monsterXpOption xp isSelected =
       option
         [ value xp
@@ -187,7 +183,7 @@ monsterXpOptionsView model =
   in
     select
       [ name "monster-xp"
-      , on "change" (Json.map SetNewMonsterXP monsterXpDecoder)
+      , on "change" (Json.map SetNewMonsterXP targetValueIntDecoder)
       ]
       monsterXpOptions
 
