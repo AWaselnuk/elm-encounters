@@ -7398,10 +7398,6 @@ var _user$elm_encounters$Utilities$initRating = A2(
 	_elm_lang$core$Maybe$withDefault,
 	0,
 	_elm_lang$core$List$head(_user$elm_encounters$StatTables$ratingList));
-var _user$elm_encounters$Utilities$highestXP = A2(
-	_elm_lang$core$Maybe$withDefault,
-	0,
-	_elm_lang$core$List$maximum(_user$elm_encounters$StatTables$xpList));
 var _user$elm_encounters$Utilities$safeRatingToXP = function (rating) {
 	return A2(
 		_elm_lang$core$Maybe$withDefault,
@@ -7413,20 +7409,6 @@ var _user$elm_encounters$Utilities$safeXPToRating = function (xp) {
 		_elm_lang$core$Maybe$withDefault,
 		0,
 		A2(_elm_lang$core$Dict$get, xp, _user$elm_encounters$StatTables$xpRatingTable));
-};
-var _user$elm_encounters$Utilities$safeStrToRating = function (_p1) {
-	return A2(
-		_elm_lang$core$Maybe$withDefault,
-		0,
-		_elm_lang$core$Result$toMaybe(
-			_elm_lang$core$String$toFloat(_p1)));
-};
-var _user$elm_encounters$Utilities$safeStrToLevel = function (_p2) {
-	return A2(
-		_elm_lang$core$Maybe$withDefault,
-		0,
-		_elm_lang$core$Result$toMaybe(
-			_elm_lang$core$String$toInt(_p2)));
 };
 
 var _user$elm_encounters$Character$randomName = 'PC Name';

@@ -1,18 +1,10 @@
-module Utilities exposing (targetValueIntDecoder, targetValueFloatDecoder, safeStrToLevel, safeStrToRating, safeRatingToXP, safeXPToRating, initRating, getEasyThreshold, getMediumThreshold, getHardThreshold, getDeadlyThreshold)
+module Utilities exposing (targetValueIntDecoder, targetValueFloatDecoder, safeRatingToXP, safeXPToRating, initRating, getEasyThreshold, getMediumThreshold, getHardThreshold, getDeadlyThreshold)
 
 import StatTables
 import String
 import Dict exposing (Dict)
 import Json.Decode as Json
 import Html.Events exposing (..)
-
-safeStrToLevel : String -> Int
-safeStrToLevel =
-  String.toInt >> Result.toMaybe >> Maybe.withDefault 0
-
-safeStrToRating : String -> Float
-safeStrToRating =
-  String.toFloat >> Result.toMaybe >> Maybe.withDefault 0
 
 safeXPToRating : Int -> Float
 safeXPToRating xp =
@@ -21,10 +13,6 @@ safeXPToRating xp =
 safeRatingToXP : Float -> Int
 safeRatingToXP rating =
   Dict.get rating StatTables.ratingXPTable |> Maybe.withDefault 0
-
-highestXP : Int
-highestXP =
-  List.maximum StatTables.xpList |> Maybe.withDefault 0
 
 initRating : Float
 initRating =
