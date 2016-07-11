@@ -1,4 +1,4 @@
-module Utilities exposing (safeStrToLevel, safeStrToRating, safeRatingToXP, safeXPToRating, initRating, getEasyThreshold, getMediumThreshold, getHardThreshold, getDeadlyThreshold)
+module Utilities exposing (targetValueIntDecoder, safeStrToLevel, safeStrToRating, safeRatingToXP, safeXPToRating, initRating, getEasyThreshold, getMediumThreshold, getHardThreshold, getDeadlyThreshold)
 
 import StatTables
 import String
@@ -45,3 +45,10 @@ getDeadlyThreshold =
 getThreshold : Dict Int Int -> Int -> Int
 getThreshold thresholds level =
   Maybe.withDefault 0 <| Dict.get level thresholds
+
+targetValueIntDecoder : Json.Decoder Int
+targetValueIntDecoder =
+  targetValue `Json.andThen` \val ->
+    case String.toInt val of
+      Ok i -> Json.succeed i
+      Err err -> Json.fail err

@@ -7368,6 +7368,17 @@ var _user$elm_encounters$StatTables$xpRatingTable = _elm_lang$core$Dict$fromList
 		_user$elm_encounters$StatTables$ratingXpList));
 var _user$elm_encounters$StatTables$levelList = _elm_lang$core$Native_List.range(1, 20);
 
+var _user$elm_encounters$Utilities$targetValueIntDecoder = A2(
+	_elm_lang$core$Json_Decode$andThen,
+	_elm_lang$html$Html_Events$targetValue,
+	function (val) {
+		var _p0 = _elm_lang$core$String$toInt(val);
+		if (_p0.ctor === 'Ok') {
+			return _elm_lang$core$Json_Decode$succeed(_p0._0);
+		} else {
+			return _elm_lang$core$Json_Decode$fail(_p0._0);
+		}
+	});
 var _user$elm_encounters$Utilities$getThreshold = F2(
 	function (thresholds, level) {
 		return A2(
@@ -7399,19 +7410,19 @@ var _user$elm_encounters$Utilities$safeXPToRating = function (xp) {
 		0,
 		A2(_elm_lang$core$Dict$get, xp, _user$elm_encounters$StatTables$xpRatingTable));
 };
-var _user$elm_encounters$Utilities$safeStrToRating = function (_p0) {
+var _user$elm_encounters$Utilities$safeStrToRating = function (_p1) {
 	return A2(
 		_elm_lang$core$Maybe$withDefault,
 		0,
 		_elm_lang$core$Result$toMaybe(
-			_elm_lang$core$String$toFloat(_p0)));
+			_elm_lang$core$String$toFloat(_p1)));
 };
-var _user$elm_encounters$Utilities$safeStrToLevel = function (_p1) {
+var _user$elm_encounters$Utilities$safeStrToLevel = function (_p2) {
 	return A2(
 		_elm_lang$core$Maybe$withDefault,
 		0,
 		_elm_lang$core$Result$toMaybe(
-			_elm_lang$core$String$toInt(_p1)));
+			_elm_lang$core$String$toInt(_p2)));
 };
 
 var _user$elm_encounters$Character$randomName = 'PC Name';
@@ -7480,11 +7491,6 @@ var _user$elm_encounters$Character$levelOptionsView = function (model) {
 				_elm_lang$core$Native_Utils.eq(level, model.level));
 		},
 		_user$elm_encounters$StatTables$levelList);
-	var levelDecoder = A2(
-		_elm_lang$core$Json_Decode$at,
-		_elm_lang$core$Native_List.fromArray(
-			['target', 'value']),
-		_elm_lang$core$Json_Decode$int);
 	return A2(
 		_elm_lang$html$Html$select,
 		_elm_lang$core$Native_List.fromArray(
@@ -7493,7 +7499,7 @@ var _user$elm_encounters$Character$levelOptionsView = function (model) {
 				A2(
 				_elm_lang$html$Html_Events$on,
 				'change',
-				A2(_elm_lang$core$Json_Decode$map, _user$elm_encounters$Character$ModifyLevel, levelDecoder))
+				A2(_elm_lang$core$Json_Decode$map, _user$elm_encounters$Character$ModifyLevel, _user$elm_encounters$Utilities$targetValueIntDecoder))
 			]),
 		levelOptions);
 };
