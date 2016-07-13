@@ -9,6 +9,40 @@
   text-align: center;
 }
 
+.base-height {
+  margin-bottom: 2.2rem;
+}
+
+.base-height-half {
+  margin-bottom: calc(2.2rem / 2);
+}
+
+.base-height-none {
+  margin-bottom: 0;
+}
+
+/* Hide only visually, but have it available for screenreaders: h5bp.com/v */
+.visually-hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+/* Extends the .visuallyhidden class to allow the element to be focusable when navigated to via the keyboard: h5bp.com/p */
+.visually-hidden.focusable:active, .visually-hidden.focusable:focus {
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+  width: auto;
+}
+
 /* Typography*/
 
 html {
@@ -18,48 +52,60 @@ html {
 body {
   font-size: 1.6rem;
   font-family: -apple-system,sans-serif;
-  line-height: 2.0em;
+  line-height: 2.2rem;
   color: #666;
 }
 
+p {
+  margin-top: 0;
+  margin-bottom: 2.2rem;
+}
+
 h1, .heading-1 {
-  margin: 0 0 2.0rem;
+  margin: 0 0 2.2rem;
   font-family: 'Libre Baskerville',serif;
+  line-height: inherit;
   color: #444;
 }
 
 h2, .heading-2 {
-  margin: 0 0 2.0rem;
+  margin: 0 0 2.2rem;
   font-family: 'Libre Baskerville',serif;
+  line-height: inherit;
   color: #444;
 }
 
 h3, .heading-3 {
-  margin: 0 0 2.0rem;
+  margin: 0 0 2.2rem;
   font-family: 'Libre Baskerville',serif;
+  line-height: inherit;
   color: #444;
 }
 
 h4, .heading-4 {
-  margin: 0 0 2.0rem;
+  margin: 0 0 2.2rem;
   font-family: 'Libre Baskerville',serif;
+  line-height: inherit;
   color: #444;
 }
 
 h5, .heading-5 {
-  margin: 0 0 2.0rem;
+  margin: 0 0 2.2rem;
   font-family: 'Libre Baskerville',serif;
+  line-height: inherit;
   color: #444;
 }
 
 h6, .heading-6 {
-  margin: 0 0 2.0rem;
+  margin: 0 0 2.2rem;
   font-family: 'Libre Baskerville',serif;
+  line-height: inherit;
   color: #444;
 }
 
 h1, .heading-1 {
   font-size: 2.0rem;
+  line-height: 3.0rem;
 }
 
 h2, .heading-2 {
@@ -71,8 +117,8 @@ h3, .heading-3 {
 }
 
 .section-heading {
-  margin-bottom: 2.0rem;
-  padding-bottom: 2.0rem / 2;
+  margin-bottom: 2.2rem;
+  padding-bottom: 2.2rem / 2;
   border-bottom: 1px solid #666;
 }
 

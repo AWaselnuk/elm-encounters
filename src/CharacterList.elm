@@ -194,17 +194,25 @@ partyThresholdsView partyThresholds =
 summaryView : Model -> Html Msg
 summaryView model =
   let
-    members = "Members: " ++ (toString <| List.length model.characterList)
+    memberCount = toString <| List.length model.characterList
     thresholds =
-      "XP: " ++
-      toString model.partyThresholds.easy ++ " | " ++
-      toString model.partyThresholds.medium ++ " | " ++
-      toString model.partyThresholds.hard ++ " | " ++
+      toString model.partyThresholds.easy ++ " / " ++
+      toString model.partyThresholds.medium ++ " / " ++
+      toString model.partyThresholds.hard ++ " / " ++
       toString model.partyThresholds.deadly
   in
     div
-      [ class "party-summary" ]
-      [
-        text (members ++ " " ++ thresholds)
+      [ class "party-summary base-height" ]
+      [ h3 [ class "visually-hidden" ] [ text "Party summary" ]
+      , p
+          [ class "base-height-none" ]
+          [ b [] [ text "Members: " ]
+          , text memberCount
+          ]
+      , p
+          [ class "base-height-none" ]
+          [ b [] [ text "XP Thresholds: " ]
+          , text thresholds
+          ]
       ]
 

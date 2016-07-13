@@ -7536,44 +7536,79 @@ var _user$elm_encounters$Character$view = function (model) {
 var _user$elm_encounters$CharacterList$summaryView = function (model) {
 	var thresholds = A2(
 		_elm_lang$core$Basics_ops['++'],
-		'XP: ',
+		_elm_lang$core$Basics$toString(model.partyThresholds.easy),
 		A2(
 			_elm_lang$core$Basics_ops['++'],
-			_elm_lang$core$Basics$toString(model.partyThresholds.easy),
+			' / ',
 			A2(
 				_elm_lang$core$Basics_ops['++'],
-				' | ',
+				_elm_lang$core$Basics$toString(model.partyThresholds.medium),
 				A2(
 					_elm_lang$core$Basics_ops['++'],
-					_elm_lang$core$Basics$toString(model.partyThresholds.medium),
+					' / ',
 					A2(
 						_elm_lang$core$Basics_ops['++'],
-						' | ',
+						_elm_lang$core$Basics$toString(model.partyThresholds.hard),
 						A2(
 							_elm_lang$core$Basics_ops['++'],
-							_elm_lang$core$Basics$toString(model.partyThresholds.hard),
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								' | ',
-								_elm_lang$core$Basics$toString(model.partyThresholds.deadly))))))));
-	var members = A2(
-		_elm_lang$core$Basics_ops['++'],
-		'Members: ',
-		_elm_lang$core$Basics$toString(
-			_elm_lang$core$List$length(model.characterList)));
+							' / ',
+							_elm_lang$core$Basics$toString(model.partyThresholds.deadly)))))));
+	var memberCount = _elm_lang$core$Basics$toString(
+		_elm_lang$core$List$length(model.characterList));
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_elm_lang$html$Html_Attributes$class('party-summary')
+				_elm_lang$html$Html_Attributes$class('party-summary base-height')
 			]),
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_elm_lang$html$Html$text(
 				A2(
-					_elm_lang$core$Basics_ops['++'],
-					members,
-					A2(_elm_lang$core$Basics_ops['++'], ' ', thresholds)))
+				_elm_lang$html$Html$h3,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('visually-hidden')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('Party summary')
+					])),
+				A2(
+				_elm_lang$html$Html$p,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('base-height-none')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(
+						_elm_lang$html$Html$b,
+						_elm_lang$core$Native_List.fromArray(
+							[]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text('Members: ')
+							])),
+						_elm_lang$html$Html$text(memberCount)
+					])),
+				A2(
+				_elm_lang$html$Html$p,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('base-height-none')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(
+						_elm_lang$html$Html$b,
+						_elm_lang$core$Native_List.fromArray(
+							[]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text('XP Thresholds: ')
+							])),
+						_elm_lang$html$Html$text(thresholds)
+					]))
 			]));
 };
 var _user$elm_encounters$CharacterList$partyThresholdsView = function (partyThresholds) {
