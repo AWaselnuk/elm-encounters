@@ -42,6 +42,10 @@ $small-screen: 600px;
   margin-bottom: 0;
 }
 
+.hidden {
+  display: none !important;
+}
+
 /* Hide only visually, but have it available for screenreaders: h5bp.com/v */
 .visually-hidden {
   border: 0;

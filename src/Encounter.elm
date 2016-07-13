@@ -5,6 +5,7 @@ import MonsterList exposing (MonsterList)
 import Html exposing (..)
 import Html.App as App
 import Html.Attributes exposing (..)
+import Html.Events exposing (..)
 
 -- FEATURES
 
@@ -40,13 +41,15 @@ import Html.Attributes exposing (..)
 type alias ID = Int
 
 type alias Model =
-  { characters : CharacterList.Model
+  { characterListVisible : Bool
+  , characters : CharacterList.Model
   , monsters : MonsterList.Model
   }
 
 init : (Model, Cmd Msg)
 init =
-  ( { characters = CharacterList.init
+  ( { characterListVisible = True
+    , characters = CharacterList.init
     , monsters = MonsterList.init }
   , Cmd.none)
 
@@ -54,6 +57,7 @@ init =
 
 type Msg
   = NoOp
+  | ToggleCharacterList
   | CharacterListMsg CharacterList.Msg
   | MonsterListMsg MonsterList.Msg
 
@@ -62,6 +66,8 @@ update msg model =
   case msg of
     NoOp ->
       (model, Cmd.none)
+    ToggleCharacterList ->
+      ({ model | characterListVisible = not model.characterListVisible }, Cmd.none)
     CharacterListMsg msg ->
       let
         (clModel, clCmd) = CharacterList.update msg model.characters
@@ -81,7 +87,7 @@ view model =
     [ class "main" ]
     [
       titleSectionView
-    , partySectionView model.characters
+    , partySectionView model
     , monsterSectionView model.monsters
     , encounterSummaryView model
     , debugView model
@@ -128,26 +134,36 @@ sectionHeading headingText =
     , h2 [] [ text headingText ]
     ]
 
-partySectionView : CharacterList.Model -> Html Msg
+partySectionView : Model -> Html Msg
 partySectionView model =
-  section
-    [ class "party-section" ]
-    [
-      sectionHeading "Party"
-    , App.map CharacterListMsg (CharacterList.summaryView model)
-    , h3 [] [ text "Add new character" ]
-    , App.map CharacterListMsg (CharacterList.addCharacterView model)
-    , div
-        [ class "tools-header" ]
-        [ div
-            [ class "tools-header-heading" ]
-            [ h3 [] [ text "Current party members" ] ]
-        , div
-            [ class "tools-header-tools" ]
-            [ button [ class "text-button" ] [ text "show" ] ]
-        ]
-    , App.map CharacterListMsg (CharacterList.view model)
-    ]
+  let
+    characterListVisibleClass = if model.characterListVisible == True then "" else "hidden"
+    showCharacterText = if model.characterListVisible == True then "hide" else "show"
+  in
+    section
+      [ class "party-section" ]
+      [
+        sectionHeading "Party"
+      , App.map CharacterListMsg (CharacterList.summaryView model.characters)
+      , h3 [] [ text "Add new character" ]
+      , App.map CharacterListMsg (CharacterList.addCharacterView model.characters)
+      , div
+          [ class "tools-header" ]
+          [ div
+              [ class "tools-header-heading" ]
+              [ h3 [] [ text "Current party members" ] ]
+          , div
+              [ class "tools-header-tools" ]
+              [ button
+                [ class "text-button"
+                , onClick ToggleCharacterList ]
+                [ text showCharacterText ]
+              ]
+          ]
+      , div
+          [ class characterListVisibleClass ]
+          [ (App.map CharacterListMsg (CharacterList.view model.characters)) ]
+      ]
 
 monsterSectionView : MonsterList.Model -> Html Msg
 monsterSectionView model =

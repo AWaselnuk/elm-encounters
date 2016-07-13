@@ -8564,12 +8564,12 @@ var _user$elm_encounters$Encounter$difficultyBadgeView = function (model) {
 };
 var _user$elm_encounters$Encounter$init = {
 	ctor: '_Tuple2',
-	_0: {characters: _user$elm_encounters$CharacterList$init, monsters: _user$elm_encounters$MonsterList$init},
+	_0: {characterListVisible: true, characters: _user$elm_encounters$CharacterList$init, monsters: _user$elm_encounters$MonsterList$init},
 	_1: _elm_lang$core$Platform_Cmd$none
 };
-var _user$elm_encounters$Encounter$Model = F2(
-	function (a, b) {
-		return {characters: a, monsters: b};
+var _user$elm_encounters$Encounter$Model = F3(
+	function (a, b, c) {
+		return {characterListVisible: a, characters: b, monsters: c};
 	});
 var _user$elm_encounters$Encounter$MonsterListMsg = function (a) {
 	return {ctor: 'MonsterListMsg', _0: a};
@@ -8669,6 +8669,16 @@ var _user$elm_encounters$Encounter$update = F2(
 		switch (_p0.ctor) {
 			case 'NoOp':
 				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+			case 'ToggleCharacterList':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{
+							characterListVisible: _elm_lang$core$Basics$not(model.characterListVisible)
+						}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 			case 'CharacterListMsg':
 				var _p1 = A2(_user$elm_encounters$CharacterList$update, _p0._0, model.characters);
 				var clModel = _p1._0;
@@ -8713,7 +8723,10 @@ var _user$elm_encounters$Encounter$encounterSummaryView = function (model) {
 				_user$elm_encounters$MonsterList$summaryView(model.monsters))
 			]));
 };
+var _user$elm_encounters$Encounter$ToggleCharacterList = {ctor: 'ToggleCharacterList'};
 var _user$elm_encounters$Encounter$partySectionView = function (model) {
+	var showCharacterText = _elm_lang$core$Native_Utils.eq(model.characterListVisible, true) ? 'hide' : 'show';
+	var characterListVisibleClass = _elm_lang$core$Native_Utils.eq(model.characterListVisible, true) ? '' : 'hidden';
 	return A2(
 		_elm_lang$html$Html$section,
 		_elm_lang$core$Native_List.fromArray(
@@ -8726,7 +8739,7 @@ var _user$elm_encounters$Encounter$partySectionView = function (model) {
 				A2(
 				_elm_lang$html$Html_App$map,
 				_user$elm_encounters$Encounter$CharacterListMsg,
-				_user$elm_encounters$CharacterList$summaryView(model)),
+				_user$elm_encounters$CharacterList$summaryView(model.characters)),
 				A2(
 				_elm_lang$html$Html$h3,
 				_elm_lang$core$Native_List.fromArray(
@@ -8738,7 +8751,7 @@ var _user$elm_encounters$Encounter$partySectionView = function (model) {
 				A2(
 				_elm_lang$html$Html_App$map,
 				_user$elm_encounters$Encounter$CharacterListMsg,
-				_user$elm_encounters$CharacterList$addCharacterView(model)),
+				_user$elm_encounters$CharacterList$addCharacterView(model.characters)),
 				A2(
 				_elm_lang$html$Html$div,
 				_elm_lang$core$Native_List.fromArray(
@@ -8776,18 +8789,28 @@ var _user$elm_encounters$Encounter$partySectionView = function (model) {
 								_elm_lang$html$Html$button,
 								_elm_lang$core$Native_List.fromArray(
 									[
-										_elm_lang$html$Html_Attributes$class('text-button')
+										_elm_lang$html$Html_Attributes$class('text-button'),
+										_elm_lang$html$Html_Events$onClick(_user$elm_encounters$Encounter$ToggleCharacterList)
 									]),
 								_elm_lang$core$Native_List.fromArray(
 									[
-										_elm_lang$html$Html$text('show')
+										_elm_lang$html$Html$text(showCharacterText)
 									]))
 							]))
 					])),
 				A2(
-				_elm_lang$html$Html_App$map,
-				_user$elm_encounters$Encounter$CharacterListMsg,
-				_user$elm_encounters$CharacterList$view(model))
+				_elm_lang$html$Html$div,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class(characterListVisibleClass)
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(
+						_elm_lang$html$Html_App$map,
+						_user$elm_encounters$Encounter$CharacterListMsg,
+						_user$elm_encounters$CharacterList$view(model.characters))
+					]))
 			]));
 };
 var _user$elm_encounters$Encounter$view = function (model) {
@@ -8800,7 +8823,7 @@ var _user$elm_encounters$Encounter$view = function (model) {
 		_elm_lang$core$Native_List.fromArray(
 			[
 				_user$elm_encounters$Encounter$titleSectionView,
-				_user$elm_encounters$Encounter$partySectionView(model.characters),
+				_user$elm_encounters$Encounter$partySectionView(model),
 				_user$elm_encounters$Encounter$monsterSectionView(model.monsters),
 				_user$elm_encounters$Encounter$encounterSummaryView(model),
 				_user$elm_encounters$Encounter$debugView(model)
