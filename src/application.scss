@@ -1,7 +1,7 @@
 // Variables
 
 $font-family-serif: 'Libre Baskerville', serif;
-$font-family-sans-serif: -apple-system, sans-serif;
+$font-family-sans-serif: -apple-system, BlinkMacSystemFont, sans-serif;
 
 $gray-1: #444;
 $gray-2: #666;
@@ -11,6 +11,9 @@ $small-screen: 600px;
 
 // Base
 
+* {
+  box-sizing: border-box;
+}
 
 // Utils
 
@@ -101,6 +104,37 @@ h3, .heading-3 {
   h2 {
     margin-bottom: 0;
   }
+}
+
+// Forms
+
+.label {
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 1.4rem;
+}
+
+input[type="text"],
+select {
+  font-size: inherit;
+}
+
+input[type="text"] {
+  padding: 0.8rem;
+}
+
+select {
+  background: none;
+  height: 38px; // match height of text input in browser
+}
+
+.form-control {
+  margin-bottom: $base-height;
+}
+
+.block-input {
+  display: block;
+  width: 100%;
 }
 
 // Title Section

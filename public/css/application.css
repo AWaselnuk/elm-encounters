@@ -2,6 +2,9 @@
 
 /* Base*/
 
+* {
+  box-sizing: border-box;
+}
 
 /* Utils*/
 
@@ -51,7 +54,7 @@ html {
 
 body {
   font-size: 1.6rem;
-  font-family: -apple-system,sans-serif;
+  font-family: -apple-system,BlinkMacSystemFont,sans-serif;
   line-height: 2.2rem;
   color: #666;
 }
@@ -124,6 +127,36 @@ h3, .heading-3 {
 
 .section-heading h2 {
   margin-bottom: 0;
+}
+
+/* Forms*/
+
+.label {
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 1.4rem;
+}
+
+input[type="text"], select {
+  font-size: inherit;
+}
+
+input[type="text"] {
+  padding: 0.8rem;
+}
+
+select {
+  background: none;
+  height: 38px; /* match height of text input in browser*/
+}
+
+.form-control {
+  margin-bottom: 2.2rem;
+}
+
+.block-input {
+  display: block;
+  width: 100%;
 }
 
 /* Title Section*/

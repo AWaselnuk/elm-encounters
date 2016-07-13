@@ -147,22 +147,36 @@ addCharacterView : Model -> Html Msg
 addCharacterView model =
   div
     []
-    [ label
-        [ for "level" ]
-        [ text "Level" ]
-    , levelOptionsView model
-    , label
-        [ for "name" ]
-        [ text "Name" ]
-    , input
-        [ type' "text"
-        , value model.newCharacterName
-        , onInput SetNewCharacterName
+    [ div
+        [ class "form-control" ]
+        [
+          label
+            [ class "label"
+            , for "add-character-level" ]
+            [ text "Level" ]
+        , levelOptionsView model
         ]
-        []
-    , button
-        [ onClick (AddCharacter (Character.new model.newCharacterLevel model.newCharacterName)) ]
-        [ text "Add Character"]
+    , div
+        [ class "form-control" ]
+        [ label
+            [ class "label"
+            , for "add-character-name" ]
+            [ text "Name" ]
+        , input
+            [ id "add-character-name"
+            , class "block-input"
+            , type' "text"
+            , value model.newCharacterName
+            , onInput SetNewCharacterName
+            ]
+            []
+        ]
+    , div
+        [ class "form-control" ]
+        [ button
+            [ onClick (AddCharacter (Character.new model.newCharacterLevel model.newCharacterName)) ]
+            [ text "Add Character"]
+        ]
     ]
 
 levelOptionsView : Model -> Html Msg
@@ -180,7 +194,8 @@ levelOptionsView model =
         StatTables.levelList
   in
     select
-      [ name "character-level"
+      [ id "add-character-level"
+      , class "block-input"
       , on "change" (Json.map SetNewCharacterLevel targetValueIntDecoder)
       ]
       levelOptions
@@ -206,12 +221,12 @@ summaryView model =
       [ h3 [ class "visually-hidden" ] [ text "Party summary" ]
       , p
           [ class "base-height-none" ]
-          [ b [] [ text "Members: " ]
+          [ span [ class "label" ] [ text "Members: " ]
           , text memberCount
           ]
       , p
           [ class "base-height-none" ]
-          [ b [] [ text "XP Thresholds: " ]
+          [ span [ class "label" ] [ text "XP Thresholds: " ]
           , text thresholds
           ]
       ]

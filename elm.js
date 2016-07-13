@@ -7582,9 +7582,11 @@ var _user$elm_encounters$CharacterList$summaryView = function (model) {
 				_elm_lang$core$Native_List.fromArray(
 					[
 						A2(
-						_elm_lang$html$Html$b,
+						_elm_lang$html$Html$span,
 						_elm_lang$core$Native_List.fromArray(
-							[]),
+							[
+								_elm_lang$html$Html_Attributes$class('label')
+							]),
 						_elm_lang$core$Native_List.fromArray(
 							[
 								_elm_lang$html$Html$text('Members: ')
@@ -7600,9 +7602,11 @@ var _user$elm_encounters$CharacterList$summaryView = function (model) {
 				_elm_lang$core$Native_List.fromArray(
 					[
 						A2(
-						_elm_lang$html$Html$b,
+						_elm_lang$html$Html$span,
 						_elm_lang$core$Native_List.fromArray(
-							[]),
+							[
+								_elm_lang$html$Html_Attributes$class('label')
+							]),
 						_elm_lang$core$Native_List.fromArray(
 							[
 								_elm_lang$html$Html$text('XP Thresholds: ')
@@ -7782,7 +7786,8 @@ var _user$elm_encounters$CharacterList$levelOptionsView = function (model) {
 		_elm_lang$html$Html$select,
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_elm_lang$html$Html_Attributes$name('character-level'),
+				_elm_lang$html$Html_Attributes$id('add-character-level'),
+				_elm_lang$html$Html_Attributes$class('block-input'),
 				A2(
 				_elm_lang$html$Html_Events$on,
 				'change',
@@ -7843,47 +7848,78 @@ var _user$elm_encounters$CharacterList$addCharacterView = function (model) {
 		_elm_lang$core$Native_List.fromArray(
 			[
 				A2(
-				_elm_lang$html$Html$label,
+				_elm_lang$html$Html$div,
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_elm_lang$html$Html_Attributes$for('level')
+						_elm_lang$html$Html_Attributes$class('form-control')
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_elm_lang$html$Html$text('Level')
+						A2(
+						_elm_lang$html$Html$label,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Attributes$class('label'),
+								_elm_lang$html$Html_Attributes$for('add-character-level')
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text('Level')
+							])),
+						_user$elm_encounters$CharacterList$levelOptionsView(model)
 					])),
-				_user$elm_encounters$CharacterList$levelOptionsView(model),
 				A2(
-				_elm_lang$html$Html$label,
+				_elm_lang$html$Html$div,
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_elm_lang$html$Html_Attributes$for('name')
+						_elm_lang$html$Html_Attributes$class('form-control')
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_elm_lang$html$Html$text('Name')
+						A2(
+						_elm_lang$html$Html$label,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Attributes$class('label'),
+								_elm_lang$html$Html_Attributes$for('add-character-name')
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text('Name')
+							])),
+						A2(
+						_elm_lang$html$Html$input,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Attributes$id('add-character-name'),
+								_elm_lang$html$Html_Attributes$class('block-input'),
+								_elm_lang$html$Html_Attributes$type$('text'),
+								_elm_lang$html$Html_Attributes$value(model.newCharacterName),
+								_elm_lang$html$Html_Events$onInput(_user$elm_encounters$CharacterList$SetNewCharacterName)
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[]))
 					])),
 				A2(
-				_elm_lang$html$Html$input,
+				_elm_lang$html$Html$div,
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_elm_lang$html$Html_Attributes$type$('text'),
-						_elm_lang$html$Html_Attributes$value(model.newCharacterName),
-						_elm_lang$html$Html_Events$onInput(_user$elm_encounters$CharacterList$SetNewCharacterName)
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[])),
-				A2(
-				_elm_lang$html$Html$button,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Events$onClick(
-						_user$elm_encounters$CharacterList$AddCharacter(
-							A2(_user$elm_encounters$Character$new, model.newCharacterLevel, model.newCharacterName)))
+						_elm_lang$html$Html_Attributes$class('form-control')
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_elm_lang$html$Html$text('Add Character')
+						A2(
+						_elm_lang$html$Html$button,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Events$onClick(
+								_user$elm_encounters$CharacterList$AddCharacter(
+									A2(_user$elm_encounters$Character$new, model.newCharacterLevel, model.newCharacterName)))
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text('Add Character')
+							]))
 					]))
 			]));
 };
