@@ -90,7 +90,6 @@ view model =
     , partySectionView model
     , monsterSectionView model.monsters
     , encounterSummaryView model
-    , debugView model
     ]
 
 encounterSummaryView : Model -> Html Msg

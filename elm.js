@@ -8825,8 +8825,7 @@ var _user$elm_encounters$Encounter$view = function (model) {
 				_user$elm_encounters$Encounter$titleSectionView,
 				_user$elm_encounters$Encounter$partySectionView(model),
 				_user$elm_encounters$Encounter$monsterSectionView(model.monsters),
-				_user$elm_encounters$Encounter$encounterSummaryView(model),
-				_user$elm_encounters$Encounter$debugView(model)
+				_user$elm_encounters$Encounter$encounterSummaryView(model)
 			]));
 };
 var _user$elm_encounters$Encounter$NoOp = {ctor: 'NoOp'};
