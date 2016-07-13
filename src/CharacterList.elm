@@ -164,7 +164,7 @@ addCharacterView model =
             [ text "Name" ]
         , input
             [ id "add-character-name"
-            , class "block-input"
+            , class "block"
             , type' "text"
             , value model.newCharacterName
             , onInput SetNewCharacterName
@@ -174,7 +174,8 @@ addCharacterView model =
     , div
         [ class "form-control" ]
         [ button
-            [ onClick (AddCharacter (Character.new model.newCharacterLevel model.newCharacterName)) ]
+            [ class "button block"
+            , onClick (AddCharacter (Character.new model.newCharacterLevel model.newCharacterName)) ]
             [ text "Add Character"]
         ]
     ]
@@ -195,7 +196,7 @@ levelOptionsView model =
   in
     select
       [ id "add-character-level"
-      , class "block-input"
+      , class "block"
       , on "change" (Json.map SetNewCharacterLevel targetValueIntDecoder)
       ]
       levelOptions

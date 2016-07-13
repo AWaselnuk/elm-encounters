@@ -12,6 +12,11 @@
   text-align: center;
 }
 
+.block {
+  display: block;
+  width: 100%;
+}
+
 .base-height {
   margin-bottom: 2.2rem;
 }
@@ -129,6 +134,31 @@ h3, .heading-3 {
   margin-bottom: 0;
 }
 
+/* Buttons*/
+
+button {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+}
+
+.button {
+  padding: 0.8rem;
+  background-color: #199e5e;
+  border: 2px solid #168458; /* TIL input[text] has a 2px border width in chrome*/
+  color: #fff
+}
+
+.button:hover {
+  cursor: pointer;
+  background-color: #199e5e;
+}
+
+.text-button {
+  color: #199e5e;
+}
+
 /* Forms*/
 
 .label {
@@ -143,6 +173,7 @@ input[type="text"], select {
 
 input[type="text"] {
   padding: 0.8rem;
+  border-width: 2px; /* default in chrome but I want to force it for button consistency*/
 }
 
 select {
@@ -154,15 +185,18 @@ select {
   margin-bottom: 2.2rem;
 }
 
-.block-input {
-  display: block;
-  width: 100%;
-}
-
 /* Title Section*/
 
 .title {
   text-align: center;
+}
+
+.tools-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.tools-header-heading, .tools-header-tools {
 }
 
 

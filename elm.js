@@ -7787,7 +7787,7 @@ var _user$elm_encounters$CharacterList$levelOptionsView = function (model) {
 		_elm_lang$core$Native_List.fromArray(
 			[
 				_elm_lang$html$Html_Attributes$id('add-character-level'),
-				_elm_lang$html$Html_Attributes$class('block-input'),
+				_elm_lang$html$Html_Attributes$class('block'),
 				A2(
 				_elm_lang$html$Html_Events$on,
 				'change',
@@ -7892,7 +7892,7 @@ var _user$elm_encounters$CharacterList$addCharacterView = function (model) {
 						_elm_lang$core$Native_List.fromArray(
 							[
 								_elm_lang$html$Html_Attributes$id('add-character-name'),
-								_elm_lang$html$Html_Attributes$class('block-input'),
+								_elm_lang$html$Html_Attributes$class('block'),
 								_elm_lang$html$Html_Attributes$type$('text'),
 								_elm_lang$html$Html_Attributes$value(model.newCharacterName),
 								_elm_lang$html$Html_Events$onInput(_user$elm_encounters$CharacterList$SetNewCharacterName)
@@ -7912,6 +7912,7 @@ var _user$elm_encounters$CharacterList$addCharacterView = function (model) {
 						_elm_lang$html$Html$button,
 						_elm_lang$core$Native_List.fromArray(
 							[
+								_elm_lang$html$Html_Attributes$class('button block'),
 								_elm_lang$html$Html_Events$onClick(
 								_user$elm_encounters$CharacterList$AddCharacter(
 									A2(_user$elm_encounters$Character$new, model.newCharacterLevel, model.newCharacterName)))
@@ -8739,30 +8740,48 @@ var _user$elm_encounters$Encounter$partySectionView = function (model) {
 				_user$elm_encounters$Encounter$CharacterListMsg,
 				_user$elm_encounters$CharacterList$addCharacterView(model)),
 				A2(
-				_elm_lang$html$Html$h3,
-				_elm_lang$core$Native_List.fromArray(
-					[]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text('Current party')
-					])),
-				A2(
 				_elm_lang$html$Html$div,
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_elm_lang$html$Html_Attributes$class('current-party-tools')
+						_elm_lang$html$Html_Attributes$class('tools-header')
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[
 						A2(
-						_elm_lang$html$Html$button,
+						_elm_lang$html$Html$div,
 						_elm_lang$core$Native_List.fromArray(
 							[
-								_elm_lang$html$Html_Attributes$class('toggle-party-view')
+								_elm_lang$html$Html_Attributes$class('tools-header-heading')
 							]),
 						_elm_lang$core$Native_List.fromArray(
 							[
-								_elm_lang$html$Html$text('view current party')
+								A2(
+								_elm_lang$html$Html$h3,
+								_elm_lang$core$Native_List.fromArray(
+									[]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html$text('Current party members')
+									]))
+							])),
+						A2(
+						_elm_lang$html$Html$div,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Attributes$class('tools-header-tools')
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								A2(
+								_elm_lang$html$Html$button,
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html_Attributes$class('text-button')
+									]),
+								_elm_lang$core$Native_List.fromArray(
+									[
+										_elm_lang$html$Html$text('show')
+									]))
 							]))
 					])),
 				A2(

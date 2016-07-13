@@ -135,13 +135,16 @@ partySectionView model =
     [
       sectionHeading "Party"
     , App.map CharacterListMsg (CharacterList.summaryView model)
-    , h3 [] [text "Add new character"]
+    , h3 [] [ text "Add new character" ]
     , App.map CharacterListMsg (CharacterList.addCharacterView model)
-    , h3 [] [text "Current party"]
     , div
-        [ class "current-party-tools" ]
-        [
-          button [ class "toggle-party-view" ] [ text "view current party" ]
+        [ class "tools-header" ]
+        [ div
+            [ class "tools-header-heading" ]
+            [ h3 [] [ text "Current party members" ] ]
+        , div
+            [ class "tools-header-tools" ]
+            [ button [ class "text-button" ] [ text "show" ] ]
         ]
     , App.map CharacterListMsg (CharacterList.view model)
     ]
