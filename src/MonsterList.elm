@@ -80,7 +80,7 @@ update msg model =
       ({ model | newMonsterName = name }, Cmd.none)
     SetNewMonsterRating rating ->
       ({ model |
-           newMonsterRating = Debug.log (toString rating) rating,
+           newMonsterRating = rating,
            newMonsterXP = safeRatingToXP rating }
        , Cmd.none)
     SetNewMonsterXP xp ->

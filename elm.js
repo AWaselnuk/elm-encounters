@@ -8270,10 +8270,7 @@ var _user$elm_encounters$MonsterList$update = F2(
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{
-							newMonsterRating: A2(
-								_elm_lang$core$Debug$log,
-								_elm_lang$core$Basics$toString(_p7),
-								_p7),
+							newMonsterRating: _p7,
 							newMonsterXP: _user$elm_encounters$Utilities$safeRatingToXP(_p7)
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
