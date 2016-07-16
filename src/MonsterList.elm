@@ -110,15 +110,22 @@ indexedMonsterView (id, model) =
 summaryView : Model -> Html Msg
 summaryView model =
   let
-    monsters = "Monsters: " ++ (toString <| List.length model.monsterList)
-    threat =
-      "XP: " ++
-      toString model.monsterXpTotal
+    monsterCount = toString <| List.length model.monsterList
+    xpTotal = toString model.monsterXpTotal
   in
     div
       [ class "monster-summary" ]
-      [
-        text (monsters ++ " " ++ threat)
+      [ h3 [ class "visually-hidden" ] [ text "Monsters summary" ]
+      , p
+          [ class "base-height-none" ]
+          [ span [ class "label" ] [ text "Monsters: " ]
+          , text monsterCount
+          ]
+      , p
+          [ class "base-height-none" ]
+          [ span [ class "label" ] [ text "Total XP: "]
+          , text xpTotal
+          ]
       ]
 
 addMonsterView : Model -> Html Msg

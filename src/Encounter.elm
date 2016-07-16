@@ -169,7 +169,7 @@ monsterSectionView model =
   section
     [ class "monster-section" ]
     [
-      h2 [] [text "The monsters"]
+      sectionHeading "Monsters"
     , App.map MonsterListMsg (MonsterList.summaryView model)
     , h3 [] [text "Add new monster"]
     , App.map MonsterListMsg (MonsterList.addMonsterView model)

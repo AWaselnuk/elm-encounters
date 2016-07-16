@@ -8134,15 +8134,9 @@ var _user$elm_encounters$MonsterList$calculateMonsterXPTotal = function (taggedM
 	return _elm_lang$core$Basics$toFloat(totalMonsterXPs) * multiplier;
 };
 var _user$elm_encounters$MonsterList$summaryView = function (model) {
-	var threat = A2(
-		_elm_lang$core$Basics_ops['++'],
-		'XP: ',
-		_elm_lang$core$Basics$toString(model.monsterXpTotal));
-	var monsters = A2(
-		_elm_lang$core$Basics_ops['++'],
-		'Monsters: ',
-		_elm_lang$core$Basics$toString(
-			_elm_lang$core$List$length(model.monsterList)));
+	var xpTotal = _elm_lang$core$Basics$toString(model.monsterXpTotal);
+	var monsterCount = _elm_lang$core$Basics$toString(
+		_elm_lang$core$List$length(model.monsterList));
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
@@ -8151,11 +8145,56 @@ var _user$elm_encounters$MonsterList$summaryView = function (model) {
 			]),
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_elm_lang$html$Html$text(
 				A2(
-					_elm_lang$core$Basics_ops['++'],
-					monsters,
-					A2(_elm_lang$core$Basics_ops['++'], ' ', threat)))
+				_elm_lang$html$Html$h3,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('visually-hidden')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('Monsters summary')
+					])),
+				A2(
+				_elm_lang$html$Html$p,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('base-height-none')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(
+						_elm_lang$html$Html$span,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Attributes$class('label')
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text('Monsters: ')
+							])),
+						_elm_lang$html$Html$text(monsterCount)
+					])),
+				A2(
+				_elm_lang$html$Html$p,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('base-height-none')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(
+						_elm_lang$html$Html$span,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Attributes$class('label')
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text('Total XP: ')
+							])),
+						_elm_lang$html$Html$text(xpTotal)
+					]))
 			]));
 };
 var _user$elm_encounters$MonsterList$update = F2(
@@ -8584,14 +8623,7 @@ var _user$elm_encounters$Encounter$monsterSectionView = function (model) {
 			]),
 		_elm_lang$core$Native_List.fromArray(
 			[
-				A2(
-				_elm_lang$html$Html$h2,
-				_elm_lang$core$Native_List.fromArray(
-					[]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text('The monsters')
-					])),
+				_user$elm_encounters$Encounter$sectionHeading('Monsters'),
 				A2(
 				_elm_lang$html$Html_App$map,
 				_user$elm_encounters$Encounter$MonsterListMsg,
