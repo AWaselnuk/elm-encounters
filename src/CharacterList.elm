@@ -136,11 +136,13 @@ view model =
 indexedCharacterView : (ID, Character.Model) -> Html Msg
 indexedCharacterView (id, model) =
   div
-    []
+    [ class "inline-form character" ]
     [ App.map (ModifyCharacter id) (Character.view model)
     , button
-        [ onClick (RemoveCharacter id) ]
-        [ text "Remove" ]
+        [ class "inline-form-control btn btn-remove-character"
+        , onClick (RemoveCharacter id)
+        ]
+        [ text "X" ]
     ]
 
 addCharacterView : Model -> Html Msg
@@ -174,7 +176,7 @@ addCharacterView model =
     , div
         [ class "form-control" ]
         [ button
-            [ class "button block"
+            [ class "btn block"
             , onClick (AddCharacter (Character.new model.newCharacterLevel model.newCharacterName)) ]
             [ text "Add Character"]
         ]

@@ -36,21 +36,20 @@ update msg model =
 view : Model -> Html Msg
 view model =
   div
-    [ class "character" ]
-    [ label
-        [ for "character-level" ]
-        [ text "Level" ]
-    , levelOptionsView model
-    , label
-        [ for "character-name" ]
-        [ text "Name" ]
-    , input
-        [
-          class "character-name"
-        , type' "text"
-        , value (model.name)
-        , onInput ModifyName
-        ] []
+    [ class "inline-form" ]
+    [ div
+        [ class "inline-form-control character-level-wrapper" ]
+        [ levelOptionsView model ]
+    , div
+        [ class "inline-form-control character-name-wrapper" ]
+        [ input
+            [
+              class "character-name"
+            , type' "text"
+            , value (model.name)
+            , onInput ModifyName
+            ] []
+        ]
     ]
 
 levelOptionsView : Model -> Html Msg
@@ -68,7 +67,7 @@ levelOptionsView model =
         StatTables.levelList
   in
     select
-      [ name "character-level"
+      [ class "character-level"
       , on "change" (Json.map ModifyLevel targetValueIntDecoder)
       ]
       levelOptions

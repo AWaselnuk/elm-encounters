@@ -147,19 +147,19 @@ button {
   font-size: inherit;
 }
 
-.button {
+.btn {
   padding: 0.8rem;
   background-color: #199e5e;
   border: 2px solid #168458; /* TIL input[text] has a 2px border width in chrome*/
   color: #fff
 }
 
-.button:hover {
+.btn:hover {
   cursor: pointer;
   background-color: #199e5e;
 }
 
-.text-button {
+.text-btn {
   color: #199e5e;
 }
 
@@ -189,6 +189,11 @@ select {
   margin-bottom: 2.2rem;
 }
 
+.inline-form {
+  display: flex;
+  width: 100%;
+}
+
 /* Title Section*/
 
 .title {
@@ -202,4 +207,28 @@ select {
 .tools-header-heading, .tools-header-tools {
 }
 
+/* Character*/
 
+.character {
+  margin-bottom: calc(2.2rem / 2)
+}
+
+.character:last-child {
+  margin-bottom: 2.2rem;
+}
+
+.character-level-wrapper {
+  flex-basis: 50px;
+}
+
+.character-name-wrapper {
+  flex-grow: 1;
+}
+
+.character-name {
+  width: 100%;
+}
+
+.btn-remove-character {
+  flex-basis: 50px;
+}

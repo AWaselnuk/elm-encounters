@@ -154,7 +154,7 @@ partySectionView model =
           , div
               [ class "tools-header-tools" ]
               [ button
-                [ class "text-button"
+                [ class "text-btn"
                 , onClick ToggleCharacterList ]
                 [ text showCharacterText ]
               ]

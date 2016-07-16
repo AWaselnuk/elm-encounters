@@ -7481,7 +7481,7 @@ var _user$elm_encounters$Character$levelOptionsView = function (model) {
 		_elm_lang$html$Html$select,
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_elm_lang$html$Html_Attributes$name('character-level'),
+				_elm_lang$html$Html_Attributes$class('character-level'),
 				A2(
 				_elm_lang$html$Html_Events$on,
 				'change',
@@ -7494,42 +7494,40 @@ var _user$elm_encounters$Character$view = function (model) {
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_elm_lang$html$Html_Attributes$class('character')
+				_elm_lang$html$Html_Attributes$class('inline-form')
 			]),
 		_elm_lang$core$Native_List.fromArray(
 			[
 				A2(
-				_elm_lang$html$Html$label,
+				_elm_lang$html$Html$div,
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_elm_lang$html$Html_Attributes$for('character-level')
+						_elm_lang$html$Html_Attributes$class('inline-form-control character-level-wrapper')
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_elm_lang$html$Html$text('Level')
-					])),
-				_user$elm_encounters$Character$levelOptionsView(model),
-				A2(
-				_elm_lang$html$Html$label,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$for('character-name')
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text('Name')
+						_user$elm_encounters$Character$levelOptionsView(model)
 					])),
 				A2(
-				_elm_lang$html$Html$input,
+				_elm_lang$html$Html$div,
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_elm_lang$html$Html_Attributes$class('character-name'),
-						_elm_lang$html$Html_Attributes$type$('text'),
-						_elm_lang$html$Html_Attributes$value(model.name),
-						_elm_lang$html$Html_Events$onInput(_user$elm_encounters$Character$ModifyName)
+						_elm_lang$html$Html_Attributes$class('inline-form-control character-name-wrapper')
 					]),
 				_elm_lang$core$Native_List.fromArray(
-					[]))
+					[
+						A2(
+						_elm_lang$html$Html$input,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Attributes$class('character-name'),
+								_elm_lang$html$Html_Attributes$type$('text'),
+								_elm_lang$html$Html_Attributes$value(model.name),
+								_elm_lang$html$Html_Events$onInput(_user$elm_encounters$Character$ModifyName)
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[]))
+					]))
 			]));
 };
 
@@ -7808,7 +7806,9 @@ var _user$elm_encounters$CharacterList$indexedCharacterView = function (_p8) {
 	return A2(
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
-			[]),
+			[
+				_elm_lang$html$Html_Attributes$class('inline-form character')
+			]),
 		_elm_lang$core$Native_List.fromArray(
 			[
 				A2(
@@ -7819,12 +7819,13 @@ var _user$elm_encounters$CharacterList$indexedCharacterView = function (_p8) {
 				_elm_lang$html$Html$button,
 				_elm_lang$core$Native_List.fromArray(
 					[
+						_elm_lang$html$Html_Attributes$class('inline-form-control btn btn-remove-character'),
 						_elm_lang$html$Html_Events$onClick(
 						_user$elm_encounters$CharacterList$RemoveCharacter(_p10))
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_elm_lang$html$Html$text('Remove')
+						_elm_lang$html$Html$text('X')
 					]))
 			]));
 };
@@ -7912,7 +7913,7 @@ var _user$elm_encounters$CharacterList$addCharacterView = function (model) {
 						_elm_lang$html$Html$button,
 						_elm_lang$core$Native_List.fromArray(
 							[
-								_elm_lang$html$Html_Attributes$class('button block'),
+								_elm_lang$html$Html_Attributes$class('btn block'),
 								_elm_lang$html$Html_Events$onClick(
 								_user$elm_encounters$CharacterList$AddCharacter(
 									A2(_user$elm_encounters$Character$new, model.newCharacterLevel, model.newCharacterName)))
@@ -8789,7 +8790,7 @@ var _user$elm_encounters$Encounter$partySectionView = function (model) {
 								_elm_lang$html$Html$button,
 								_elm_lang$core$Native_List.fromArray(
 									[
-										_elm_lang$html$Html_Attributes$class('text-button'),
+										_elm_lang$html$Html_Attributes$class('text-btn'),
 										_elm_lang$html$Html_Events$onClick(_user$elm_encounters$Encounter$ToggleCharacterList)
 									]),
 								_elm_lang$core$Native_List.fromArray(

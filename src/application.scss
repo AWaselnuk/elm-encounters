@@ -128,7 +128,7 @@ button {
   font-size: inherit;
 }
 
-.button {
+.btn {
   padding: 0.8rem;
   background-color: $accent-color;
   border: 2px solid $accent-color-dark; // TIL input[text] has a 2px border width in chrome
@@ -140,7 +140,7 @@ button {
   }
 }
 
-.text-button {
+.text-btn {
   color: $accent-color;
 }
 
@@ -171,6 +171,11 @@ select {
   margin-bottom: $base-height;
 }
 
+.inline-form {
+  display: flex;
+  width: 100%;
+}
+
 // Title Section
 
 .title {
@@ -185,4 +190,28 @@ select {
 .tools-header-tools {
 }
 
+// Character
 
+.character {
+  margin-bottom: calc($base-height / 2);
+
+  &:last-child {
+    margin-bottom: $base-height;
+  }
+}
+
+.character-level-wrapper {
+  flex-basis: 50px;
+}
+
+.character-name-wrapper {
+  flex-grow: 1;
+}
+
+.character-name {
+  width: 100%;
+}
+
+.btn-remove-character {
+  flex-basis: 50px;
+}
