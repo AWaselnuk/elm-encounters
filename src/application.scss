@@ -22,6 +22,10 @@ $gutter-half: calc($gutter / 2);
   box-sizing: border-box;
 }
 
+body {
+  padding: $gutter $gutter-half;
+}
+
 // Utils
 
 .text-center {
