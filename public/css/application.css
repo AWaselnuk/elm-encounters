@@ -246,3 +246,32 @@ select {
 .btn-remove-character, .btn-remove-monster {
   flex-basis: 50px;
 }
+
+/* Encounter summary*/
+
+.badge {
+  text-transform: uppercase;
+  font-size: 2.0rem;
+  line-height: 3.0rem;
+  margin-bottom: 2.2rem;
+}
+
+.badge--easy {
+  color: green;
+}
+
+.badge--medium {
+  color: yellow;
+}
+
+.badge--hard {
+  color: orange;
+}
+
+.badge--deadly {
+  color: red;
+}
+
+.badge--tpk {
+  color: purple;
+}

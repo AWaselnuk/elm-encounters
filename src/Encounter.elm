@@ -97,7 +97,11 @@ encounterSummaryView model =
   section
     [ class "encounter-summary-section" ]
     [
-      difficultyBadgeView model
+      sectionHeading "Your Encounter"
+    , p
+        [ class "label" ]
+        [ text "The difficulty of your encounter is"]
+    , difficultyBadgeView model
     , App.map CharacterListMsg (CharacterList.summaryView model.characters)
     , App.map MonsterListMsg (MonsterList.summaryView model.monsters)
     ]
@@ -195,7 +199,7 @@ calculateDifficulty model =
   else if (round model.monsters.monsterXpTotal < model.characters.partyThresholds.deadly) then
     "deadly"
   else
-    "TPK"
+    "tpk"
 
 debugView model =
   p [] [ text <| toString <| model ]

@@ -8571,7 +8571,7 @@ var _user$elm_encounters$Encounter$calculateDifficulty = function (model) {
 		_elm_lang$core$Basics$round(model.monsters.monsterXpTotal),
 		model.characters.partyThresholds.hard) < 0) ? 'hard' : ((_elm_lang$core$Native_Utils.cmp(
 		_elm_lang$core$Basics$round(model.monsters.monsterXpTotal),
-		model.characters.partyThresholds.deadly) < 0) ? 'deadly' : 'TPK')));
+		model.characters.partyThresholds.deadly) < 0) ? 'deadly' : 'tpk')));
 };
 var _user$elm_encounters$Encounter$sectionHeading = function (headingText) {
 	return A2(
@@ -8759,6 +8759,17 @@ var _user$elm_encounters$Encounter$encounterSummaryView = function (model) {
 			]),
 		_elm_lang$core$Native_List.fromArray(
 			[
+				_user$elm_encounters$Encounter$sectionHeading('Your Encounter'),
+				A2(
+				_elm_lang$html$Html$p,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('label')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html$text('The difficulty of your encounter is')
+					])),
 				_user$elm_encounters$Encounter$difficultyBadgeView(model),
 				A2(
 				_elm_lang$html$Html_App$map,
