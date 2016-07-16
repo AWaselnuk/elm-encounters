@@ -8141,7 +8141,7 @@ var _user$elm_encounters$MonsterList$summaryView = function (model) {
 		_elm_lang$html$Html$div,
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_elm_lang$html$Html_Attributes$class('monster-summary')
+				_elm_lang$html$Html_Attributes$class('monster-summary base-height')
 			]),
 		_elm_lang$core$Native_List.fromArray(
 			[
@@ -8339,7 +8339,8 @@ var _user$elm_encounters$MonsterList$monsterRatingOptionsView = function (model)
 		_elm_lang$html$Html$select,
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_elm_lang$html$Html_Attributes$name('monster-rating'),
+				_elm_lang$html$Html_Attributes$id('add-monster-rating'),
+				_elm_lang$html$Html_Attributes$class('block'),
 				A2(
 				_elm_lang$html$Html_Events$on,
 				'change',
@@ -8378,7 +8379,8 @@ var _user$elm_encounters$MonsterList$monsterXpOptionsView = function (model) {
 		_elm_lang$html$Html$select,
 		_elm_lang$core$Native_List.fromArray(
 			[
-				_elm_lang$html$Html_Attributes$name('monster-xp'),
+				_elm_lang$html$Html_Attributes$id('add-monster-xp'),
+				_elm_lang$html$Html_Attributes$class('block'),
 				A2(
 				_elm_lang$html$Html_Events$on,
 				'change',
@@ -8442,58 +8444,100 @@ var _user$elm_encounters$MonsterList$addMonsterView = function (model) {
 		_elm_lang$core$Native_List.fromArray(
 			[
 				A2(
-				_elm_lang$html$Html$label,
+				_elm_lang$html$Html$div,
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_elm_lang$html$Html_Attributes$for('monster-rating')
+						_elm_lang$html$Html_Attributes$class('form-control')
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_elm_lang$html$Html$text('Challenge Rating')
-					])),
-				_user$elm_encounters$MonsterList$monsterRatingOptionsView(model),
-				A2(
-				_elm_lang$html$Html$label,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$for('monster-xp')
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text('Experience Points')
-					])),
-				_user$elm_encounters$MonsterList$monsterXpOptionsView(model),
-				A2(
-				_elm_lang$html$Html$label,
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html_Attributes$for('monster-name')
-					]),
-				_elm_lang$core$Native_List.fromArray(
-					[
-						_elm_lang$html$Html$text('Name')
+						A2(
+						_elm_lang$html$Html$label,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Attributes$class('label'),
+								_elm_lang$html$Html_Attributes$for('add-monster-rating')
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text('Challenge Rating')
+							])),
+						_user$elm_encounters$MonsterList$monsterRatingOptionsView(model)
 					])),
 				A2(
-				_elm_lang$html$Html$input,
+				_elm_lang$html$Html$div,
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_elm_lang$html$Html_Attributes$type$('text'),
-						_elm_lang$html$Html_Attributes$value(model.newMonsterName),
-						_elm_lang$html$Html_Events$onInput(_user$elm_encounters$MonsterList$SetNewMonsterName)
+						_elm_lang$html$Html_Attributes$class('form-control')
 					]),
 				_elm_lang$core$Native_List.fromArray(
-					[])),
+					[
+						A2(
+						_elm_lang$html$Html$label,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Attributes$class('label'),
+								_elm_lang$html$Html_Attributes$for('add-monster-xp')
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text('Experience Points')
+							])),
+						_user$elm_encounters$MonsterList$monsterXpOptionsView(model)
+					])),
 				A2(
-				_elm_lang$html$Html$button,
+				_elm_lang$html$Html$div,
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_elm_lang$html$Html_Events$onClick(
-						_user$elm_encounters$MonsterList$AddMonster(
-							A2(_user$elm_encounters$Monster$new, model.newMonsterRating, model.newMonsterName)))
+						_elm_lang$html$Html_Attributes$class('form-control')
 					]),
 				_elm_lang$core$Native_List.fromArray(
 					[
-						_elm_lang$html$Html$text('Add Monster')
+						A2(
+						_elm_lang$html$Html$label,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Attributes$class('label'),
+								_elm_lang$html$Html_Attributes$for('add-monster-name')
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text('Name')
+							])),
+						A2(
+						_elm_lang$html$Html$input,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Attributes$id('add-monster-name'),
+								_elm_lang$html$Html_Attributes$class('block'),
+								_elm_lang$html$Html_Attributes$type$('text'),
+								_elm_lang$html$Html_Attributes$value(model.newMonsterName),
+								_elm_lang$html$Html_Events$onInput(_user$elm_encounters$MonsterList$SetNewMonsterName)
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[]))
+					])),
+				A2(
+				_elm_lang$html$Html$div,
+				_elm_lang$core$Native_List.fromArray(
+					[
+						_elm_lang$html$Html_Attributes$class('form-control')
+					]),
+				_elm_lang$core$Native_List.fromArray(
+					[
+						A2(
+						_elm_lang$html$Html$button,
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html_Attributes$class('btn block'),
+								_elm_lang$html$Html_Events$onClick(
+								_user$elm_encounters$MonsterList$AddMonster(
+									A2(_user$elm_encounters$Monster$new, model.newMonsterRating, model.newMonsterName)))
+							]),
+						_elm_lang$core$Native_List.fromArray(
+							[
+								_elm_lang$html$Html$text('Add Monster')
+							]))
 					]))
 			]));
 };

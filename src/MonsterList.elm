@@ -114,7 +114,7 @@ summaryView model =
     xpTotal = toString model.monsterXpTotal
   in
     div
-      [ class "monster-summary" ]
+      [ class "monster-summary base-height" ]
       [ h3 [ class "visually-hidden" ] [ text "Monsters summary" ]
       , p
           [ class "base-height-none" ]
@@ -132,26 +132,48 @@ addMonsterView : Model -> Html Msg
 addMonsterView model =
   div
     []
-    [ label
-        [ for "monster-rating" ]
-        [ text "Challenge Rating" ]
-    , monsterRatingOptionsView model
-    , label
-        [ for "monster-xp" ]
-        [ text "Experience Points" ]
-    , monsterXpOptionsView model
-    , label
-        [ for "monster-name" ]
-        [ text "Name" ]
-    , input
-        [ type' "text"
-        , value model.newMonsterName
-        , onInput SetNewMonsterName
+    [ div
+        [ class "form-control" ]
+        [ label
+            [ class "label"
+            , for "add-monster-rating"
+            ]
+            [ text "Challenge Rating" ]
+        , monsterRatingOptionsView model
         ]
-        []
-    , button
-        [ onClick (AddMonster (Monster.new model.newMonsterRating model.newMonsterName)) ]
-        [ text "Add Monster"]
+    , div
+        [ class "form-control" ]
+        [ label
+            [ class "label"
+            , for "add-monster-xp"
+            ]
+            [ text "Experience Points" ]
+        , monsterXpOptionsView model
+        ]
+    , div
+        [ class "form-control" ]
+        [ label
+            [ class "label"
+            , for "add-monster-name"
+            ]
+            [ text "Name" ]
+        , input
+            [ id "add-monster-name"
+            , class "block"
+            , type' "text"
+            , value model.newMonsterName
+            , onInput SetNewMonsterName
+            ]
+            []
+        ]
+    , div
+        [ class "form-control" ]
+        [ button
+            [ class "btn block"
+            , onClick (AddMonster (Monster.new model.newMonsterRating model.newMonsterName))
+            ]
+            [ text "Add Monster"]
+        ]
     ]
 
 monsterRatingOptionsView : Model -> Html Msg
@@ -169,7 +191,8 @@ monsterRatingOptionsView model =
         StatTables.ratingList
   in
     select
-      [ name "monster-rating"
+      [ id "add-monster-rating"
+      , class "block"
       , on "change" (Json.map SetNewMonsterRating targetValueFloatDecoder)
       ]
       monsterRatingOptions
@@ -189,7 +212,8 @@ monsterXpOptionsView model =
         StatTables.xpList
   in
     select
-      [ name "monster-xp"
+      [ id "add-monster-xp"
+      , class "block"
       , on "change" (Json.map SetNewMonsterXP targetValueIntDecoder)
       ]
       monsterXpOptions
