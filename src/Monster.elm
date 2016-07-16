@@ -44,25 +44,23 @@ update msg model =
 view : Model -> Html Msg
 view model =
   div
-    [ class "monster" ]
-    [ label
-        [ for "monster-rating" ]
-        [ text "Challenge Rating" ]
-    , monsterRatingOptionsView model
-    , label
-        [ for "monster-xp" ]
-        [ text "Experience Points" ]
-    , monsterXpOptionsView model
-    , label
-        [ for "monster-name" ]
-        [ text "Name" ]
-    , input
-        [
-          class "monster-name"
-        , type' "text"
-        , value (model.name)
-        , onInput ModifyName
-        ] []
+    [ class "inline-form" ]
+    [ div
+        [ class "inline-form-control monster-rating-wrapper" ]
+        [ monsterRatingOptionsView model ]
+    , div
+        [ class "inline-form-control monster-xp-wrapper" ]
+        [ monsterXpOptionsView model ]
+    , div
+        [ class "inline-form-control monster-name-wrapper" ]
+        [ input
+            [
+              class "monster-name"
+            , type' "text"
+            , value (model.name)
+            , onInput ModifyName
+            ] []
+        ]
     ]
 
 monsterRatingOptionsView : Model -> Html Msg

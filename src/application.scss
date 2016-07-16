@@ -13,6 +13,9 @@ $accent-color-dark: #168458;
 $base-height: 2.2rem;
 $small-screen: 600px;
 
+$gutter: 2.0rem;
+$gutter-half: calc($gutter / 2);
+
 // Base
 
 * {
@@ -171,6 +174,20 @@ select {
   margin-bottom: $base-height;
 }
 
+.form-control-left-right {
+  display: flex;
+}
+
+.form-control-left {
+  flex-basis: 50%;
+  margin-right: $gutter-half;
+}
+
+.form-control-right {
+  flex-basis: 50%;
+  margin-left: $gutter-half;
+}
+
 .inline-form {
   display: flex;
   width: 100%;
@@ -190,9 +207,10 @@ select {
 .tools-header-tools {
 }
 
-// Character
+// Character / Monster
 
-.character {
+.character,
+.monster {
   margin-bottom: calc($base-height / 2);
 
   &:last-child {
@@ -200,18 +218,23 @@ select {
   }
 }
 
-.character-level-wrapper {
+.character-level-wrapper,
+.monster-rating-wrapper,
+.monster-xp-wrapper {
   flex-basis: 50px;
 }
 
-.character-name-wrapper {
+.character-name-wrapper,
+.monster-name-wrapper {
   flex-grow: 1;
 }
 
-.character-name {
+.character-name,
+.monster-name {
   width: 100%;
 }
 
-.btn-remove-character {
+.btn-remove-character,
+.btn-remove-monster {
   flex-basis: 50px;
 }

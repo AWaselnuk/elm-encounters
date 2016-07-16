@@ -189,6 +189,20 @@ select {
   margin-bottom: 2.2rem;
 }
 
+.form-control-left-right {
+  display: flex;
+}
+
+.form-control-left {
+  flex-basis: 50%;
+  margin-right: calc(2.0rem / 2);
+}
+
+.form-control-right {
+  flex-basis: 50%;
+  margin-left: calc(2.0rem / 2);
+}
+
 .inline-form {
   display: flex;
   width: 100%;
@@ -207,28 +221,28 @@ select {
 .tools-header-heading, .tools-header-tools {
 }
 
-/* Character*/
+/* Character / Monster*/
 
-.character {
+.character, .monster {
   margin-bottom: calc(2.2rem / 2)
 }
 
-.character:last-child {
+.character:last-child, .monster:last-child {
   margin-bottom: 2.2rem;
 }
 
-.character-level-wrapper {
+.character-level-wrapper, .monster-rating-wrapper, .monster-xp-wrapper {
   flex-basis: 50px;
 }
 
-.character-name-wrapper {
+.character-name-wrapper, .monster-name-wrapper {
   flex-grow: 1;
 }
 
-.character-name {
+.character-name, .monster-name {
   width: 100%;
 }
 
-.btn-remove-character {
+.btn-remove-character, .btn-remove-monster {
   flex-basis: 50px;
 }

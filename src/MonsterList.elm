@@ -100,11 +100,13 @@ view model =
 indexedMonsterView : (ID, Monster.Model) -> Html Msg
 indexedMonsterView (id, model) =
   div
-    []
+    [ class "inline-form monster" ]
     [ App.map (ModifyMonster id) (Monster.view model)
     , button
-        [ onClick (RemoveMonster id) ]
-        [ text "Remove" ]
+        [ class "inline-form-control btn btn-remove-monster"
+        , onClick (RemoveMonster id)
+        ]
+        [ text "X" ]
     ]
 
 summaryView : Model -> Html Msg
@@ -133,22 +135,25 @@ addMonsterView model =
   div
     []
     [ div
-        [ class "form-control" ]
-        [ label
-            [ class "label"
-            , for "add-monster-rating"
+        [ class "form-control-left-right" ]
+        [ div
+            [ class "form-control form-control-left" ]
+            [ label
+                [ class "label"
+                , for "add-monster-rating"
+                ]
+                [ text "Rating" ]
+            , monsterRatingOptionsView model
             ]
-            [ text "Challenge Rating" ]
-        , monsterRatingOptionsView model
-        ]
-    , div
-        [ class "form-control" ]
-        [ label
-            [ class "label"
-            , for "add-monster-xp"
+        , div
+            [ class "form-control form-control-right" ]
+            [ label
+                [ class "label"
+                , for "add-monster-xp"
+                ]
+                [ text "XP" ]
+            , monsterXpOptionsView model
             ]
-            [ text "Experience Points" ]
-        , monsterXpOptionsView model
         ]
     , div
         [ class "form-control" ]

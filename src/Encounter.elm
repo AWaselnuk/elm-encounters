@@ -174,13 +174,13 @@ monsterSectionView model =
     , h3 [] [text "Add new monster"]
     , App.map MonsterListMsg (MonsterList.addMonsterView model)
     , h3 [] [text "Current monsters"]
-    , div
-        [ class "current-monster-tools" ]
-        [
-          button [ class "set-monster-cr-view" ] [ text "CR" ]
-        , button [ class "set-monster-xp-view" ] [ text "XP" ]
-        , button [ class "toggle-monster-view" ] [ text "view current monsters" ]
-        ]
+    --, div
+    --    [ class "current-monster-tools" ]
+    --    [
+    --      button [ class "set-monster-cr-view" ] [ text "CR" ]
+    --    , button [ class "set-monster-xp-view" ] [ text "XP" ]
+    --    , button [ class "toggle-monster-view" ] [ text "view current monsters" ]
+    --    ]
     , App.map MonsterListMsg (MonsterList.view model)
     ]
 
